@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>tang-slidex — AI 驱动的幻灯片框架</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <!-- highlight.js：代码语法高亮，slide 内直接用 <pre><code class="language-xxx"> 即可 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #0a0a0f;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ─── Slide 舞台 ─── */
+    #slide-host {
+      width: 1280px; height: 720px;
+      position: relative;
+      transform-origin: center center;
+      transition: opacity 0.15s ease;
+    }
+
+    /* ─── 编辑模式：舞台橙色边框 ─── */
+    #slide-host.edit-mode {
+      outline: 2px solid rgba(251, 146, 60, 0.6);
+      outline-offset: 2px;
+    }
+
+    /* ─── 编辑提示条 ─── */
+    #edit-banner {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 36px;
+      background: linear-gradient(90deg, #f97316, #ea580c);
+      color: #fff; font-family: system-ui; font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      z-index: 200; letter-spacing: 0.03em;
+      transform: translateY(-100%);
+      transition: transform 0.25s ease;
+    }
+    #edit-banner.show { transform: translateY(0); }
+    #edit-banner kbd {
+      background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px;
+      font-size: 12px; font-family: ui-monospace;
+    }
+
+    /* ─── 导航栏 ─── */
+    #nav-bar {
+      position: fixed; bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px; padding: 7px 16px;
+      color: #fff; font-family: system-ui, sans-serif; font-size: 14px;
+      user-select: none; z-index: 50;
+      transition: border-color 0.3s;
+    }
+    #nav-bar.edit-mode {
+      border-color: rgba(251, 146, 60, 0.5);
+      background: rgba(251, 146, 60, 0.08);
+    }
+
+    .nav-btn {
+      background: none; border: none; color: rgba(255,255,255,0.7);
+      cursor: pointer; font-size: 16px; padding: 4px 10px;
+      border-radius: 6px; transition: all 0.2s; line-height: 1;
+      white-space: nowrap;
+    }
+    .nav-btn:hover  { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-btn:active { transform: scale(0.92); }
+    .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+    .nav-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+
+    #page-info { color: rgba(255,255,255,0.6); min-width: 56px; text-align: center; font-size: 13px; }
+
+    /* 编辑按钮 */
+    #btn-edit {
+      font-size: 14px; padding: 4px 12px;
+      color: #fb923c;
+    }
+    #btn-edit:hover { background: rgba(251,146,60,0.15); color: #fdba74; }
+    #btn-save {
+      font-size: 13px; padding: 4px 12px;
+      background: rgba(34,197,94,0.15); color: #4ade80;
+      border-radius: 6px;
+    }
+    #btn-save:hover { background: rgba(34,197,94,0.25); }
+    #btn-cancel-edit {
+      font-size: 13px; padding: 4px 10px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ─── HMR toast ─── */
+    #hmr-toast {
+      position: fixed; bottom: 72px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #7c3aed; color: #fff;
+      font-family: system-ui; font-size: 13px; font-weight: 600;
+      padding: 8px 20px; border-radius: 999px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s; z-index: 60;
+    }
+    #hmr-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ─── 加载遮罩 ─── */
+    #loading {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #0a0a0f; color: rgba(255,255,255,0.4);
+      font-family: system-ui; font-size: 16px;
+      transition: opacity 0.3s; z-index: 100;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+
+    /* ─── Selection overlay ─── */
+    #selection-overlay {
+      position: fixed;
+      border: 2px solid #3b82f6;
+      border-radius: 3px;
+      pointer-events: none;
+      z-index: 150;
+      display: none;
+      box-shadow: 0 0 0 1px rgba(59,130,246,0.2);
+    }
+    #selection-overlay::before {
+      content: attr(data-label);
+      position: absolute; top: -22px; left: -2px;
+      background: #3b82f6; color: #fff;
+      font-size: 10px; font-weight: 600; font-family: ui-monospace;
+      padding: 2px 7px; border-radius: 4px 4px 0 0;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    /* 删除按钮 */
+    #selection-delete {
+      position: fixed;
+      width: 22px; height: 22px;
+      background: #ef4444; color: #fff;
+      border: none; border-radius: 50%;
+      font-size: 12px; font-weight: 700;
+      cursor: pointer; z-index: 151;
+      display: none; align-items: center; justify-content: center;
+      line-height: 1;
+    }
+    #selection-delete:hover { background: #dc2626; }
+
+    /* ─── 可编辑元素样式（edit mode 激活时） ─── */
+    .tang-editable {
+      outline: 1px dashed rgba(59,130,246,0.4) !important;
+      cursor: text !important;
+    }
+    .tang-editable:focus {
+      outline: 2px solid #3b82f6 !important;
+      background: rgba(59,130,246,0.04) !important;
+    }
+    /* viewer 代码块编辑 textarea */
+    .tang-code-textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+    }
+    /* 编辑模式下悬停代码块提示可点击 */
+    .edit-mode pre:hover {
+      outline: 1px dashed rgba(59,130,246,0.5);
+      cursor: text;
+    }
+    .edit-mode pre:hover::after {
+      content: '✏️ 点击编辑';
+      position: absolute;
+      top: 6px; right: 8px;
+      background: #3b82f6;
+      color: #fff;
+      font-size: 10px; font-weight: 700; font-family: system-ui;
+      padding: 2px 8px; border-radius: 4px;
+      pointer-events: none;
+    }
+    .tang-draggable {
+      cursor: grab !important;
+    }
+    .tang-draggable.dragging {
+      cursor: grabbing !important;
+      opacity: 0.85;
+      z-index: 999;
+    }
+
+    /* 对齐辅助线 */
+    #align-h, #align-v {
+      position: fixed;
+      background: rgba(251,146,60,0.6);
+      pointer-events: none;
+      z-index: 160;
+      display: none;
+    }
+    #align-h { height: 1px; left: 0; right: 0; }
+    #align-v { width: 1px; top: 0; bottom: 0; }
+  </style>
+</head>
+<body>
+  <div id="loading">⏳ 加载中…</div>
+  <div id="edit-banner">✏️ 编辑模式 &nbsp;·&nbsp; 双击文本编辑 · 拖拽移动元素 <kbd>Esc</kbd> 取消 &nbsp;<kbd>Ctrl+S</kbd> 保存</div>
+  <div id="slide-host"></div>
+  <div id="hmr-toast">🔥 slide 已热更新</div>
+
+  <!-- 选中框 + 删除按钮 -->
+  <div id="selection-overlay" data-label=""></div>
+  <button id="selection-delete" title="删除元素">✕</button>
+
+  <!-- 对齐辅助线 -->
+  <div id="align-h"></div>
+  <div id="align-v"></div>
+
+  <div id="nav-bar">
+    <button class="nav-btn" id="btn-prev" title="上一页 (←)">‹</button>
+    <span id="page-info">1 / 15</span>
+    <button class="nav-btn" id="btn-next" title="下一页 (→)">›</button>
+    <div class="nav-divider"></div>
+    <button class="nav-btn" id="btn-edit" title="进入编辑模式 (E)">✏️ 编辑</button>
+    <!-- 编辑模式下显示 -->
+    <button class="nav-btn" id="btn-save"        title="保存 (Ctrl+S)" style="display:none">💾 保存</button>
+    <button class="nav-btn" id="btn-cancel-edit" title="取消 (Esc)"    style="display:none">✕ 取消</button>
+  </div>
+
+  <script type="module">
+    // ═══════════════════════════════════════════════════════════════
+    // 主题 & 配置
+    // ═══════════════════════════════════════════════════════════════
+    const THEME = {
+      colors: {
+        primary: '#7c3aed', secondary: '#5b21b6',
+        background: '#0f172a', surface: '#1e293b',
+        text: '#f1f5f9', textMuted: '#94a3b8',
+        accent: '#1e1b4b', border: '#334155',
+      },
+      fonts: { heading: 'system-ui', body: 'system-ui', mono: 'ui-monospace' },
+      borderRadius: '12px',
+      shadow: '0 4px 32px rgba(124,58,237,0.15)',
+    }
+
+    function buildThemeCss(t) {
+      return `#slide-host {
+        --color-primary:    ${t.colors.primary};
+        --color-secondary:  ${t.colors.secondary};
+        --color-background: ${t.colors.background};
+        --color-surface:    ${t.colors.surface};
+        --color-text:       ${t.colors.text};
+        --color-text-muted: ${t.colors.textMuted};
+        --color-accent:     ${t.colors.accent};
+        --color-border:     ${t.colors.border};
+        --font-heading:     ${t.fonts.heading}, system-ui, sans-serif;
+        --font-body:        ${t.fonts.body}, system-ui, sans-serif;
+        --font-mono:        ${t.fonts.mono}, ui-monospace, monospace;
+        --border-radius:    ${t.borderRadius};
+        --shadow:           ${t.shadow};
+      }`
+    }
+
+    const themeStyleEl = document.createElement('style')
+    themeStyleEl.id = 'tang-theme'
+    themeStyleEl.textContent = buildThemeCss(THEME)
+    document.head.appendChild(themeStyleEl)
+
+    const CONFIG = { slidesDir: './slides', totalSlides: 16 }
+    let current     = 0
+    let isAnimating = false
+    const slideStage = document.getElementById('slide-host')
+
+    // ─── 缩放适配 ────────────────────────────────────────────────────
+    let currentScale = 1
+    function scaleToFit() {
+      currentScale = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.96
+      slideStage.style.transform = `scale(${currentScale})`
+    }
+    scaleToFit()
+    window.addEventListener('resize', () => { scaleToFit(); editManager.updateOverlay() })
+
+    // ─── Slide 加载 & 渲染 ───────────────────────────────────────────
+    async function loadSlide(index) {
+      const num = String(index + 1).padStart(3, '0')
+      const res = await fetch(`${CONFIG.slidesDir}/slide-${num}.html?t=${Date.now()}`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      return res.text()
+    }
+
+    function injectSlide(html) {
+      const parser = new DOMParser()
+      const doc    = parser.parseFromString(html, 'text/html')
+      slideStage.innerHTML = ''
+      doc.head.querySelectorAll('style').forEach(s => {
+        const el = document.createElement('style')
+        el.textContent = s.textContent
+        slideStage.appendChild(el)
+      })
+      const scripts = []
+      Array.from(doc.body.childNodes).forEach(node => {
+        if (node.nodeName === 'SCRIPT') scripts.push(node.textContent || '')
+        else slideStage.appendChild(document.importNode(node, true))
+      })
+      return scripts
+    }
+
+    function runScripts(scripts) {
+      for (const code of scripts) {
+        if (!code.trim()) continue
+        try { new Function(code)() } catch (e) { console.warn('[slide script]', e) }
+      }
+    }
+
+    async function navigateTo(index, { instant = false, hmrReload = false } = {}) {
+      if (isAnimating && !instant && !hmrReload) return
+      if (index < 0 || index >= CONFIG.totalSlides) return
+      // 编辑模式下不允许切页
+      if (editManager.active && !hmrReload) return
+
+      isAnimating = true
+      try {
+        codeBoxManager.destroy()  // 清理上一页的 CodeMirror 实例
+        const html    = await loadSlide(index)
+        const scripts = injectSlide(html)
+        requestAnimationFrame(() => {
+          runScripts(scripts)
+          // 高亮 viewer 模式代码块
+          if (typeof hljs !== 'undefined') {
+            slideStage.querySelectorAll('pre code[class*="language-"]').forEach(el => {
+              if (!el.dataset.highlighted) hljs.highlightElement(el)
+            })
+          }
+          // 初始化 IDE 模式代码块
+          codeBoxManager.init()
+        })
+        current = index
+        updateUI()
+        if (!hmrReload) history.replaceState(null, '', `#${index}`)
+        // 切页后如果编辑模式激活，重新绑定
+        if (editManager.active) requestAnimationFrame(() => editManager.bind())
+      } catch (err) {
+        console.error(err)
+        slideStage.innerHTML = `<div style="color:#ef4444;padding:48px;font-family:monospace;width:1280px">❌ ${err.message}</div>`
+      } finally {
+        isAnimating = false
+      }
+    }
+
+    function updateUI() {
+      document.getElementById('page-info').textContent = `${current + 1} / ${CONFIG.totalSlides}`
+      const inEdit = editManager.active
+      document.getElementById('btn-prev').disabled = current === 0 || inEdit
+      document.getElementById('btn-next').disabled = current === CONFIG.totalSlides - 1 || inEdit
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  EditManager — 核心编辑管理器
+    // ═══════════════════════════════════════════════════════════════
+    const editManager = new class EditManager {
+      constructor() {
+        this.active   = false
+        this.patches  = []           // 当前 session 的变更列表
+        this._snapshots = new Map()  // element → original textContent
+        this._dragState = null
+        this._selectedEl = null
+
+        // DOM refs
+        this.$overlay = document.getElementById('selection-overlay')
+        this.$delBtn  = document.getElementById('selection-delete')
+        this.$banner  = document.getElementById('edit-banner')
+        this.$alignH  = document.getElementById('align-h')
+        this.$alignV  = document.getElementById('align-v')
+
+        // 删除按钮
+        this.$delBtn.addEventListener('click', () => this._deleteSelected())
+      }
+
+      /** 进入编辑模式 */
+      enable() {
+        this.active  = true
+        this.patches = []
+        this._snapshots.clear()
+        slideStage.classList.add('edit-mode')
+        document.getElementById('nav-bar').classList.add('edit-mode')
+        this.$banner.classList.add('show')
+        document.getElementById('btn-edit').style.display   = 'none'
+        document.getElementById('btn-save').style.display   = ''
+        document.getElementById('btn-cancel-edit').style.display = ''
+        this.bind()
+        updateUI()
+      }
+
+      /** 退出编辑模式（不保存） */
+      disable() {
+        this.active = false
+        this._restoreSnapshots()
+        this._cleanup()
+        updateUI()
+      }
+
+      /** 保存并退出 */
+      async save() {
+        if (this.patches.length === 0) {
+          this.disable()
+          return
+        }
+        try {
+          const res = await fetch('/api/save-slide', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slideIndex: current, patches: this.patches }),
+          })
+          const data = await res.json()
+          if (data.ok) {
+            this._showToast('💾 已保存', '#22c55e')
+            this.active = false
+            this._cleanup()
+            updateUI()
+          } else {
+            this._showToast('❌ 保存失败: ' + data.error, '#ef4444')
+          }
+        } catch (err) {
+          this._showToast('❌ 网络错误', '#ef4444')
+          console.error(err)
+        }
+      }
+
+      /** 扫描 slide DOM，注入 contenteditable + drag */
+      bind() {
+        const slide = slideStage.querySelector('.slide')
+        if (!slide) return
+
+        // ── 代码块：特殊处理，使用浮动 textarea 覆盖编辑 ──────────────
+        slideStage.querySelectorAll('pre code[data-highlighted]').forEach(codeEl => {
+          const pre = codeEl.closest('pre')
+          if (!pre || pre.dataset.editBound) return
+          pre.dataset.editBound = '1'
+          // 存原始代码（decode HTML entities）
+          const raw = codeEl.dataset.rawCode ?? decodeEntities(codeEl.textContent)
+          codeEl.dataset.rawCode = raw
+
+          // 点击代码块 → 弹出浮动 textarea
+          const activate = (e) => {
+            if (!this.active) return
+            e.stopPropagation()
+            if (pre.querySelector('.tang-code-textarea')) return  // 已打开
+
+            const ta = document.createElement('textarea')
+            ta.className = 'tang-code-textarea'
+            ta.value = codeEl.dataset.rawCode ?? raw
+            ta.spellcheck = false
+
+            // 尺寸跟随 pre
+            const preRect = pre.getBoundingClientRect()
+            const hostRect = slideStage.getBoundingClientRect()
+            ta.style.cssText = `
+              position: absolute;
+              left: 0; top: 0; right: 0; bottom: 0;
+              width: 100%; height: 100%;
+              background: rgba(13,17,23,0.97);
+              color: #e6edf3;
+              font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+              font-size: 12px; line-height: 1.75;
+              padding: 16px 18px;
+              border: 2px solid #3b82f6;
+              border-radius: inherit;
+              resize: none;
+              z-index: 100;
+              outline: none;
+              tab-size: 2;
+            `
+            pre.style.position = 'relative'
+            pre.appendChild(ta)
+            ta.focus()
+
+            // 支持 Tab 缩进
+            ta.addEventListener('keydown', ev => {
+              if (ev.key === 'Tab') {
+                ev.preventDefault()
+                const s = ta.selectionStart, e2 = ta.selectionEnd
+                ta.value = ta.value.substring(0, s) + '  ' + ta.value.substring(e2)
+                ta.selectionStart = ta.selectionEnd = s + 2
+              }
+              // Escape 关闭
+              if (ev.key === 'Escape') { ev.stopPropagation(); ta.blur() }
+            })
+
+            // 失焦：更新高亮 + 记录 patch
+            ta.addEventListener('blur', () => {
+              const newCode = ta.value
+              codeEl.dataset.rawCode = newCode
+              // 重新高亮
+              codeEl.textContent = newCode
+              delete codeEl.dataset.highlighted
+              if (typeof hljs !== 'undefined') hljs.highlightElement(codeEl)
+              ta.remove()
+              // 记录 patch（type: code，server 端写回 <code> textContent）
+              const origRaw = raw
+              if (newCode !== origRaw) {
+                const selector = this._getSelector(codeEl)
+                this.patches = this.patches.filter(p => !(p.type === 'code' && p.selector === selector))
+                this.patches.push({ type: 'code', selector, value: newCode })
+              }
+            })
+          }
+
+          pre.addEventListener('click', activate)
+          pre._editActivate = activate
+        })
+
+        // 收集所有"叶子文本"元素（不含 canvas、svg、script、style、pre）
+        const textEls = this._collectTextElements(slide)
+        textEls.forEach(el => {
+          if (!this._snapshots.has(el)) this._snapshots.set(el, el.textContent)
+          el.contentEditable = 'true'
+          el.classList.add('tang-editable')
+          el.addEventListener('blur', () => this._onTextBlur(el), { once: false })
+        })
+
+        // 收集块级可拖拽元素（slide 的直接子元素，排除 style/canvas）
+        Array.from(slide.children).forEach(child => {
+          if (['STYLE','CANVAS','SCRIPT'].includes(child.tagName)) return
+          child.classList.add('tang-draggable')
+          child.addEventListener('mousedown', (e) => this._onDragStart(e, child))
+        })
+
+        // 点击选中
+        slideStage.addEventListener('click', (e) => this._onSlideClick(e), { once: false })
+      }
+
+      /** 更新选中框位置 */
+      updateOverlay(el) {
+        if (el) this._selectedEl = el
+        const target = this._selectedEl
+        if (!target) { this.$overlay.style.display = 'none'; this.$delBtn.style.display = 'none'; return }
+
+        const rect      = target.getBoundingClientRect()
+        const hostRect  = slideStage.getBoundingClientRect()
+
+        // 换算到 viewport 坐标
+        this.$overlay.style.cssText = `
+          display: block;
+          left:   ${rect.left   - 2}px;
+          top:    ${rect.top    - 2}px;
+          width:  ${rect.width  + 4}px;
+          height: ${rect.height + 4}px;
+        `
+        this.$overlay.setAttribute('data-label', target.tagName.toLowerCase() + (target.className ? '.' + target.className.split(' ')[0] : ''))
+
+        // 删除按钮放右上角
+        this.$delBtn.style.cssText = `
+          display: flex;
+          left: ${rect.right  + 2}px;
+          top:  ${rect.top    - 12}px;
+        `
+      }
+
+      // ── 私有方法 ──────────────────────────────────────────────────
+      _collectTextElements(root) {
+        const result = []
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT)
+        let node
+        while ((node = walker.nextNode())) {
+          if (['CANVAS','SVG','SCRIPT','STYLE','PRE','CODE'].includes(node.tagName)) continue
+          // 叶子节点：直接子节点只有文本（无元素子节点）
+          const hasElementChild = Array.from(node.childNodes).some(n => n.nodeType === 1)
+          if (!hasElementChild && node.textContent.trim()) {
+            result.push(node)
+          }
+        }
+        return result
+      }
+
+      _onTextBlur(el) {
+        if (!this.active) return
+        const original = this._snapshots.get(el) ?? ''
+        const current  = el.textContent
+        if (current !== original) {
+          const selector = this._getSelector(el)
+          // 去重：同 selector 的变更只保留最新
+          this.patches = this.patches.filter(p => !(p.type === 'text' && p.selector === selector))
+          this.patches.push({ type: 'text', selector, value: current })
+          this._snapshots.set(el, current)
+        }
+      }
+
+      _onDragStart(e, el) {
+        if (!this.active) return
+        // contenteditable 文本编辑时不触发拖拽
+        if (e.target.isContentEditable && e.target !== el) return
+        e.preventDefault()
+
+        const startX = e.clientX
+        const startY = e.clientY
+        const origTransform = el.style.transform || ''
+        // 解析已有偏移
+        const m = origTransform.match(/translate\(([^,]+),\s*([^)]+)\)/)
+        const baseX = m ? parseFloat(m[1]) : 0
+        const baseY = m ? parseFloat(m[2]) : 0
+
+        el.classList.add('dragging')
+        this._dragState = { el, startX, startY, baseX, baseY, dx: 0, dy: 0 }
+        this._selectedEl = el
+        this.updateOverlay(el)
+
+        const onMove = (e) => {
+          const rawDx = (e.clientX - startX) / currentScale
+          const rawDy = (e.clientY - startY) / currentScale
+          this._dragState.dx = rawDx
+          this._dragState.dy = rawDy
+          el.style.transform = `translate(${baseX + rawDx}px, ${baseY + rawDy}px)`
+          // 辅助线：接近中轴时吸附
+          this._showAlignGuides(el)
+          this.updateOverlay(el)
+        }
+
+        const onUp = () => {
+          if (!this._dragState) return
+          el.classList.remove('dragging')
+          const { dx, dy } = this._dragState
+          if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+            const selector = this._getSelector(el)
+            this.patches = this.patches.filter(p => !(p.type === 'move' && p.selector === selector))
+            this.patches.push({ type: 'move', selector, dx: Math.round(dx), dy: Math.round(dy) })
+          }
+          this._dragState = null
+          this._hideAlignGuides()
+          document.removeEventListener('mousemove', onMove)
+          document.removeEventListener('mouseup',  onUp)
+        }
+
+        document.addEventListener('mousemove', onMove)
+        document.addEventListener('mouseup',   onUp)
+      }
+
+      _onSlideClick(e) {
+        if (!this.active) return
+        const slide = slideStage.querySelector('.slide')
+        if (!slide) return
+        // 找到被点击的直接块元素
+        let target = e.target
+        while (target && target.parentElement !== slide) {
+          target = target.parentElement
+          if (!target || target === slideStage) { this.updateOverlay(null); return }
+        }
+        if (target && target !== slide) this.updateOverlay(target)
+        else this.updateOverlay(null)
+      }
+
+      _deleteSelected() {
+        if (!this._selectedEl) return
+        const selector = this._getSelector(this._selectedEl)
+        this.patches.push({ type: 'delete', selector })
+        this._selectedEl.style.display = 'none'
+        this._selectedEl = null
+        this.updateOverlay(null)
+      }
+
+      _showAlignGuides(el) {
+        const rect     = el.getBoundingClientRect()
+        const hostRect = slideStage.getBoundingClientRect()
+        const centerY  = rect.top + rect.height / 2
+        const centerX  = rect.left + rect.width / 2
+        const hostCY   = hostRect.top + hostRect.height / 2
+        const hostCX   = hostRect.left + hostRect.width / 2
+        const snap     = 8
+
+        if (Math.abs(centerY - hostCY) < snap) {
+          this.$alignH.style.cssText = `display:block; top:${hostCY}px;`
+        } else {
+          this.$alignH.style.display = 'none'
+        }
+        if (Math.abs(centerX - hostCX) < snap) {
+          this.$alignV.style.cssText = `display:block; left:${hostCX}px;`
+        } else {
+          this.$alignV.style.display = 'none'
+        }
+      }
+
+      _hideAlignGuides() {
+        this.$alignH.style.display = 'none'
+        this.$alignV.style.display = 'none'
+      }
+
+      _restoreSnapshots() {
+        this._snapshots.forEach((orig, el) => { el.textContent = orig })
+        // 恢复 transform
+        this.patches.filter(p => p.type === 'move').forEach(p => {
+          try {
+            const el = slideStage.querySelector(p.selector)
+            if (el) el.style.transform = ''
+          } catch {}
+        })
+        // 恢复删除
+        this.patches.filter(p => p.type === 'delete').forEach(p => {
+          try {
+            const el = slideStage.querySelector(p.selector)
+            if (el) el.style.display = ''
+          } catch {}
+        })
+      }
+
+      _cleanup() {
+        // 清理代码块浮动 textarea
+        slideStage.querySelectorAll('.tang-code-textarea').forEach(ta => ta.remove())
+        slideStage.querySelectorAll('pre[data-edit-bound]').forEach(pre => {
+          delete pre.dataset.editBound
+          if (pre._editActivate) pre.removeEventListener('click', pre._editActivate)
+        })
+        // 移除所有 edit class
+        slideStage.querySelectorAll('[contenteditable]').forEach(el => {
+          el.removeAttribute('contenteditable')
+          el.classList.remove('tang-editable')
+        })
+        slideStage.querySelectorAll('.tang-draggable').forEach(el => {
+          el.classList.remove('tang-draggable')
+        })
+        slideStage.classList.remove('edit-mode')
+        document.getElementById('nav-bar').classList.remove('edit-mode')
+        this.$banner.classList.remove('show')
+        document.getElementById('btn-edit').style.display   = ''
+        document.getElementById('btn-save').style.display   = 'none'
+        document.getElementById('btn-cancel-edit').style.display = 'none'
+        this.$overlay.style.display = 'none'
+        this.$delBtn.style.display  = 'none'
+        this._hideAlignGuides()
+        this._selectedEl = null
+        this.patches     = []
+      }
+
+      /** 生成稳定的 CSS selector（nth-child 路径） */
+      _getSelector(el) {
+        const parts = []
+        let node = el
+        const root = slideStage
+        while (node && node !== root) {
+          const parent = node.parentElement
+          if (!parent) break
+          const idx = Array.from(parent.children).indexOf(node) + 1
+          parts.unshift(`:nth-child(${idx})`)
+          node = parent
+        }
+        return '#slide-host ' + parts.join(' > ')
+      }
+
+      _showToast(msg, bg = '#7c3aed') {
+        const toast = document.getElementById('hmr-toast')
+        toast.textContent = msg
+        toast.style.background = bg
+        toast.classList.add('show')
+        setTimeout(() => {
+          toast.classList.remove('show')
+          toast.textContent = '🔥 slide 已热更新'
+          toast.style.background = ''
+        }, 2500)
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  CodeBoxManager — CodeMirror 6 IDE 模式 + 代码运行
+    // ═══════════════════════════════════════════════════════════════
+
+    // 解码 HTML entities 工具（将 hljs 渲染后的文本还原为原始代码）
+    function decodeEntities(str) {
+      const ta = document.createElement('textarea')
+      ta.innerHTML = str
+      return ta.value
+    }
+
+    const codeBoxManager = new class CodeBoxManager {
+      constructor() {
+        this._cmModules = null  // 缓存已加载的 CodeMirror 模块
+        this._editors   = []    // { container, view, outputEl }
+      }
+
+      /** 初始化当前 slide 内所有 [data-codebox="ide"] 容器 */
+      async init() {
+        const ideBoxes = slideStage.querySelectorAll('[data-codebox="ide"]:not([data-cm-init])')
+        if (ideBoxes.length === 0) return
+        const mods = await this._loadCM()
+        if (!mods) return
+        ideBoxes.forEach(box => this._initBox(box, mods))
+      }
+
+      /** 懒加载 CodeMirror 6 模块（esm.sh v135 pin，所有包共享同一个 state 实例） */
+      async _loadCM() {
+        if (this._cmModules) return this._cmModules
+        try {
+          // esm.sh v135 pin：所有包内部 import 都解析到 /v135/ 路径
+          // 相同路径 => 浏览器模块缓存命中 => 只有一个 @codemirror/state 实例
+          const PIN = 'https://esm.sh/v135'
+          const [stateMod, viewMod, langMod, cmdMod, autoMod,
+                 jsMod, htmlMod, cssMod, themeMod] = await Promise.all([
+            import(`${PIN}/@codemirror/state@6.4.1`),
+            import(`${PIN}/@codemirror/view@6.4.1`),
+            import(`${PIN}/@codemirror/language@6.10.1`),
+            import(`${PIN}/@codemirror/commands@6.6.0`),
+            import(`${PIN}/@codemirror/autocomplete@6.18.0`),
+            import(`${PIN}/@codemirror/lang-javascript@6.2.2`),
+            import(`${PIN}/@codemirror/lang-html@6.4.9`),
+            import(`${PIN}/@codemirror/lang-css@6.2.1`),
+            import(`${PIN}/@codemirror/theme-one-dark@6.1.2`),
+          ])
+          this._cmModules = {
+            EditorView:             viewMod.EditorView,
+            keymap:                 viewMod.keymap,
+            lineNumbers:            viewMod.lineNumbers,
+            highlightActiveLine:    viewMod.highlightActiveLine,
+            drawSelection:          viewMod.drawSelection,
+            EditorState:            stateMod.EditorState,
+            defaultKeymap:          cmdMod.defaultKeymap,
+            indentWithTab:          cmdMod.indentWithTab,
+            history:                cmdMod.history,
+            historyKeymap:          cmdMod.historyKeymap,
+            autocompletion:         autoMod.autocompletion,
+            closeBrackets:          autoMod.closeBrackets,
+            indentOnInput:          langMod.indentOnInput,
+            syntaxHighlighting:     langMod.syntaxHighlighting,
+            defaultHighlightStyle:  langMod.defaultHighlightStyle,
+            bracketMatching:        langMod.bracketMatching,
+            foldGutter:             langMod.foldGutter,
+            javascript:             jsMod.javascript,
+            html:                   htmlMod.html,
+            css:                    cssMod.css,
+            oneDark:                themeMod.oneDark,
+          }
+          return this._cmModules
+        } catch (e) {
+          console.error('[CodeBoxManager] 加载 CodeMirror 失败:', e)
+          return null
+        }
+      }
+
+      _getLangExtension(lang, mods) {
+        switch ((lang || 'javascript').toLowerCase()) {
+          case 'js': case 'javascript': return mods.javascript({ jsx: true })
+          case 'html':                  return mods.html()
+          case 'css':                   return mods.css()
+          default:                      return mods.javascript()
+        }
+      }
+
+      _initBox(box, mods) {
+        box.dataset.cmInit = '1'
+        const lang      = box.dataset.language || 'javascript'
+        const canRun    = box.dataset.run === 'true'
+        const heightPx  = parseInt(box.dataset.height || '300')
+        const rawScript = box.querySelector('script[type="text/plain"]')
+        const initCode  = rawScript ? rawScript.textContent.trim() : '// 在这里写代码'
+
+        // 直接从 mods 解构（已平铺到顶层）
+        const {
+          EditorView, keymap, lineNumbers, highlightActiveLine, drawSelection,
+          EditorState,
+          defaultKeymap, indentWithTab, history, historyKeymap,
+          autocompletion, closeBrackets,
+          indentOnInput, syntaxHighlighting, defaultHighlightStyle,
+          bracketMatching, foldGutter,
+          oneDark,
+        } = mods
+
+        // ── 构建容器 DOM ──
+        box.innerHTML = ''
+        box.style.cssText = `
+          display: flex; flex-direction: column;
+          border-radius: 10px; overflow: hidden;
+          border: 1px solid #21262d;
+          height: ${heightPx}px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        `
+
+        // 标题栏
+        const titlebar = document.createElement('div')
+        titlebar.style.cssText = `
+          display: flex; align-items: center; gap: 6px;
+          padding: 8px 14px; background: #161b22;
+          border-bottom: 1px solid #21262d; flex-shrink: 0;
+        `
+        const dots = ['#ff5f56','#ffbd2e','#27c93f'].map(c => {
+          const d = document.createElement('div')
+          d.style.cssText = `width:10px;height:10px;border-radius:50%;background:${c};`
+          return d
+        })
+        dots.forEach(d => titlebar.appendChild(d))
+        const filenameSpan = document.createElement('span')
+        filenameSpan.textContent = `  ${box.dataset.filename || lang + ' · IDE 模式'}`
+        filenameSpan.style.cssText = 'font-size:12px;color:#8b949e;flex:1;'
+        titlebar.appendChild(filenameSpan)
+
+        if (canRun) {
+          const runBtn = document.createElement('button')
+          runBtn.textContent = '▶ Run'
+          runBtn.style.cssText = `
+            background: rgba(34,197,94,0.15); color: #4ade80;
+            border: 1px solid rgba(34,197,94,0.3); border-radius: 5px;
+            font-size: 11px; font-weight: 700; font-family: system-ui;
+            padding: 3px 10px; cursor: pointer;
+          `
+          runBtn.addEventListener('mouseover', () => runBtn.style.background = 'rgba(34,197,94,0.25)')
+          runBtn.addEventListener('mouseout',  () => runBtn.style.background = 'rgba(34,197,94,0.15)')
+          runBtn.addEventListener('click', () => {
+            const code = view.state.doc.toString()
+            this._runCode(lang, code, outputEl)
+          })
+          titlebar.appendChild(runBtn)
+        }
+        box.appendChild(titlebar)
+
+        // 编辑器容器
+        const editorWrap = document.createElement('div')
+        editorWrap.style.cssText = 'flex:1;overflow:hidden;position:relative;'
+        box.appendChild(editorWrap)
+
+        // 输出面板
+        const outputEl = document.createElement('div')
+        outputEl.style.cssText = `
+          display: none;
+          background: #0a0e14; border-top: 1px solid #21262d;
+          font-family: ui-monospace; font-size: 11.5px; color: #a0aec0;
+          padding: 8px 14px; max-height: 100px; overflow-y: auto;
+          flex-shrink: 0; white-space: pre-wrap;
+        `
+        box.appendChild(outputEl)
+
+        // ── 创建 EditorView ──
+        const view = new EditorView({
+          state: EditorState.create({
+            doc: initCode,
+            extensions: [
+              lineNumbers(),
+              highlightActiveLine(),
+              drawSelection(),
+              bracketMatching(),
+              closeBrackets(),
+              history(),
+              indentOnInput(),
+              syntaxHighlighting(defaultHighlightStyle),
+              autocompletion(),
+              foldGutter(),
+              keymap.of([
+                indentWithTab,
+                ...defaultKeymap,
+                ...historyKeymap,
+              ]),
+              this._getLangExtension(lang, mods),
+              oneDark,
+              EditorView.lineWrapping,
+              EditorView.theme({
+                '&': { height: '100%', fontSize: '12px' },
+                '.cm-scroller': { overflow: 'auto', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' },
+              }),
+            ],
+          }),
+          parent: editorWrap,
+        })
+
+        box._cmEditor = view
+        this._editors.push({ container: box, view, outputEl })
+      }
+
+      /** 在 iframe sandbox 里运行代码 */
+      _runCode(lang, code, outputEl) {
+        outputEl.style.display = 'block'
+        outputEl.textContent = '▶ 运行中…'
+
+        const iframe = document.createElement('iframe')
+        iframe.style.display = 'none'
+        iframe.setAttribute('sandbox', 'allow-scripts')
+
+        const onMsg = (e) => {
+          if (e.source !== iframe.contentWindow) return
+          if (e.data?.type === 'run-result') {
+            window.removeEventListener('message', onMsg)
+            iframe.remove()
+            const lines = e.data.output
+            outputEl.textContent = lines.length
+              ? lines.join('\n')
+              : '(无输出)'
+          }
+        }
+        window.addEventListener('message', onMsg)
+
+        if (lang === 'html' || lang === 'css') {
+          // HTML/CSS 直接预览
+          outputEl.textContent = ''
+          const preview = document.createElement('iframe')
+          preview.style.cssText = 'width:100%;height:90px;border:none;background:#fff;'
+          preview.setAttribute('sandbox', 'allow-scripts')
+          preview.srcdoc = lang === 'css' ? `<style>${code}</style><div style="padding:8px;font-size:12px">CSS 预览</div>` : code
+          outputEl.appendChild(preview)
+          iframe.remove()
+          window.removeEventListener('message', onMsg)
+          return
+        }
+
+        // JavaScript 执行
+        const escaped = code.replace(/<\/script>/gi, '<\\/script>')
+        iframe.srcdoc = `<!DOCTYPE html><script>
+  ;(function(){
+    const _out = []
+    const _orig = console.log.bind(console)
+    console.log = (...a) => { _out.push(a.map(x => typeof x === 'object' ? JSON.stringify(x) : String(x)).join(' ')); _orig(...a) }
+    console.error = (...a) => { _out.push('❌ ' + a.join(' ')); _orig(...a) }
+    console.warn  = (...a) => { _out.push('⚠️ ' + a.join(' ')); _orig(...a) }
+    try { ${escaped} } catch(e) { _out.push('❌ ' + e.message) }
+    parent.postMessage({ type: 'run-result', output: _out }, '*')
+  })()
+<\/script>`
+        document.body.appendChild(iframe)
+      }
+
+      /** 清理所有 editor 实例（切页时调用） */
+      destroy() {
+        this._editors.forEach(({ view }) => view.destroy())
+        this._editors = []
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 导航事件
+    // ═══════════════════════════════════════════════════════════════
+    document.getElementById('btn-prev').addEventListener('click', () => navigateTo(current - 1))
+    document.getElementById('btn-next').addEventListener('click', () => navigateTo(current + 1))
+    document.getElementById('btn-edit').addEventListener('click', () => editManager.enable())
+    document.getElementById('btn-save').addEventListener('click', () => editManager.save())
+    document.getElementById('btn-cancel-edit').addEventListener('click', () => editManager.disable())
+
+    document.addEventListener('keydown', e => {
+      if (editManager.active) {
+        if (e.key === 'Escape') { editManager.disable(); return }
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); editManager.save(); return }
+        return  // 编辑模式下屏蔽翻页快捷键
+      }
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigateTo(current + 1) }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); navigateTo(current - 1) }
+      if (e.key === 'Home')       navigateTo(0)
+      if (e.key === 'End')        navigateTo(CONFIG.totalSlides - 1)
+      if (e.key === 'e' || e.key === 'E') editManager.enable()
+      if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.()
+    })
+
+    let touchStartX = 0
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0]?.clientX ?? 0 }, { passive: true })
+    document.addEventListener('touchend', e => {
+      if (editManager.active) return
+      const diff = touchStartX - (e.changedTouches[0]?.clientX ?? 0)
+      if (Math.abs(diff) > 50) diff > 0 ? navigateTo(current + 1) : navigateTo(current - 1)
+    })
+
+    // ─── Vite HMR ────────────────────────────────────────────────────
+    if (import.meta.hot) {
+      import.meta.hot.on('tang-slide-update', ({ file }) => {
+        const match = file.match(/slide-(\d+)\.html$/)
+        if (!match) return
+        const idx = parseInt(match[1], 10) - 1
+        if (idx === current) {
+          navigateTo(current, { hmrReload: true }).then(() => {
+            editManager._showToast('🔥 slide 已热更新')
+          })
+        }
+      })
+    }
+
+    // ─── 仅在 dev 模式（有 HMR）时显示编辑按钮 ─────────────────────
+    if (!import.meta.hot) {
+      document.getElementById('btn-edit').style.display  = 'none'
+      document.querySelector('.nav-divider').style.display = 'none'
+    }
+
+    window.__slideRunner = {
+      navigateTo: (i) => navigateTo(i),
+      get current() { return current },
+      total: CONFIG.totalSlides,
+    }
+
+    // ─── 初始化 ───────────────────────────────────────────────────────
+    const startIndex = parseInt(location.hash.slice(1)) || 0
+    await navigateTo(startIndex, { instant: true })
+    document.getElementById('loading').classList.add('hidden')
+  </script>
+</body>
+</html>

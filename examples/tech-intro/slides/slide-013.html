@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .slide {
+      width: 1280px; height: 720px; overflow: hidden;
+      background-color: var(--color-background, #0f172a);
+      padding: 44px 72px 36px;
+    }
+    .header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 8px; }
+    .title   { font-size: 40px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.1; letter-spacing: -0.02em; }
+    .legend  { display: flex; gap: 20px; align-items: center; padding-bottom: 4px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-muted, #94a3b8); }
+    .legend-dot  { width: 10px; height: 10px; border-radius: 2px; }
+    #roadmap-chart { width: 100%; height: 520px; }
+  </style>
+</head>
+<body>
+  <div class="slide" data-slide-id="013" data-slide-type="content">
+    <div class="header">
+      <div>
+        <p class="eyebrow">10 · Roadmap</p>
+        <h1 class="title">开发路线图</h1>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>已完成</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.08);border:1.5px solid #475569"></div>计划中</div>
+      </div>
+    </div>
+    <div id="roadmap-chart"></div>
+  </div>
+
+  <script>
+    if (typeof echarts !== 'undefined') {
+      // ─── 数据定义 ─────────────────────────────────────────────────────────────
+      // [startQuarter, endQuarter] 用数值表示，0 = Q1 2026，每季度 +1
+      const phases = [
+        {
+          name: 'Phase 1  MVP',
+          start: 0, end: 2,
+          color: '#7c3aed',
+          done: true,
+          tasks: 'Monorepo · SlideRunner · PPT 规范 · slide-generator Skill',
+        },
+        {
+          name: 'Phase 2  Build & Export',
+          start: 2, end: 4,
+          color: '#2563eb',
+          done: false,
+          tasks: 'HTML 单文件打包 · PDF 导出 · CLI 工具 · ppt-outline Skill',
+        },
+        {
+          name: 'Phase 3  Editor',
+          start: 3, end: 6,
+          color: '#059669',
+          done: false,
+          tasks: 'Electron IDE · 三栏布局 · AI 对话框 · IPC 热更新',
+        },
+        {
+          name: 'Phase 4  Ecosystem',
+          start: 5, end: 8,
+          color: '#d97706',
+          done: false,
+          tasks: 'chart-integration · animation-guide · 社区模板 · npm 发布',
+        },
+        {
+          name: 'Phase 5  User Product',
+          start: 7, end: 10,
+          color: '#e11d48',
+          done: false,
+          tasks: '用户版封装 · 一键托管 · 模板市场 · 引导式界面',
+        },
+      ]
+
+      const quarterLabels = [
+        'Q1 2026','Q2 2026','Q3 2026','Q4 2026',
+        'Q1 2027','Q2 2027','Q3 2027','Q4 2027',
+        'Q1 2028','Q2 2028','Q3 2028',
+      ]
+
+      // ─── custom 渲染器 ────────────────────────────────────────────────────────
+      function renderItem(params, api) {
+        const phaseIndex  = params.dataIndex
+        const phase       = phases[phaseIndex]
+        const startCoord  = api.coord([phase.start, phaseIndex])
+        const endCoord    = api.coord([phase.end,   phaseIndex])
+        const barHeight   = api.size([0, 1])[1] * 0.55
+        const x           = startCoord[0]
+        const y           = startCoord[1] - barHeight / 2
+        const width       = endCoord[0] - startCoord[0]
+        const alpha       = phase.done ? 1 : 0.22
+
+        return {
+          type: 'group',
+          children: [
+            // 背景填充（未完成时为半透明）
+            {
+              type: 'rect',
+              shape: { x, y, width, height: barHeight, r: 5 },
+              style: {
+                fill: phase.done
+                  ? { type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
+                      colorStops: [
+                        { offset: 0, color: phase.color },
+                        { offset: 1, color: phase.color + 'bb' },
+                      ]}
+                  : 'rgba(255,255,255,0.04)',
+                stroke: phase.color,
+                lineWidth: phase.done ? 0 : 1.5,
+              },
+            },
+            // 标签
+            {
+              type: 'text',
+              style: {
+                text: phase.tasks,
+                x: x + 12,
+                y: y + barHeight / 2,
+                fill: phase.done ? '#fff' : phase.color,
+                fontSize: 11.5,
+                fontWeight: phase.done ? 500 : 400,
+                textVerticalAlign: 'middle',
+                overflow: 'truncate',
+                width: width - 16,
+              },
+            },
+          ],
+        }
+      }
+
+      const chart = echarts.init(document.getElementById('roadmap-chart'))
+      chart.setOption({
+        backgroundColor: 'transparent',
+        grid: { left: 160, right: 24, top: 8, bottom: 48 },
+        xAxis: {
+          type: 'value',
+          min: 0,
+          max: quarterLabels.length - 1,
+          interval: 1,
+          axisLabel: {
+            formatter: (v) => quarterLabels[v] ?? '',
+            color: '#64748b', fontSize: 11,
+          },
+          axisLine: { lineStyle: { color: '#334155' } },
+          splitLine: { lineStyle: { color: '#1e293b', type: 'dashed' } },
+        },
+        yAxis: {
+          type: 'category',
+          data: phases.map(p => p.name).reverse(),
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: { color: '#94a3b8', fontSize: 12.5, fontWeight: 700 },
+        },
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: '#1e293b',
+          borderColor: '#334155',
+          textStyle: { color: '#f1f5f9', fontSize: 13 },
+          formatter: (params) => {
+            const p = phases[params.dataIndex]
+            const qs = quarterLabels[p.start]
+            const qe = quarterLabels[p.end]
+            return `<b>${p.name}</b><br/><span style="color:#64748b">${qs} → ${qe}</span><br/>${p.tasks}`
+          },
+        },
+        series: [{
+          type: 'custom',
+          renderItem,
+          data: phases.map((_, i) => i).reverse(),  // y 轴 reversed
+          encode: { x: 0, y: 0 },
+          coordinateSystem: 'cartesian2d',
+        }],
+      })
+    }
+
+    if (window.gsap) {
+      gsap.from('.title',         { y: -20, opacity: 0, duration: 0.4 })
+      gsap.from('#roadmap-chart', { opacity: 0, duration: 0.6, delay: 0.2 })
+    }
+  </script>
+</body>
+</html>

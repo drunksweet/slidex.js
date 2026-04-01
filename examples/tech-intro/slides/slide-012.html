@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .slide {
+      width: 1280px; height: 720px; overflow: hidden;
+      background-color: var(--color-background, #0f172a);
+      padding: 48px 72px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+    }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 10px; }
+    .title   { font-size: 40px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 28px; }
+    .rule-list { display: flex; flex-direction: column; gap: 12px; }
+    .rule {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 16px;
+      background: var(--color-surface, #1e293b);
+      border: 1px solid var(--color-border, #334155);
+      border-radius: 8px; border-left: 3px solid var(--color-primary, #7c3aed);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .rule:hover { transform: translateX(4px); }
+    .rule-num  { font-size: 12px; font-weight: 800; color: var(--color-primary, #7c3aed); font-family: ui-monospace; min-width: 24px; margin-top: 2px; }
+    .rule-body {}
+    .rule-title { font-size: 15px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 3px; }
+    .rule-desc  { font-size: 13px; color: var(--color-text-muted, #94a3b8); line-height: 1.5; }
+    .rule-code  {
+      font-family: ui-monospace; font-size: 12px;
+      background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px;
+      color: #a78bfa; display: inline-block; margin-top: 4px;
+    }
+    /* 尺寸预览 */
+    .size-demo {
+      background: var(--color-surface, #1e293b);
+      border: 1px solid var(--color-border, #334155);
+      border-radius: 12px; padding: 20px;
+    }
+    .size-demo-title { font-size: 13px; font-weight: 600; color: var(--color-text-muted, #94a3b8); margin-bottom: 14px; }
+    .ratio-box {
+      background: rgba(124,58,237,0.1);
+      border: 2px dashed rgba(124,58,237,0.4);
+      border-radius: 6px; padding: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px; position: relative;
+      aspect-ratio: 16/9;
+    }
+    .ratio-label { font-size: 13px; font-weight: 700; color: #a78bfa; }
+    .ratio-sub   { position: absolute; bottom: 6px; right: 10px; font-size: 11px; color: #64748b; }
+    .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .type-tag {
+      text-align: center; padding: 8px;
+      background: rgba(124,58,237,0.08);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 6px;
+      font-size: 12px; font-weight: 600; color: #a78bfa;
+    }
+    .type-tag small { display: block; font-weight: 400; color: #64748b; font-size: 11px; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <div class="slide" data-slide-id="012" data-slide-type="content">
+    <div>
+      <p class="eyebrow">09 · 规范</p>
+      <h1 class="title">PPT 规范标准</h1>
+      <div class="rule-list">
+        <div class="rule">
+          <span class="rule-num">R1</span>
+          <div class="rule-body">
+            <div class="rule-title">尺寸锁定 16:9</div>
+            <div class="rule-desc">所有 slide 必须 1280×720px，超出内容 overflow:hidden</div>
+            <span class="rule-code">.slide { width:1280px; height:720px }</span>
+          </div>
+        </div>
+        <div class="rule">
+          <span class="rule-num">R2</span>
+          <div class="rule-body">
+            <div class="rule-title">字号层级约束</div>
+            <div class="rule-desc">主标题 48-64px · 副标题 28-36px · 正文 20-24px · 注释 14-16px</div>
+          </div>
+        </div>
+        <div class="rule">
+          <span class="rule-num">R3</span>
+          <div class="rule-body">
+            <div class="rule-title">单页文字限制</div>
+            <div class="rule-desc">单页不超过 150 字，要点不超过 5 条，留白 ≥ 30% 页面面积</div>
+          </div>
+        </div>
+        <div class="rule">
+          <span class="rule-num">R4</span>
+          <div class="rule-body">
+            <div class="rule-title">CSS 变量主题化</div>
+            <div class="rule-desc">所有颜色必须使用 <code style="color:#a78bfa">--color-*</code> 变量，禁止硬编码颜色值</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="size-demo">
+        <div class="size-demo-title">📐 页面尺寸规范</div>
+        <div class="ratio-box">
+          <span class="ratio-label">1280 × 720</span>
+          <span class="ratio-sub">16 : 9</span>
+        </div>
+        <div class="type-grid">
+          <div class="type-tag">cover<small>封面</small></div>
+          <div class="type-tag">toc<small>目录</small></div>
+          <div class="type-tag">content<small>内容</small></div>
+          <div class="type-tag">data-chart<small>数据图</small></div>
+          <div class="type-tag">split<small>分栏</small></div>
+          <div class="type-tag">ending<small>结尾</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    if (window.gsap) {
+      gsap.from('.title',   { y: -20, opacity: 0, duration: 0.4 })
+      gsap.from('.rule',    { x: -20, opacity: 0, duration: 0.35, stagger: 0.08, delay: 0.2 })
+      gsap.from('.size-demo', { x: 24, opacity: 0, duration: 0.5, delay: 0.2 })
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .slide {
+      width: 1280px; height: 720px; overflow: hidden;
+      background-color: var(--color-background, #0f172a);
+      padding: 52px 80px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .toc-left { padding-top: 8px; }
+    .toc-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-primary, #7c3aed); margin-bottom: 16px;
+    }
+    .toc-heading {
+      font-size: 48px; font-weight: 800;
+      color: var(--color-text, #f1f5f9);
+      line-height: 1.1; letter-spacing: -0.03em;
+    }
+    .toc-heading em {
+      display: block; font-style: normal;
+      color: var(--color-text-muted, #94a3b8);
+      font-size: 22px; font-weight: 400;
+      margin-top: 10px; letter-spacing: 0;
+    }
+    .toc-note {
+      margin-top: 24px;
+      font-size: 13px; color: var(--color-text-muted, #94a3b8);
+      line-height: 1.6;
+      border-left: 2px solid var(--color-primary, #7c3aed);
+      padding-left: 14px;
+    }
+    /* 两列目录 */
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 32px;
+      align-content: start;
+    }
+    .toc-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--color-border, #334155);
+      border-radius: 6px;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s, padding-left 0.25s;
+    }
+    .toc-item::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(124,58,237,0.08), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .toc-item::after {
+      content: '';
+      position: absolute; left: 0; top: 50%;
+      transform: translateY(-50%) scaleY(0);
+      width: 3px; height: 55%;
+      background: var(--color-primary, #7c3aed);
+      border-radius: 2px;
+      transition: transform 0.25s ease;
+    }
+    .toc-item:hover::before { opacity: 1; }
+    .toc-item:hover::after  { transform: translateY(-50%) scaleY(1); }
+    .toc-item:hover { padding-left: 22px; }
+    .toc-num {
+      font-size: 11px; font-weight: 800;
+      color: var(--color-primary, #7c3aed);
+      font-family: var(--font-mono, ui-monospace);
+      min-width: 28px; opacity: 0.8;
+    }
+    .toc-name {
+      font-size: 17px; font-weight: 500;
+      color: var(--color-text, #f1f5f9); flex: 1;
+      transition: color 0.2s;
+    }
+    .toc-item:hover .toc-name { color: #fff; }
+    .toc-section {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--color-primary, #7c3aed);
+      padding: 14px 14px 4px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide" data-slide-id="002" data-slide-type="toc">
+
+    <div class="toc-left">
+      <p class="toc-eyebrow">CONTENTS</p>
+      <h1 class="toc-heading">
+        目录
+        <em>Overview</em>
+      </h1>
+      <p class="toc-note">
+        15 页 · 覆盖从背景洞察到未来生态的完整故事
+      </p>
+    </div>
+
+    <div class="toc-grid">
+      <div>
+        <div class="toc-section">背景 & 架构</div>
+        <div class="toc-item"><span class="toc-num">03</span><span class="toc-name">为什么需要 tang-slidex</span></div>
+        <div class="toc-item"><span class="toc-num">04</span><span class="toc-name">竞品对比分析</span></div>
+        <div class="toc-item"><span class="toc-num">05</span><span class="toc-name">核心工作流</span></div>
+        <div class="toc-item"><span class="toc-num">06</span><span class="toc-name">系统架构分层</span></div>
+        <div class="toc-section">Skill & 技术</div>
+        <div class="toc-item"><span class="toc-num">07</span><span class="toc-name">Skill 体系</span></div>
+        <div class="toc-item"><span class="toc-num">08</span><span class="toc-name">技术栈全景</span></div>
+      </div>
+      <div>
+        <div class="toc-section">能力展示</div>
+        <div class="toc-item"><span class="toc-num">09</span><span class="toc-name">数据可视化能力</span></div>
+        <div class="toc-item"><span class="toc-num">10</span><span class="toc-name">代码生成示例</span></div>
+        <div class="toc-item"><span class="toc-num">11</span><span class="toc-name">动画 & 交互能力</span></div>
+        <div class="toc-item"><span class="toc-num">12</span><span class="toc-name">PPT 规范标准</span></div>
+        <div class="toc-section">路线 & 展望</div>
+        <div class="toc-item"><span class="toc-num">13</span><span class="toc-name">开发路线图</span></div>
+        <div class="toc-item"><span class="toc-num">14</span><span class="toc-name">社区 & 生态</span></div>
+        <div class="toc-item"><span class="toc-num">15</span><span class="toc-name">结语 · Let's Build</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    if (window.gsap) {
+      gsap.from('.toc-heading', { x: -30, opacity: 0, duration: 0.5, ease: 'power2.out' })
+      gsap.from('.toc-note',    { x: -20, opacity: 0, duration: 0.4, delay: 0.2 })
+      gsap.from('.toc-section', { opacity: 0, duration: 0.3, stagger: 0.05, delay: 0.2 })
+      gsap.from('.toc-item',    { x: 32, opacity: 0, duration: 0.35, stagger: 0.04, delay: 0.25, ease: 'power2.out' })
+    }
+  </script>
+</body>
+</html>

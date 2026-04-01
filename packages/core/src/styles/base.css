@@ -1,0 +1,211 @@
+/**
+ * tang-slidex base.css
+ * PPT 规范基础样式 — 所有 slide 必须应用
+ */
+
+/* ─── Reset ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Slide 容器（规范核心） ──────────────────────────────────────────────────── */
+.slide {
+  /* 尺寸：16:9 标准，通过 CSS scale 适配窗口 */
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  position: relative;
+
+  /* 默认背景（主题覆盖） */
+  background-color: var(--color-background, #ffffff);
+  color:            var(--color-text, #111928);
+
+  /* 字体 */
+  font-family:      var(--font-body, system-ui, sans-serif);
+  font-size:        22px;
+  line-height:      1.6;
+
+  /* 安全区内边距：左右 64px，上下 48px */
+  padding: 48px 64px;
+}
+
+/* ─── 通用文字元素 ────────────────────────────────────────────────────────────── */
+.slide h1, .slide-title {
+  font-family: var(--font-heading, system-ui, sans-serif);
+  font-size:   52px;
+  font-weight: 700;
+  line-height: 1.2;
+  color:       var(--color-text, #111928);
+  letter-spacing: -0.02em;
+}
+
+.slide h2, .slide-subtitle {
+  font-size:   32px;
+  font-weight: 500;
+  line-height: 1.35;
+  color:       var(--color-text-muted, #6b7280);
+}
+
+.slide h3 {
+  font-size:   26px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.slide p, .slide-body {
+  font-size:   22px;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+.slide-caption {
+  font-size:   15px;
+  font-weight: 300;
+  color:       var(--color-text-muted, #9ca3af);
+}
+
+/* ─── 强调色 ──────────────────────────────────────────────────────────────────── */
+.slide strong, .highlight {
+  color: var(--color-primary, #1a56db);
+  font-weight: 700;
+}
+
+.slide code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size:   0.9em;
+  background:  var(--color-surface, #f3f4f6);
+  color:       var(--color-primary, #1a56db);
+  padding:     0.15em 0.4em;
+  border-radius: 4px;
+}
+
+/* ─── 列表 ────────────────────────────────────────────────────────────────────── */
+.slide ul, .slide ol {
+  padding-left: 1.5em;
+}
+
+.slide li {
+  font-size:   22px;
+  line-height: 1.7;
+  margin-bottom: 0.4em;
+}
+
+.slide li::marker {
+  color: var(--color-primary, #1a56db);
+}
+
+/* ─── 装饰线 ──────────────────────────────────────────────────────────────────── */
+.accent-line {
+  display:          block;
+  width:            64px;
+  height:           4px;
+  background-color: var(--color-primary, #1a56db);
+  border-radius:    2px;
+  margin-bottom:    24px;
+}
+
+/* ─── 布局辅助 ────────────────────────────────────────────────────────────────── */
+.slide-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  height: 100%;
+  align-items: center;
+}
+
+.slide-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.slide-flex-center {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  height:          100%;
+  text-align:      center;
+}
+
+/* ─── 卡片 ────────────────────────────────────────────────────────────────────── */
+.slide-card {
+  background:    var(--color-surface, #f8faff);
+  border:        1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--border-radius, 8px);
+  padding:       28px 32px;
+  box-shadow:    var(--shadow, 0 4px 24px rgba(0,0,0,0.06));
+}
+
+/* ─── 数字大字展示 ────────────────────────────────────────────────────────────── */
+.slide-metric {
+  font-size:   80px;
+  font-weight: 800;
+  line-height: 1;
+  color:       var(--color-primary, #1a56db);
+  letter-spacing: -0.03em;
+  font-family: var(--font-heading, system-ui, sans-serif);
+}
+
+.slide-metric-label {
+  font-size:  18px;
+  color:      var(--color-text-muted, #6b7280);
+  margin-top: 8px;
+}
+
+/* ─── 标签/Badge ──────────────────────────────────────────────────────────────── */
+.slide-badge {
+  display:          inline-block;
+  padding:          4px 14px;
+  border-radius:    999px;
+  font-size:        14px;
+  font-weight:      600;
+  background-color: var(--color-accent, #dbeafe);
+  color:            var(--color-primary, #1a56db);
+}
+
+/* ─── 标准动画类 ──────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.90); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in    { animation: fadeIn    0.5s ease both; }
+.animate-slide-up   { animation: slideUp   0.5s ease both; }
+.animate-slide-right{ animation: slideRight 0.5s ease both; }
+.animate-scale-in   { animation: scaleIn   0.45s ease both; }
+
+/* 动画延迟辅助类 */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+
+/* ─── 页码指示器 ──────────────────────────────────────────────────────────────── */
+.slide-page-number {
+  position:   absolute;
+  bottom:     24px;
+  right:      40px;
+  font-size:  14px;
+  color:      var(--color-text-muted, #9ca3af);
+  font-family: var(--font-mono, ui-monospace);
+}

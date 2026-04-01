@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .slide {
+      width: 1280px; height: 720px; overflow: hidden;
+      background-color: var(--color-background, #0f172a);
+      padding: 52px 80px;
+    }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 12px; }
+    .title   { font-size: 42px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 28px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--color-text-muted, #94a3b8); margin-bottom: 28px; font-style: italic; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--color-text-muted, #94a3b8);
+      padding: 10px 16px; text-align: left;
+      border-bottom: 2px solid var(--color-border, #334155);
+    }
+    thead th:first-child { width: 160px; }
+    tbody tr {
+      border-bottom: 1px solid var(--color-border, #334155);
+      transition: background 0.2s;
+    }
+    tbody tr:hover { background: rgba(124,58,237,0.05); }
+    tbody tr.highlight { background: rgba(124,58,237,0.08); }
+    tbody tr.highlight td:first-child { color: var(--color-primary, #7c3aed); font-weight: 700; }
+    td {
+      font-size: 15px; padding: 12px 16px;
+      color: var(--color-text, #f1f5f9);
+      vertical-align: middle;
+    }
+    .badge-yes { color: #34d399; font-weight: 700; font-size: 17px; }
+    .badge-no  { color: #64748b; font-weight: 700; font-size: 17px; }
+    .badge-partial { color: #fbbf24; font-weight: 700; font-size: 15px; }
+    .badge-tag {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      background: rgba(124,58,237,0.15); color: #a78bfa;
+      padding: 2px 8px; border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide" data-slide-id="004" data-slide-type="content">
+    <p class="eyebrow">02 · 竞品</p>
+    <h1 class="title">竞品对比分析</h1>
+    <p class="subtitle">"把 AI Agent 当设计师，把浏览器当播放器" —— 这是其他工具做不到的</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>对比项</th>
+          <th>tang-slidex <span class="badge-tag">本项目</span></th>
+          <th>Slidev</th>
+          <th>Gamma</th>
+          <th>reveal.js</th>
+          <th>PowerPoint</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight">
+          <td>AI Agent 原生支持</td>
+          <td><span class="badge-yes">✅</span> 核心设计</td>
+          <td><span class="badge-no">❌</span></td>
+          <td><span class="badge-partial">⚡ 部分</span></td>
+          <td><span class="badge-no">❌</span></td>
+          <td><span class="badge-partial">⚡ 插件</span></td>
+        </tr>
+        <tr>
+          <td>前端技术栈自由度</td>
+          <td><span class="badge-yes">✅</span> 完全自由</td>
+          <td><span class="badge-partial">⚡ Vue 绑定</span></td>
+          <td><span class="badge-no">❌</span></td>
+          <td><span class="badge-partial">⚡ HTML</span></td>
+          <td><span class="badge-no">❌</span></td>
+        </tr>
+        <tr class="highlight">
+          <td>数据可视化集成</td>
+          <td><span class="badge-yes">✅</span> ECharts/AntV</td>
+          <td><span class="badge-partial">⚡ 有限</span></td>
+          <td><span class="badge-no">❌</span></td>
+          <td><span class="badge-no">❌</span></td>
+          <td><span class="badge-partial">⚡ 内置图表</span></td>
+        </tr>
+        <tr>
+          <td>动画能力</td>
+          <td><span class="badge-yes">✅</span> GSAP 全量</td>
+          <td><span class="badge-partial">⚡ CSS</span></td>
+          <td><span class="badge-partial">⚡ 内置</span></td>
+          <td><span class="badge-partial">⚡ CSS</span></td>
+          <td><span class="badge-partial">⚡ 有限</span></td>
+        </tr>
+        <tr>
+          <td>导出分发</td>
+          <td><span class="badge-yes">✅</span> HTML单文件+PDF</td>
+          <td><span class="badge-partial">⚡ PDF/HTML</span></td>
+          <td>云端托管</td>
+          <td><span class="badge-partial">⚡ HTML</span></td>
+          <td>.pptx</td>
+        </tr>
+        <tr>
+          <td>开源</td>
+          <td><span class="badge-yes">✅</span></td>
+          <td><span class="badge-yes">✅</span></td>
+          <td><span class="badge-no">❌</span></td>
+          <td><span class="badge-yes">✅</span></td>
+          <td><span class="badge-no">❌</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    if (window.gsap) {
+      gsap.from('.title',    { y: -20, opacity: 0, duration: 0.4 })
+      gsap.from('.subtitle', { opacity: 0, duration: 0.4, delay: 0.15 })
+      gsap.from('tbody tr',  { x: -20, opacity: 0, duration: 0.35, stagger: 0.06, delay: 0.2 })
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .slide {
+      width: 1280px; height: 720px; overflow: hidden;
+      background-color: var(--color-background, #0f172a);
+      padding: 52px 80px;
+    }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 12px; }
+    .title   { font-size: 42px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--color-text-muted, #94a3b8); margin-bottom: 32px; }
+    .flow {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; align-items: center;
+    }
+    .step {
+      text-align: center; position: relative;
+    }
+    .step-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--color-surface, #1e293b);
+      border: 2px solid var(--color-border, #334155);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin: 0 auto 14px;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      cursor: default;
+    }
+    .step:hover .step-circle {
+      border-color: var(--color-primary, #7c3aed);
+      box-shadow: 0 0 0 4px rgba(124,58,237,0.15);
+      transform: scale(1.08);
+    }
+    .step-title { font-size: 14px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 6px; }
+    .step-desc  { font-size: 12px; color: var(--color-text-muted, #94a3b8); line-height: 1.5; padding: 0 8px; }
+    .step-tag   {
+      display: inline-block; margin-top: 8px;
+      font-size: 10px; font-weight: 700; color: var(--color-primary, #7c3aed);
+      background: rgba(124,58,237,0.12); padding: 2px 8px; border-radius: 999px;
+    }
+    .arrow {
+      text-align: center; font-size: 22px; color: var(--color-border, #334155);
+      position: relative; top: -20px;
+    }
+    /* 下方 SOP 说明 */
+    .sop-bar {
+      margin-top: 28px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .sop-card {
+      background: var(--color-surface, #1e293b);
+      border: 1px solid var(--color-border, #334155);
+      border-radius: 10px; padding: 16px;
+      display: flex; gap: 12px; align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .sop-card:hover { border-color: var(--color-primary, #7c3aed); }
+    .sop-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .sop-title { font-size: 14px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 4px; }
+    .sop-desc  { font-size: 13px; color: var(--color-text-muted, #94a3b8); line-height: 1.55; }
+  </style>
+</head>
+<body>
+  <div class="slide" data-slide-id="007" data-slide-type="content">
+    <p class="eyebrow">04 · Skill 体系</p>
+    <h1 class="title">Skill 体系</h1>
+    <p class="subtitle">为 AI Agent 量身定制的 SOP 指令集，让 Agent 像专业设计师一样工作</p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="step-circle">💬</div>
+        <div class="step-title">ppt-brainstorm</div>
+        <div class="step-desc">引导用户明确主题、受众、核心亮点</div>
+        <span class="step-tag">用户引导</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="step-circle">📋</div>
+        <div class="step-title">ppt-outline</div>
+        <div class="step-desc">将草稿转化为结构化 execution.md</div>
+        <span class="step-tag">规划</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="step-circle">⚡</div>
+        <div class="step-title">slide-generator</div>
+        <div class="step-desc">逐页生成符合规范的 HTML 文件</div>
+        <span class="step-tag">Agent SOP</span>
+      </div>
+    </div>
+
+    <div class="sop-bar">
+      <div class="sop-card">
+        <span class="sop-icon">📏</span>
+        <div>
+          <div class="sop-title">ppt-standards</div>
+          <div class="sop-desc">PPT 规范约束：尺寸/字体/配色/留白，确保输出"像 PPT"</div>
+        </div>
+      </div>
+      <div class="sop-card">
+        <span class="sop-icon">📊</span>
+        <div>
+          <div class="sop-title">chart-integration</div>
+          <div class="sop-desc">ECharts / AntV 图表接入指南，含数据格式和主题适配</div>
+        </div>
+      </div>
+      <div class="sop-card">
+        <span class="sop-icon">✨</span>
+        <div>
+          <div class="sop-title">animation-guide</div>
+          <div class="sop-desc">GSAP 动画规范：入场时序、缓动函数、性能最佳实践</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    if (window.gsap) {
+      gsap.from('.title',    { y: -20, opacity: 0, duration: 0.4 })
+      gsap.from('.subtitle', { opacity: 0, duration: 0.4, delay: 0.1 })
+      gsap.from('.step',     { y: 30, opacity: 0, duration: 0.4, stagger: 0.1, delay: 0.2 })
+      gsap.from('.arrow',    { opacity: 0, duration: 0.3, stagger: 0.1, delay: 0.35 })
+      gsap.from('.sop-card', { y: 20, opacity: 0, duration: 0.35, stagger: 0.08, delay: 0.5 })
+    }
+  </script>
+</body>
+</html>

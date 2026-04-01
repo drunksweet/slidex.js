@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .slide {
+      width: 1280px; height: 720px; overflow: hidden;
+      background: linear-gradient(135deg, #7c3aed 0%, #1e1b4b 60%, #0f172a 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    canvas#end-canvas {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .deco-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 64px 64px; pointer-events: none;
+    }
+    .main-text {
+      font-size: 88px; font-weight: 800; color: #fff;
+      letter-spacing: -0.04em; line-height: 1.05;
+      position: relative; margin-bottom: 24px;
+    }
+    .glow-text {
+      background: linear-gradient(90deg, #a78bfa, #c4b5fd, #a78bfa);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      to { background-position: 200% center; }
+    }
+    .sub-text {
+      font-size: 20px; color: rgba(255,255,255,0.6);
+      max-width: 520px; line-height: 1.6;
+      position: relative; margin-bottom: 44px;
+    }
+    .links { display: flex; gap: 20px; position: relative; }
+    .link-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 999px;
+      font-size: 16px; font-weight: 600; text-decoration: none;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .link-btn:hover { transform: translateY(-2px); }
+    /* 涟漪 */
+    .link-btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: scale(0);
+      animation: ripple-out 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-out {
+      to { transform: scale(4); opacity: 0; }
+    }
+    .link-btn-primary {
+      background: #fff; color: #7c3aed;
+      box-shadow: 0 4px 24px rgba(255,255,255,0.2);
+    }
+    .link-btn-primary:hover {
+      box-shadow: 0 8px 32px rgba(255,255,255,0.35);
+    }
+    .link-btn-secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+    }
+    .link-btn-secondary:hover {
+      background: rgba(255,255,255,0.14);
+    }
+    .bottom-info {
+      position: absolute; bottom: 32px;
+      display: flex; gap: 28px;
+      font-size: 13px; color: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="slide" data-slide-id="006" data-slide-type="ending">
+    <canvas id="end-canvas" width="1280" height="720"></canvas>
+    <div class="deco-grid"></div>
+
+    <div class="main-text">
+      Let's<br><span class="glow-text">Build It.</span>
+    </div>
+
+    <p class="sub-text">
+      tang-slidex 正在开发中，欢迎 Star、贡献代码或提出想法。
+    </p>
+
+    <div class="links">
+      <a href="https://github.com/tang-slidex" class="link-btn link-btn-primary">
+        ⭐ GitHub
+      </a>
+      <a href="#" class="link-btn link-btn-secondary">
+        📖 文档
+      </a>
+    </div>
+
+    <div class="bottom-info">
+      <span>tang-slidex v0.1.0</span>
+      <span>MIT License</span>
+      <span>Made with ❤️ by jiaoxinheng</span>
+    </div>
+  </div>
+
+  <script>
+    // ─── 粒子背景（与封面同款） ───────────────────────────────────────────────────
+    const canvas = document.getElementById('end-canvas')
+    const ctx    = canvas.getContext('2d')
+    const pts    = Array.from({ length: 60 }, () => ({
+      x:  Math.random() * 1280, y: Math.random() * 720,
+      r:  Math.random() * 1.6 + 0.3,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      alpha: Math.random() * 0.45 + 0.1,
+    }))
+
+    ;(function draw() {
+      ctx.clearRect(0, 0, 1280, 720)
+      for (const p of pts) {
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(167,139,250,${p.alpha})`
+        ctx.fill()
+      }
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y
+          const d  = Math.sqrt(dx * dx + dy * dy)
+          if (d < 130) {
+            ctx.beginPath()
+            ctx.moveTo(pts[i].x, pts[i].y)
+            ctx.lineTo(pts[j].x, pts[j].y)
+            ctx.strokeStyle = `rgba(124,58,237,${(1 - d / 130) * 0.1})`
+            ctx.lineWidth = 1
+            ctx.stroke()
+          }
+        }
+      }
+      for (const p of pts) {
+        p.x += p.vx; p.y += p.vy
+        if (p.x < 0 || p.x > 1280) p.vx *= -1
+        if (p.y < 0 || p.y > 720)  p.vy *= -1
+      }
+      requestAnimationFrame(draw)
+    })()
+
+    // ─── 按钮涟漪 ─────────────────────────────────────────────────────────────────
+    document.querySelectorAll('.link-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const rect   = btn.getBoundingClientRect()
+        const size   = Math.max(rect.width, rect.height)
+        const ripple = document.createElement('span')
+        ripple.className = 'ripple'
+        ripple.style.cssText = `
+          width: ${size}px; height: ${size}px;
+          left: ${e.clientX - rect.left - size / 2}px;
+          top:  ${e.clientY - rect.top  - size / 2}px;
+        `
+        btn.appendChild(ripple)
+        setTimeout(() => ripple.remove(), 700)
+      })
+    })
+
+    // ─── GSAP 入场动画 ────────────────────────────────────────────────────────────
+    if (window.gsap) {
+      gsap.from('.main-text', { scale: 0.82, opacity: 0, duration: 0.75, ease: 'back.out(1.2)' })
+      gsap.from('.sub-text',  { y: 24, opacity: 0, duration: 0.5, delay: 0.35 })
+      gsap.from('.links',     { y: 20, opacity: 0, duration: 0.5, delay: 0.5 })
+      gsap.from('.bottom-info', { opacity: 0, duration: 0.6, delay: 0.7 })
+    }
+  </script>
+</body>
+</html>

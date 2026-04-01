@@ -1,0 +1,29 @@
+{
+  "name": "@tang-slidex/core",
+  "version": "0.0.1",
+  "description": "tang-slidex 运行时引擎 + PPT 规范",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./base.css": "./dist/base.css",
+    "./theme.css": "./dist/theme.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts && cp src/styles/*.css dist/",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "vitest": "^3.0.5",
+    "typescript": "^5.7.3"
+  }
+}

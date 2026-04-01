@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .slide {
+      width: 1280px; height: 720px; overflow: hidden;
+      background-color: var(--color-background, #0f172a);
+      padding: 48px 72px;
+    }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 10px; }
+    .title   { font-size: 40px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 6px; }
+    .subtitle{ font-size: 15px; color: var(--color-text-muted, #94a3b8); margin-bottom: 28px; }
+    .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .demo-card {
+      background: var(--color-surface, #1e293b);
+      border: 1px solid var(--color-border, #334155);
+      border-radius: 12px; padding: 24px;
+      text-align: center; cursor: default;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .demo-card:hover { border-color: var(--color-primary, #7c3aed); transform: translateY(-3px); }
+    .demo-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+    .demo-title { font-size: 17px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 8px; }
+    .demo-desc  { font-size: 13px; color: var(--color-text-muted, #94a3b8); line-height: 1.6; }
+    /* 动画演示区 */
+    .anim-demo {
+      height: 60px; margin-top: 14px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .dot-anim {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--color-primary, #7c3aed);
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .dot-anim:nth-child(2) { animation-delay: 0.15s; background: #5b21b6; }
+    .dot-anim:nth-child(3) { animation-delay: 0.30s; background: #2563eb; }
+    .dot-anim:nth-child(4) { animation-delay: 0.45s; background: #059669; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(1); opacity: 0.8; }
+      40% { transform: scale(1.6) translateY(-6px); opacity: 1; }
+    }
+    .bar-anim {
+      display: flex; align-items: flex-end; gap: 4px; height: 40px;
+    }
+    .bar-el {
+      width: 10px; background: var(--color-primary, #7c3aed); border-radius: 2px 2px 0 0;
+      animation: barPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes barPulse {
+      0%, 100% { transform: scaleY(0.4); }
+      50%       { transform: scaleY(1); }
+    }
+    .spin-anim {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid rgba(124,58,237,0.2);
+      border-top-color: var(--color-primary, #7c3aed);
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="slide" data-slide-id="011" data-slide-type="content">
+    <p class="eyebrow">08 · 动画 & 交互</p>
+    <h1 class="title">动画 & 交互能力</h1>
+    <p class="subtitle">前端技术栈的天然优势：任何 CSS/JS 动画都可以直接用</p>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <span class="demo-icon">✨</span>
+        <div class="demo-title">GSAP 入场动画</div>
+        <div class="demo-desc">逐元素 stagger 动画、缓动函数、Timeline 精确控制时序</div>
+        <div class="anim-demo">
+          <div class="dot-anim"></div>
+          <div class="dot-anim"></div>
+          <div class="dot-anim"></div>
+          <div class="dot-anim"></div>
+        </div>
+      </div>
+      <div class="demo-card">
+        <span class="demo-icon">📊</span>
+        <div class="demo-title">图表动态加载</div>
+        <div class="demo-desc">ECharts 数字滚动、渐进加载、实时数据流更新</div>
+        <div class="anim-demo">
+          <div class="bar-anim">
+            <div class="bar-el" style="height:32px;animation-delay:0s"></div>
+            <div class="bar-el" style="height:24px;animation-delay:0.2s"></div>
+            <div class="bar-el" style="height:40px;animation-delay:0.4s"></div>
+            <div class="bar-el" style="height:18px;animation-delay:0.1s"></div>
+            <div class="bar-el" style="height:36px;animation-delay:0.3s"></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-card">
+        <span class="demo-icon">🌐</span>
+        <div class="demo-title">Canvas / WebGL</div>
+        <div class="demo-desc">粒子系统、Three.js 3D 场景、自定义着色器，无限可能</div>
+        <div class="anim-demo">
+          <div class="spin-anim"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    if (window.gsap) {
+      gsap.from('.title',     { y: -20, opacity: 0, duration: 0.4 })
+      gsap.from('.demo-card', { y: 36, opacity: 0, duration: 0.45, stagger: 0.1, delay: 0.2, ease: 'power2.out' })
+    }
+  </script>
+</body>
+</html>

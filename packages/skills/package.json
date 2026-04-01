@@ -1,0 +1,10 @@
+{
+  "name": "@tang-slidex/skills",
+  "version": "0.0.1",
+  "description": "tang-slidex Skill 体系 — 面向 Agent 的技术 SOP + 面向用户的引导 Skill",
+  "private": false,
+  "scripts": {
+    "build": "echo 'Skills 包无需构建，SKILL.md 直接使用'",
+    "lint": "echo 'ok'"
+  }
+}
