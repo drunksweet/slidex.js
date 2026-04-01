@@ -11,6 +11,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { Plugin, Connect } from 'vite'
+import type { ServerResponse } from 'node:http'
 import type { WysiwygPatch, SaveSlideRequest } from '../types.js'
 
 // ─── 历史栈（文件写回前保存快照） ────────────────────────────────────────────
@@ -189,19 +190,26 @@ function readBody(req: Connect.IncomingMessage): Promise<string> {
   })
 }
 
-function jsonResponse(res: Connect.ServerResponse, status: number, data: object): void {
+function jsonResponse(res: ServerResponse, status: number, data: object): void {
   res.writeHead(status, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify(data))
+}
+
+export interface SlideSaveOptions {
+  /** slides 目录的绝对路径，默认为 process.cwd()/slides */
+  slidesRoot?: string
 }
 
 /**
  * slideSavePlugin：POST /api/save-slide
  * 接收 { slideIndex, patches } → 行级写回 HTML 文件
  */
-export function slideSavePlugin(): Plugin {
+export function slideSavePlugin(options: SlideSaveOptions = {}): Plugin {
   return {
     name: 'tang-slidex-save',
     configureServer(server) {
+      const slidesRoot = options.slidesRoot ?? path.join(process.cwd(), 'slides')
+
       server.middlewares.use('/api/save-slide', async (req, res, next) => {
         if (req.method !== 'POST') { next(); return }
 
@@ -210,10 +218,10 @@ export function slideSavePlugin(): Plugin {
           const { slideIndex, patches }: SaveSlideRequest = JSON.parse(body)
 
           const num      = String(slideIndex + 1).padStart(3, '0')
-          const filePath = path.join(process.cwd(), 'slides', `slide-${num}.html`)
+          const filePath = path.join(slidesRoot, `slide-${num}.html`)
 
           if (!fs.existsSync(filePath)) {
-            return jsonResponse(res, 404, { ok: false, error: `slide-${num}.html not found` })
+            return jsonResponse(res, 404, { ok: false, error: `slide-${num}.html not found (slidesRoot: ${slidesRoot})` })
           }
 
           const html    = fs.readFileSync(filePath, 'utf8')
@@ -235,17 +243,21 @@ export function slideSavePlugin(): Plugin {
  * slideUndoPlugin：POST /api/undo
  * 接收 { file } → 还原上一次写回前的文件内容
  */
-export function slideUndoPlugin(): Plugin {
+export function slideUndoPlugin(options: SlideSaveOptions = {}): Plugin {
   return {
     name: 'tang-slidex-undo',
     configureServer(server) {
+      const slidesRoot = options.slidesRoot ?? path.join(process.cwd(), 'slides')
+
       server.middlewares.use('/api/undo', async (req, res, next) => {
         if (req.method !== 'POST') { next(); return }
 
         try {
           const body = await readBody(req)
           const { file }: { file: string } = JSON.parse(body)
-          const filePath = path.join(process.cwd(), file)
+          // file 格式为 "slides/slide-001.html"，取文件名后拼 slidesRoot
+          const fileName = path.basename(file)
+          const filePath = path.join(slidesRoot, fileName)
 
           const history = editHistory.get(filePath)
           if (!history?.length) {

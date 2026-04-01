@@ -1,0 +1,151 @@
+.stageArea {
+  grid-area: stage;
+  display: flex;
+  flex-direction: column;
+  background: #12121a;
+  overflow: hidden;
+  position: relative;
+  min-height: 0;
+}
+
+/* 演示模式：更深的背景，凸显 slide 边界 */
+[data-mode="present"] .stageArea {
+  background: #050508;
+}
+
+/* 编辑模式：稍浅的格子背景，明确区分编辑区域 */
+[data-mode="edit"] .stageArea {
+  background: #0d0d14;
+  background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* 缩放画布容器：填满剩余空间，flex 居中 slide-host */
+.stageCanvas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* slide-host：固定 1280×720，JS 只设 transform scale，居中由 flex 父容器保证 */
+#slide-host {
+  width: 1280px;
+  height: 720px;
+  flex-shrink: 0;
+  transform-origin: center center;
+}
+
+/* 底部导航 */
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: #0e0e18;
+  flex-shrink: 0;
+  height: 44px;
+}
+
+.navBtn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55);
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+}
+
+.navBtn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border-color: rgba(255,255,255,0.2);
+}
+
+.navBtn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+.pageInfo {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  min-width: 60px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.navSep {
+  width: 1px;
+  height: 14px;
+  background: rgba(255,255,255,0.1);
+  margin: 0 4px;
+}
+
+.presentBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.28);
+  color: #4ade80;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.presentBtn:hover { background: rgba(34,197,94,0.22); }
+
+.editBtn {
+  background: rgba(251,146,60,0.12);
+  border: 1px solid rgba(251,146,60,0.28);
+  color: #fb923c;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.editBtn:hover { background: rgba(251,146,60,0.22); }
+
+/* ── 元素选中框 ── */
+.selectionOverlay {
+  position: fixed;
+  border: 2px solid #3b82f6;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 400;
+  display: none;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.selectionOverlay::before {
+  content: attr(data-label);
+  position: absolute; top: -21px; left: -2px;
+  background: #3b82f6; color: #fff;
+  font-size: 10px; font-weight: 700; font-family: ui-monospace;
+  padding: 1px 7px; border-radius: 4px 4px 0 0;
+  white-space: nowrap; pointer-events: none;
+}
+
+/* ── 对齐辅助线 ── */
+.alignGuide {
+  position: fixed;
+  background: rgba(251,146,60,0.7);
+  pointer-events: none;
+  z-index: 410;
+  display: none;
+}
+.alignH { height: 1px; left: 0; right: 0; }
+.alignV { width:  1px; top:  0; bottom: 0; }

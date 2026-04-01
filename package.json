@@ -5,8 +5,10 @@
   "description": "首个专为 AI Agent 设计、前端技术栈原生的开源幻灯片框架",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "dev:example": "pnpm --filter tang-slidex-example-tech-intro dev",
+    "dev:turbo": "turbo run dev",
+    "dev": "pnpm --filter @tang-slidex/viewer dev",
+    "dev:viewer": "pnpm --filter @tang-slidex/viewer dev",
+    "dev:legacy": "pnpm --filter tang-slidex-example-tech-intro dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules"

@@ -44,12 +44,19 @@ export function injectLineNumbers(html: string, relPath: string): string {
   return result.join('\n')
 }
 
-export function slideInspectorPlugin(): Plugin {
+export interface SlideInspectorOptions {
+  /** slides 目录的绝对路径，默认为 process.cwd()/slides */
+  slidesRoot?: string
+}
+
+export function slideInspectorPlugin(options: SlideInspectorOptions = {}): Plugin {
   return {
     name: 'tang-slidex-inspector',
     apply: 'serve',  // 仅开发模式
 
     configureServer(server) {
+      const slidesRoot = options.slidesRoot ?? path.join(process.cwd(), 'slides')
+
       // 在所有其他中间件之前，拦截 slides HTML 请求
       server.middlewares.use((req, res, next) => {
         const url = req.url ?? ''
@@ -60,7 +67,9 @@ export function slideInspectorPlugin(): Plugin {
         }
 
         try {
-          const filePath = path.join(process.cwd(), urlPath)
+          // 从 slidesRoot 读取文件（而不是 process.cwd()）
+          const fileName = path.basename(urlPath)
+          const filePath = path.join(slidesRoot, fileName)
           if (!fs.existsSync(filePath)) return next()
 
           const html    = fs.readFileSync(filePath, 'utf8')

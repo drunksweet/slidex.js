@@ -1,0 +1,161 @@
+.topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  background: #0e0e18;
+  user-select: none;
+  z-index: 100;
+}
+
+.topbar[data-mode="present"] {
+  background: rgba(10,10,15,0.95);
+  backdrop-filter: blur(16px);
+  border-bottom-color: rgba(255,255,255,0.05);
+}
+
+/* ── 左区 ── */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logoIcon { font-size: 18px; }
+
+.logoText {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #a78bfa, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.modeTabs {
+  display: flex;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.modeTab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.modeTab:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.05); }
+
+.modeTab.active {
+  background: rgba(99,179,237,0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(99,179,237,0.25);
+}
+
+/* ── 中区 ── */
+.center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toolGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 4px 6px;
+}
+
+.toolBtn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 5px;
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+}
+
+.toolBtn:hover:not(:disabled) { background: rgba(255,255,255,0.08); color: #fff; }
+.toolBtn:disabled { opacity: 0.25; cursor: not-allowed; }
+.toolActive { background: rgba(99,179,237,0.18) !important; color: #93c5fd !important; }
+
+.toolSep {
+  width: 1px;
+  height: 14px;
+  background: rgba(255,255,255,0.1);
+  margin: 0 2px;
+}
+
+/* ── 右区 ── */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.actionBtn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.actionBtn.dirty {
+  background: rgba(34,197,94,0.12);
+  border-color: rgba(34,197,94,0.3);
+  color: #4ade80;
+}
+
+.actionBtn.dirty:hover { background: rgba(34,197,94,0.2); }
+
+.iconBtn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+}
+
+.iconBtn:hover { background: rgba(255,255,255,0.08); color: #fff; }

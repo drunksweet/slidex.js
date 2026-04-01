@@ -2,15 +2,7 @@
   "name": "tang-slidex-example-tech-intro",
   "version": "0.0.1",
   "private": true,
-  "description": "示例：tang-slidex 技术介绍 PPT",
-  "scripts": {
-    "dev": "vite --port 5173",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^6.2.0"
-  },
+  "description": "示例：tang-slidex 技术介绍 PPT（slides/ 目录由 packages/viewer 提供演示）",
   "tang-slidex": {
     "title": "tang-slidex — AI 驱动的幻灯片框架",
     "theme": "dark-tech",

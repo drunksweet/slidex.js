@@ -1,0 +1,27 @@
+/* ── 编辑模式：三栏 Grid ── */
+.app[data-mode="edit"] {
+  display: grid;
+  width: 100%;
+  grid-template-areas:
+    "topbar  topbar  topbar"
+    "slides  stage   panel"
+    "status  status  status";
+  grid-template-columns: var(--left-panel-w, 200px) 1fr var(--right-panel-w, 240px);
+  grid-template-rows: 48px 1fr 28px;
+  height: 100%;
+  background: #12121a;
+}
+
+/* ── 演示模式：全屏舞台，单列铺满 ── */
+.app[data-mode="present"] {
+  display: grid;
+  width: 100%;
+  grid-template-areas:
+    "topbar"
+    "stage"
+    "status";
+  grid-template-columns: 1fr;       /* ← 必须显式指定，否则 stage 宽度取决于内容 */
+  grid-template-rows: 44px 1fr 28px;
+  height: 100%;
+  background: #0a0a0f;
+}

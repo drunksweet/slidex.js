@@ -1,0 +1,48 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #0a0a0f;
+  color: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 全局滚动条样式 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+
+/* ── 编辑模式：slide 元素样式 ── */
+.tang-editable {
+  outline: 1px dashed rgba(99,179,237,0.4) !important;
+  cursor: text !important;
+  border-radius: 2px;
+}
+.tang-editable:focus {
+  outline: 2px solid rgba(99,179,237,0.85) !important;
+  background: rgba(59,130,246,0.05) !important;
+}
+.tang-draggable { cursor: grab !important; }
+.tang-dragging  { cursor: grabbing !important; opacity: 0.82; z-index: 999; }
+
+.tang-edit-mode pre { position: relative !important; cursor: text; }
+.tang-edit-mode pre:hover { outline: 1px dashed rgba(99,179,237,0.5); }
+.tang-edit-mode pre:hover::after {
+  content: 'click to edit';
+  position: absolute; top: 6px; right: 8px;
+  background: rgba(59,130,246,0.85); color: #fff;
+  font-size: 10px; font-family: system-ui; font-weight: 600;
+  padding: 2px 7px; border-radius: 3px; pointer-events: none;
+}
+
+.tang-code-textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+}
