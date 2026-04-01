@@ -1,0 +1,30 @@
+{
+  "name": "@tang-slidex/editor",
+  "version": "0.0.1",
+  "description": "tang-slidex 编辑引擎：WYSIWYG 可视化编辑 + AI Agent 辅助编辑",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./vite-plugins": {
+      "import": "./dist/vite-plugins/index.js",
+      "types": "./dist/vite-plugins/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts src/vite-plugins/index.ts --format esm --dts --splitting",
+    "dev": "tsup src/index.ts src/vite-plugins/index.ts --format esm --dts --splitting --watch",
+    "lint": "eslint src",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
+  }
+}

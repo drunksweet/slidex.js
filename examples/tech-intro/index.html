@@ -19,6 +19,7 @@
       background: #0a0a0f;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
     /* ─── Slide 舞台 ─── */
@@ -28,87 +29,74 @@
       transform-origin: center center;
       transition: opacity 0.15s ease;
     }
-
-    /* ─── 编辑模式：舞台橙色边框 ─── */
-    #slide-host.edit-mode {
-      outline: 2px solid rgba(251, 146, 60, 0.6);
-      outline-offset: 2px;
+    #slide-host.tang-edit-mode {
+      outline: 2px solid rgba(251, 146, 60, 0.5);
+      outline-offset: 3px;
     }
 
-    /* ─── 编辑提示条 ─── */
+    /* ─── 编辑提示横幅 ─── */
     #edit-banner {
       position: fixed; top: 0; left: 0; right: 0;
       height: 36px;
       background: linear-gradient(90deg, #f97316, #ea580c);
-      color: #fff; font-family: system-ui; font-size: 13px; font-weight: 600;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      z-index: 200; letter-spacing: 0.03em;
+      color: #fff; font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      z-index: 300; letter-spacing: 0.02em;
       transform: translateY(-100%);
-      transition: transform 0.25s ease;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     #edit-banner.show { transform: translateY(0); }
     #edit-banner kbd {
-      background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px;
-      font-size: 12px; font-family: ui-monospace;
+      background: rgba(0,0,0,0.25); padding: 1px 6px; border-radius: 4px;
+      font-size: 11px; font-family: ui-monospace; letter-spacing: 0;
     }
+    #edit-banner .banner-sep { opacity: 0.4; }
 
     /* ─── 导航栏 ─── */
     #nav-bar {
       position: fixed; bottom: 20px; left: 50%;
       transform: translateX(-50%);
-      display: flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 999px; padding: 7px 16px;
-      color: #fff; font-family: system-ui, sans-serif; font-size: 14px;
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(15,15,25,0.85);
+      backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px; padding: 6px 14px;
+      color: #fff; font-size: 13px;
       user-select: none; z-index: 50;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s, background 0.3s;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
     }
     #nav-bar.edit-mode {
-      border-color: rgba(251, 146, 60, 0.5);
-      background: rgba(251, 146, 60, 0.08);
+      border-color: rgba(251, 146, 60, 0.45);
+      background: rgba(30,15,5,0.9);
     }
-
     .nav-btn {
-      background: none; border: none; color: rgba(255,255,255,0.7);
-      cursor: pointer; font-size: 16px; padding: 4px 10px;
-      border-radius: 6px; transition: all 0.2s; line-height: 1;
+      background: none; border: none; color: rgba(255,255,255,0.65);
+      cursor: pointer; font-size: 15px; padding: 4px 10px;
+      border-radius: 6px; transition: all 0.15s; line-height: 1;
       white-space: nowrap;
     }
-    .nav-btn:hover  { background: rgba(255,255,255,0.1); color: #fff; }
-    .nav-btn:active { transform: scale(0.92); }
-    .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
-    .nav-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+    .nav-btn:hover  { background: rgba(255,255,255,0.09); color: #fff; }
+    .nav-btn:active { transform: scale(0.91); }
+    .nav-btn:disabled { opacity: 0.22; cursor: not-allowed; }
+    .nav-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.12); margin: 0 2px; }
+    #page-info { color: rgba(255,255,255,0.5); min-width: 52px; text-align: center; font-size: 12px; }
+    #btn-edit { color: #fb923c; font-size: 13px; padding: 4px 12px; }
+    #btn-edit:hover { background: rgba(251,146,60,0.12); color: #fdba74; }
+    #btn-save { font-size: 12px; padding: 4px 12px; background: rgba(34,197,94,0.14); color: #4ade80; border-radius: 6px; }
+    #btn-save:hover { background: rgba(34,197,94,0.24); }
+    #btn-cancel-edit { font-size: 12px; padding: 4px 10px; color: rgba(255,255,255,0.45); }
 
-    #page-info { color: rgba(255,255,255,0.6); min-width: 56px; text-align: center; font-size: 13px; }
-
-    /* 编辑按钮 */
-    #btn-edit {
-      font-size: 14px; padding: 4px 12px;
-      color: #fb923c;
-    }
-    #btn-edit:hover { background: rgba(251,146,60,0.15); color: #fdba74; }
-    #btn-save {
-      font-size: 13px; padding: 4px 12px;
-      background: rgba(34,197,94,0.15); color: #4ade80;
-      border-radius: 6px;
-    }
-    #btn-save:hover { background: rgba(34,197,94,0.25); }
-    #btn-cancel-edit {
-      font-size: 13px; padding: 4px 10px;
-      color: rgba(255,255,255,0.5);
-    }
-
-    /* ─── HMR toast ─── */
+    /* ─── HMR / status toast ─── */
     #hmr-toast {
       position: fixed; bottom: 72px; left: 50%;
-      transform: translateX(-50%) translateY(16px);
+      transform: translateX(-50%) translateY(10px);
       background: #7c3aed; color: #fff;
-      font-family: system-ui; font-size: 13px; font-weight: 600;
-      padding: 8px 20px; border-radius: 999px;
+      font-size: 12px; font-weight: 600;
+      padding: 7px 18px; border-radius: 999px;
       opacity: 0; pointer-events: none;
-      transition: opacity 0.2s, transform 0.2s; z-index: 60;
+      transition: opacity 0.18s, transform 0.18s; z-index: 60;
+      white-space: nowrap;
     }
     #hmr-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -117,113 +105,354 @@
       position: fixed; inset: 0;
       display: flex; align-items: center; justify-content: center;
       background: #0a0a0f; color: rgba(255,255,255,0.4);
-      font-family: system-ui; font-size: 16px;
-      transition: opacity 0.3s; z-index: 100;
+      font-size: 16px; transition: opacity 0.3s; z-index: 100;
     }
     #loading.hidden { opacity: 0; pointer-events: none; }
 
-    /* ─── Selection overlay ─── */
+    /* ═══════════════════════════════════════════════════════
+       编辑模式：元素状态
+    ═══════════════════════════════════════════════════════ */
+    .tang-editable {
+      outline: 1px dashed rgba(99,179,237,0.35) !important;
+      cursor: text !important;
+      border-radius: 2px;
+    }
+    .tang-editable:focus {
+      outline: 2px solid rgba(99,179,237,0.8) !important;
+      background: rgba(59,130,246,0.05) !important;
+    }
+    .tang-draggable { cursor: grab !important; }
+    .tang-dragging  { cursor: grabbing !important; opacity: 0.82; z-index: 999; }
+
+    /* 代码块 hover 提示 */
+    .tang-edit-mode pre { position: relative !important; cursor: text; }
+    .tang-edit-mode pre:hover { outline: 1px dashed rgba(99,179,237,0.5); }
+    .tang-edit-mode pre:hover::after {
+      content: 'click to edit'; position: absolute; top: 6px; right: 8px;
+      background: rgba(59,130,246,0.85); color: #fff;
+      font-size: 10px; font-family: system-ui; font-weight: 600;
+      padding: 2px 7px; border-radius: 3px; pointer-events: none;
+    }
+
+    /* ─── 选中框 ─── */
     #selection-overlay {
       position: fixed;
       border: 2px solid #3b82f6;
-      border-radius: 3px;
+      border-radius: 4px;
       pointer-events: none;
-      z-index: 150;
+      z-index: 400;
       display: none;
-      box-shadow: 0 0 0 1px rgba(59,130,246,0.2);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+      transition: left .08s, top .08s, width .08s, height .08s;
     }
     #selection-overlay::before {
       content: attr(data-label);
-      position: absolute; top: -22px; left: -2px;
+      position: absolute; top: -21px; left: -2px;
       background: #3b82f6; color: #fff;
-      font-size: 10px; font-weight: 600; font-family: ui-monospace;
-      padding: 2px 7px; border-radius: 4px 4px 0 0;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-    /* 删除按钮 */
-    #selection-delete {
-      position: fixed;
-      width: 22px; height: 22px;
-      background: #ef4444; color: #fff;
-      border: none; border-radius: 50%;
-      font-size: 12px; font-weight: 700;
-      cursor: pointer; z-index: 151;
-      display: none; align-items: center; justify-content: center;
-      line-height: 1;
-    }
-    #selection-delete:hover { background: #dc2626; }
-
-    /* ─── 可编辑元素样式（edit mode 激活时） ─── */
-    .tang-editable {
-      outline: 1px dashed rgba(59,130,246,0.4) !important;
-      cursor: text !important;
-    }
-    .tang-editable:focus {
-      outline: 2px solid #3b82f6 !important;
-      background: rgba(59,130,246,0.04) !important;
-    }
-    /* viewer 代码块编辑 textarea */
-    .tang-code-textarea {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
-    }
-    /* 编辑模式下悬停代码块提示可点击 */
-    .edit-mode pre:hover {
-      outline: 1px dashed rgba(59,130,246,0.5);
-      cursor: text;
-    }
-    .edit-mode pre:hover::after {
-      content: '✏️ 点击编辑';
-      position: absolute;
-      top: 6px; right: 8px;
-      background: #3b82f6;
-      color: #fff;
-      font-size: 10px; font-weight: 700; font-family: system-ui;
-      padding: 2px 8px; border-radius: 4px;
-      pointer-events: none;
-    }
-    .tang-draggable {
-      cursor: grab !important;
-    }
-    .tang-draggable.dragging {
-      cursor: grabbing !important;
-      opacity: 0.85;
-      z-index: 999;
+      font-size: 10px; font-weight: 700; font-family: ui-monospace;
+      padding: 1px 7px; border-radius: 4px 4px 0 0;
+      white-space: nowrap; pointer-events: none;
+      letter-spacing: 0.02em;
     }
 
-    /* 对齐辅助线 */
-    #align-h, #align-v {
-      position: fixed;
-      background: rgba(251,146,60,0.6);
-      pointer-events: none;
-      z-index: 160;
-      display: none;
+    /* ─── 对齐辅助线 ─── */
+    .tang-align-guide {
+      position: fixed; background: rgba(251,146,60,0.7);
+      pointer-events: none; z-index: 410; display: none;
     }
     #align-h { height: 1px; left: 0; right: 0; }
     #align-v { width: 1px; top: 0; bottom: 0; }
+
+    /* ═══════════════════════════════════════════════════════
+       浮动工具栏（选中元素时出现）
+    ═══════════════════════════════════════════════════════ */
+    #edit-toolbar {
+      position: fixed;
+      display: none;
+      align-items: center; gap: 2px;
+      background: rgba(15,15,25,0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 5px 8px;
+      z-index: 450;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05);
+      transform-origin: top center;
+      animation: toolbar-pop 0.14s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #edit-toolbar.visible { display: flex; }
+    @keyframes toolbar-pop {
+      from { opacity: 0; transform: scale(0.9) translateY(-6px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .tb-btn {
+      background: none; border: none; color: rgba(255,255,255,0.7);
+      cursor: pointer; font-size: 13px; padding: 4px 7px;
+      border-radius: 6px; transition: all 0.12s; line-height: 1;
+      white-space: nowrap; display: flex; align-items: center; gap: 3px;
+    }
+    .tb-btn:hover  { background: rgba(255,255,255,0.1); color: #fff; }
+    .tb-btn:active { transform: scale(0.9); }
+    .tb-btn.active { background: rgba(99,179,237,0.18); color: #93c5fd; }
+    .tb-btn.danger:hover { background: rgba(239,68,68,0.18); color: #fca5a5; }
+
+    .tb-sep { width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 3px; flex-shrink: 0; }
+
+    .tb-input {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; border-radius: 5px; font-size: 12px;
+      padding: 3px 6px; outline: none; text-align: center;
+    }
+    .tb-input:focus { border-color: rgba(99,179,237,0.6); background: rgba(99,179,237,0.08); }
+    #tb-font-size { width: 44px; }
+
+    .tb-color-btn {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      cursor: pointer; padding: 0; position: relative; overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .tb-color-btn:hover { border-color: rgba(255,255,255,0.6); }
+    .tb-color-btn input[type="color"] {
+      position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px);
+      opacity: 0; cursor: pointer; border: none; padding: 0;
+    }
+    .tb-color-preview {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       属性侧边栏（选中元素时显示）
+    ═══════════════════════════════════════════════════════ */
+    #props-panel {
+      position: fixed; right: 0; top: 0; bottom: 0;
+      width: 220px;
+      background: rgba(10,10,20,0.92);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(255,255,255,0.08);
+      padding: 16px 14px;
+      overflow-y: auto;
+      z-index: 300;
+      transform: translateX(100%);
+      transition: transform 0.2s cubic-bezier(0.34, 1.2, 0.64, 1);
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    #props-panel.visible { transform: translateX(0); }
+
+    .pp-section { display: flex; flex-direction: column; gap: 8px; }
+    .pp-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.3); text-transform: uppercase; padding-bottom: 2px;
+    }
+    .pp-row { display: flex; align-items: center; gap: 6px; }
+    .pp-label { font-size: 11px; color: rgba(255,255,255,0.45); width: 52px; flex-shrink: 0; }
+    .pp-input {
+      flex: 1; background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1); color: #fff;
+      border-radius: 5px; font-size: 12px; padding: 4px 7px;
+      outline: none; min-width: 0;
+    }
+    .pp-input:focus { border-color: rgba(99,179,237,0.55); background: rgba(99,179,237,0.07); }
+    .pp-range {
+      flex: 1; accent-color: #3b82f6; cursor: pointer;
+      height: 3px;
+    }
+    .pp-color-row { display: flex; align-items: center; gap: 6px; }
+    .pp-color-swatch {
+      width: 28px; height: 28px; border-radius: 6px;
+      border: 2px solid rgba(255,255,255,0.15);
+      cursor: pointer; position: relative; overflow: hidden;
+      flex-shrink: 0;
+    }
+    .pp-color-swatch input[type="color"] {
+      position: absolute; inset: -4px; opacity: 0; cursor: pointer;
+      width: calc(100% + 8px); height: calc(100% + 8px);
+    }
+    .pp-color-hex {
+      flex: 1; background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1); color: #fff;
+      border-radius: 5px; font-size: 11px; font-family: ui-monospace;
+      padding: 4px 7px; outline: none; min-width: 0;
+      text-transform: uppercase;
+    }
+    .pp-color-hex:focus { border-color: rgba(99,179,237,0.55); }
+    .pp-btn-row { display: flex; gap: 5px; flex-wrap: wrap; }
+    .pp-icon-btn {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.65); border-radius: 6px; padding: 4px 8px;
+      cursor: pointer; font-size: 11px; transition: all 0.12s;
+      flex: 1; text-align: center; min-width: 0;
+    }
+    .pp-icon-btn:hover { background: rgba(99,179,237,0.15); color: #93c5fd; border-color: rgba(99,179,237,0.3); }
+    .pp-icon-btn.active { background: rgba(99,179,237,0.2); color: #93c5fd; border-color: rgba(99,179,237,0.4); }
+
+    .pp-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 2px 0; }
+    #pp-no-selection {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      opacity: 0.35; padding: 20px;
+    }
+    #pp-no-selection .pp-empty-icon { font-size: 28px; }
+    #pp-no-selection .pp-empty-text { font-size: 11px; text-align: center; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+    /* ─── 代码块 textarea ─── */
+    .tang-code-textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+    }
   </style>
 </head>
 <body>
   <div id="loading">⏳ 加载中…</div>
-  <div id="edit-banner">✏️ 编辑模式 &nbsp;·&nbsp; 双击文本编辑 · 拖拽移动元素 <kbd>Esc</kbd> 取消 &nbsp;<kbd>Ctrl+S</kbd> 保存</div>
+
+  <!-- 编辑模式顶部提示横幅 -->
+  <div id="edit-banner">
+    <span>✏️ 编辑模式</span>
+    <span class="banner-sep">·</span>
+    <span>点击选中元素</span>
+    <span class="banner-sep">·</span>
+    <span>拖拽移动</span>
+    <span class="banner-sep">·</span>
+    <kbd>Esc</kbd>取消
+    <kbd>Ctrl+S</kbd>保存
+    <kbd>Ctrl+Z</kbd>撤销
+  </div>
+
+  <!-- slide 舞台 -->
   <div id="slide-host"></div>
   <div id="hmr-toast">🔥 slide 已热更新</div>
 
-  <!-- 选中框 + 删除按钮 -->
+  <!-- 元素选中框（pointer-events:none，浮在上层） -->
   <div id="selection-overlay" data-label=""></div>
-  <button id="selection-delete" title="删除元素">✕</button>
 
   <!-- 对齐辅助线 -->
-  <div id="align-h"></div>
-  <div id="align-v"></div>
+  <div id="align-h" class="tang-align-guide"></div>
+  <div id="align-v" class="tang-align-guide"></div>
 
+  <!-- ══════════════════════════════════════════
+       浮动工具栏（选中元素后显示在其正上方）
+  ══════════════════════════════════════════ -->
+  <div id="edit-toolbar">
+    <!-- 文字样式 -->
+    <button class="tb-btn" id="tb-bold"   title="粗体 (Ctrl+B)"><b>B</b></button>
+    <button class="tb-btn" id="tb-italic" title="斜体 (Ctrl+I)"><i>I</i></button>
+    <button class="tb-btn" id="tb-underline" title="下划线"><u>U</u></button>
+    <div class="tb-sep"></div>
+    <!-- 字号 -->
+    <input class="tb-input" id="tb-font-size" type="number" min="6" max="200" step="1" title="字号" placeholder="px">
+    <div class="tb-sep"></div>
+    <!-- 文字颜色 -->
+    <div class="tb-color-btn" title="文字颜色">
+      <div class="tb-color-preview" id="tb-color-preview" style="background:#ffffff"></div>
+      <input type="color" id="tb-color-input" value="#ffffff">
+    </div>
+    <div class="tb-sep"></div>
+    <!-- 文字对齐 -->
+    <button class="tb-btn" id="tb-align-left"   title="左对齐">⬅</button>
+    <button class="tb-btn" id="tb-align-center" title="居中对齐">☰</button>
+    <button class="tb-btn" id="tb-align-right"  title="右对齐">➡</button>
+    <div class="tb-sep"></div>
+    <!-- 元素操作 -->
+    <button class="tb-btn" id="tb-bring-front" title="置于顶层">↑</button>
+    <button class="tb-btn danger" id="tb-delete" title="删除元素">🗑</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       属性面板（右侧固定，选中元素后滑入）
+  ══════════════════════════════════════════ -->
+  <div id="props-panel">
+    <div id="pp-no-selection">
+      <div class="pp-empty-icon">🖱️</div>
+      <div class="pp-empty-text">在编辑模式下<br>点击元素以查看属性</div>
+    </div>
+
+    <div id="pp-content" style="display:none;flex-direction:column;gap:14px;">
+
+      <!-- 元素信息 -->
+      <div class="pp-section">
+        <div class="pp-title" id="pp-element-label">元素</div>
+      </div>
+
+      <div class="pp-divider"></div>
+
+      <!-- 位移（translate） -->
+      <div class="pp-section">
+        <div class="pp-title">位置偏移</div>
+        <div class="pp-row">
+          <span class="pp-label">X 偏移</span>
+          <input class="pp-input" id="pp-x" type="number" step="1" placeholder="0">
+        </div>
+        <div class="pp-row">
+          <span class="pp-label">Y 偏移</span>
+          <input class="pp-input" id="pp-y" type="number" step="1" placeholder="0">
+        </div>
+      </div>
+
+      <div class="pp-divider"></div>
+
+      <!-- 不透明度 -->
+      <div class="pp-section">
+        <div class="pp-title">不透明度</div>
+        <div class="pp-row">
+          <input class="pp-range" id="pp-opacity-range" type="range" min="0" max="1" step="0.01" value="1">
+          <input class="pp-input" id="pp-opacity-val" type="number" min="0" max="100" step="1" style="width:52px;flex:none" value="100">
+        </div>
+      </div>
+
+      <div class="pp-divider"></div>
+
+      <!-- 背景色 -->
+      <div class="pp-section">
+        <div class="pp-title">背景色</div>
+        <div class="pp-color-row">
+          <div class="pp-color-swatch" id="pp-bg-swatch">
+            <input type="color" id="pp-bg-input">
+          </div>
+          <input class="pp-color-hex" id="pp-bg-hex" type="text" placeholder="#000000" maxlength="9">
+        </div>
+      </div>
+
+      <div class="pp-divider"></div>
+
+      <!-- 圆角 -->
+      <div class="pp-section">
+        <div class="pp-title">圆角</div>
+        <div class="pp-row">
+          <input class="pp-range" id="pp-radius-range" type="range" min="0" max="80" step="1" value="0">
+          <input class="pp-input" id="pp-radius-val"  type="number" min="0" max="80" step="1" style="width:52px;flex:none" value="0">
+        </div>
+      </div>
+
+      <div class="pp-divider"></div>
+
+      <!-- 对齐（相对 slide） -->
+      <div class="pp-section">
+        <div class="pp-title">对齐</div>
+        <div class="pp-btn-row">
+          <button class="pp-icon-btn" id="pp-align-left"    title="水平靠左">← 左</button>
+          <button class="pp-icon-btn" id="pp-align-hcenter" title="水平居中">↔ 中</button>
+          <button class="pp-icon-btn" id="pp-align-right"   title="水平靠右">→ 右</button>
+        </div>
+        <div class="pp-btn-row">
+          <button class="pp-icon-btn" id="pp-align-top"     title="垂直靠顶">↑ 顶</button>
+          <button class="pp-icon-btn" id="pp-align-vcenter" title="垂直居中">↕ 中</button>
+          <button class="pp-icon-btn" id="pp-align-bottom"  title="垂直靠底">↓ 底</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       导航栏
+  ══════════════════════════════════════════ -->
   <div id="nav-bar">
     <button class="nav-btn" id="btn-prev" title="上一页 (←)">‹</button>
-    <span id="page-info">1 / 15</span>
+    <span id="page-info">1 / 16</span>
     <button class="nav-btn" id="btn-next" title="下一页 (→)">›</button>
     <div class="nav-divider"></div>
     <button class="nav-btn" id="btn-edit" title="进入编辑模式 (E)">✏️ 编辑</button>
-    <!-- 编辑模式下显示 -->
     <button class="nav-btn" id="btn-save"        title="保存 (Ctrl+S)" style="display:none">💾 保存</button>
     <button class="nav-btn" id="btn-cancel-edit" title="取消 (Esc)"    style="display:none">✕ 取消</button>
   </div>
@@ -279,7 +508,7 @@
       slideStage.style.transform = `scale(${currentScale})`
     }
     scaleToFit()
-    window.addEventListener('resize', () => { scaleToFit(); editManager.updateOverlay() })
+    window.addEventListener('resize', () => { scaleToFit() })
 
     // ─── Slide 加载 & 渲染 ───────────────────────────────────────────
     async function loadSlide(index) {
@@ -339,7 +568,7 @@
         updateUI()
         if (!hmrReload) history.replaceState(null, '', `#${index}`)
         // 切页后如果编辑模式激活，重新绑定
-        if (editManager.active) requestAnimationFrame(() => editManager.bind())
+        if (editManager.active) requestAnimationFrame(() => editManager.rebind())
       } catch (err) {
         console.error(err)
         slideStage.innerHTML = `<div style="color:#ef4444;padding:48px;font-family:monospace;width:1280px">❌ ${err.message}</div>`
@@ -356,190 +585,129 @@
     }
 
     // ═══════════════════════════════════════════════════════════════
-    //  EditManager — 核心编辑管理器
+    //  EditManager — 来自 @tang-slidex/editor（独立包）
+    // Vite dev 模式直接解析 TypeScript 源码
     // ═══════════════════════════════════════════════════════════════
-    const editManager = new class EditManager {
+    const { EditManager } = await import('../../packages/editor/src/index.ts')
+
+    // toast 工具（供 EditManager 回调）
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('hmr-toast')
+      const colors = { success: '#22c55e', error: '#ef4444', info: '#7c3aed' }
+      toast.textContent = msg
+      toast.style.background = colors[type] ?? colors.info
+      toast.classList.add('show')
+      setTimeout(() => {
+        toast.classList.remove('show')
+        toast.textContent = '🔥 slide 已热更新'
+        toast.style.background = ''
+      }, 2500)
+    }
+
+    const editManager = new EditManager({
+      slideStage,
+      getCurrentIndex: () => current,
+      getCurrentScale: () => currentScale,
+      showToast,
+      onStateChange: (active) => {
+        // 同步 UI 状态（banner、导航栏按钮）
+        const banner  = document.getElementById('edit-banner')
+        const navBar  = document.getElementById('nav-bar')
+        const btnEdit = document.getElementById('btn-edit')
+        const btnSave = document.getElementById('btn-save')
+        const btnCancel = document.getElementById('btn-cancel-edit')
+        if (active) {
+          banner.classList.add('show')
+          navBar.classList.add('edit-mode')
+          btnEdit.style.display   = 'none'
+          btnSave.style.display   = ''
+          btnCancel.style.display = ''
+          propsPanel.open()
+        } else {
+          banner.classList.remove('show')
+          navBar.classList.remove('edit-mode')
+          btnEdit.style.display   = ''
+          btnSave.style.display   = 'none'
+          btnCancel.style.display = 'none'
+          propsPanel.close()
+          editUI.clearSelection()
+        }
+        updateUI()
+      },
+      // 拖拽时同步更新 overlay 和辅助线
+      onDragMove: (el) => { editUI.updateOverlay(el); editUI.showGuides(el) },
+      onDragEnd:  ()   => { editUI.hideGuides() },
+      // 元素被点击后选中
+      onElementClick: (el) => { editUI.select(el) },
+    })
+
+    // ═══════════════════════════════════════════════════════════════
+    //  EditUI — 选中框 / 工具栏 / 属性面板（宿主层，不进 editor 包）
+    // ═══════════════════════════════════════════════════════════════
+    const editUI = new class EditUI {
       constructor() {
-        this.active   = false
-        this.patches  = []           // 当前 session 的变更列表
-        this._snapshots = new Map()  // element → original textContent
-        this._dragState = null
-        this._selectedEl = null
+        this._sel = null  // 当前选中元素
 
         // DOM refs
-        this.$overlay = document.getElementById('selection-overlay')
-        this.$delBtn  = document.getElementById('selection-delete')
-        this.$banner  = document.getElementById('edit-banner')
-        this.$alignH  = document.getElementById('align-h')
-        this.$alignV  = document.getElementById('align-v')
+        this.$overlay  = document.getElementById('selection-overlay')
+        this.$toolbar  = document.getElementById('edit-toolbar')
+        this.$alignH   = document.getElementById('align-h')
+        this.$alignV   = document.getElementById('align-v')
 
-        // 删除按钮
-        this.$delBtn.addEventListener('click', () => this._deleteSelected())
-      }
+        // ── 工具栏绑定 ──
+        this._bindToolbar()
 
-      /** 进入编辑模式 */
-      enable() {
-        this.active  = true
-        this.patches = []
-        this._snapshots.clear()
-        slideStage.classList.add('edit-mode')
-        document.getElementById('nav-bar').classList.add('edit-mode')
-        this.$banner.classList.add('show')
-        document.getElementById('btn-edit').style.display   = 'none'
-        document.getElementById('btn-save').style.display   = ''
-        document.getElementById('btn-cancel-edit').style.display = ''
-        this.bind()
-        updateUI()
-      }
-
-      /** 退出编辑模式（不保存） */
-      disable() {
-        this.active = false
-        this._restoreSnapshots()
-        this._cleanup()
-        updateUI()
-      }
-
-      /** 保存并退出 */
-      async save() {
-        if (this.patches.length === 0) {
-          this.disable()
-          return
-        }
-        try {
-          const res = await fetch('/api/save-slide', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slideIndex: current, patches: this.patches }),
+        // ── slide 点击选中 ──
+        slideStage.addEventListener('mousedown', (e) => {
+          if (!editManager.active) return
+          const target = e.target
+          // 忽略工具栏本身的点击
+          if (this.$toolbar.contains(target)) return
+          requestAnimationFrame(() => {
+            const slide = slideStage.querySelector('.slide')
+            if (!slide) return
+            let el = target
+            // 向上找到 slide 直接子元素
+            while (el && el.parentElement !== slide) {
+              el = el.parentElement
+              if (!el || el === slideStage) { this.clearSelection(); return }
+            }
+            if (el && el !== slide) this.select(el)
           })
-          const data = await res.json()
-          if (data.ok) {
-            this._showToast('💾 已保存', '#22c55e')
-            this.active = false
-            this._cleanup()
-            updateUI()
-          } else {
-            this._showToast('❌ 保存失败: ' + data.error, '#ef4444')
+        })
+
+        // 点击 overlay 之外 → 取消选中
+        document.addEventListener('mousedown', (e) => {
+          if (!editManager.active) return
+          if (
+            !slideStage.contains(e.target) &&
+            !this.$toolbar.contains(e.target) &&
+            !document.getElementById('props-panel').contains(e.target)
+          ) {
+            this.clearSelection()
           }
-        } catch (err) {
-          this._showToast('❌ 网络错误', '#ef4444')
-          console.error(err)
-        }
+        })
       }
 
-      /** 扫描 slide DOM，注入 contenteditable + drag */
-      bind() {
-        const slide = slideStage.querySelector('.slide')
-        if (!slide) return
-
-        // ── 代码块：特殊处理，使用浮动 textarea 覆盖编辑 ──────────────
-        slideStage.querySelectorAll('pre code[data-highlighted]').forEach(codeEl => {
-          const pre = codeEl.closest('pre')
-          if (!pre || pre.dataset.editBound) return
-          pre.dataset.editBound = '1'
-          // 存原始代码（decode HTML entities）
-          const raw = codeEl.dataset.rawCode ?? decodeEntities(codeEl.textContent)
-          codeEl.dataset.rawCode = raw
-
-          // 点击代码块 → 弹出浮动 textarea
-          const activate = (e) => {
-            if (!this.active) return
-            e.stopPropagation()
-            if (pre.querySelector('.tang-code-textarea')) return  // 已打开
-
-            const ta = document.createElement('textarea')
-            ta.className = 'tang-code-textarea'
-            ta.value = codeEl.dataset.rawCode ?? raw
-            ta.spellcheck = false
-
-            // 尺寸跟随 pre
-            const preRect = pre.getBoundingClientRect()
-            const hostRect = slideStage.getBoundingClientRect()
-            ta.style.cssText = `
-              position: absolute;
-              left: 0; top: 0; right: 0; bottom: 0;
-              width: 100%; height: 100%;
-              background: rgba(13,17,23,0.97);
-              color: #e6edf3;
-              font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-              font-size: 12px; line-height: 1.75;
-              padding: 16px 18px;
-              border: 2px solid #3b82f6;
-              border-radius: inherit;
-              resize: none;
-              z-index: 100;
-              outline: none;
-              tab-size: 2;
-            `
-            pre.style.position = 'relative'
-            pre.appendChild(ta)
-            ta.focus()
-
-            // 支持 Tab 缩进
-            ta.addEventListener('keydown', ev => {
-              if (ev.key === 'Tab') {
-                ev.preventDefault()
-                const s = ta.selectionStart, e2 = ta.selectionEnd
-                ta.value = ta.value.substring(0, s) + '  ' + ta.value.substring(e2)
-                ta.selectionStart = ta.selectionEnd = s + 2
-              }
-              // Escape 关闭
-              if (ev.key === 'Escape') { ev.stopPropagation(); ta.blur() }
-            })
-
-            // 失焦：更新高亮 + 记录 patch
-            ta.addEventListener('blur', () => {
-              const newCode = ta.value
-              codeEl.dataset.rawCode = newCode
-              // 重新高亮
-              codeEl.textContent = newCode
-              delete codeEl.dataset.highlighted
-              if (typeof hljs !== 'undefined') hljs.highlightElement(codeEl)
-              ta.remove()
-              // 记录 patch（type: code，server 端写回 <code> textContent）
-              const origRaw = raw
-              if (newCode !== origRaw) {
-                const selector = this._getSelector(codeEl)
-                this.patches = this.patches.filter(p => !(p.type === 'code' && p.selector === selector))
-                this.patches.push({ type: 'code', selector, value: newCode })
-              }
-            })
-          }
-
-          pre.addEventListener('click', activate)
-          pre._editActivate = activate
-        })
-
-        // 收集所有"叶子文本"元素（不含 canvas、svg、script、style、pre）
-        const textEls = this._collectTextElements(slide)
-        textEls.forEach(el => {
-          if (!this._snapshots.has(el)) this._snapshots.set(el, el.textContent)
-          el.contentEditable = 'true'
-          el.classList.add('tang-editable')
-          el.addEventListener('blur', () => this._onTextBlur(el), { once: false })
-        })
-
-        // 收集块级可拖拽元素（slide 的直接子元素，排除 style/canvas）
-        Array.from(slide.children).forEach(child => {
-          if (['STYLE','CANVAS','SCRIPT'].includes(child.tagName)) return
-          child.classList.add('tang-draggable')
-          child.addEventListener('mousedown', (e) => this._onDragStart(e, child))
-        })
-
-        // 点击选中
-        slideStage.addEventListener('click', (e) => this._onSlideClick(e), { once: false })
+      /** 选中一个块元素 */
+      select(el) {
+        this._sel = el
+        this.updateOverlay(el)
+        this._showToolbar(el)
+        propsPanel.update(el)
       }
 
-      /** 更新选中框位置 */
+      /** 清空选中 */
+      clearSelection() {
+        this._sel = null
+        this.$overlay.style.display = 'none'
+        this.$toolbar.classList.remove('visible')
+        propsPanel.clear()
+      }
+
+      /** 更新蓝色选中框位置 */
       updateOverlay(el) {
-        if (el) this._selectedEl = el
-        const target = this._selectedEl
-        if (!target) { this.$overlay.style.display = 'none'; this.$delBtn.style.display = 'none'; return }
-
-        const rect      = target.getBoundingClientRect()
-        const hostRect  = slideStage.getBoundingClientRect()
-
-        // 换算到 viewport 坐标
+        const rect = el.getBoundingClientRect()
         this.$overlay.style.cssText = `
           display: block;
           left:   ${rect.left   - 2}px;
@@ -547,214 +715,336 @@
           width:  ${rect.width  + 4}px;
           height: ${rect.height + 4}px;
         `
-        this.$overlay.setAttribute('data-label', target.tagName.toLowerCase() + (target.className ? '.' + target.className.split(' ')[0] : ''))
-
-        // 删除按钮放右上角
-        this.$delBtn.style.cssText = `
-          display: flex;
-          left: ${rect.right  + 2}px;
-          top:  ${rect.top    - 12}px;
-        `
+        const tag = el.tagName.toLowerCase()
+        const cls = el.className?.split(' ').find(c => c && !c.startsWith('tang-')) ?? ''
+        this.$overlay.dataset.label = cls ? `${tag}.${cls}` : tag
       }
 
-      // ── 私有方法 ──────────────────────────────────────────────────
-      _collectTextElements(root) {
-        const result = []
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT)
-        let node
-        while ((node = walker.nextNode())) {
-          if (['CANVAS','SVG','SCRIPT','STYLE','PRE','CODE'].includes(node.tagName)) continue
-          // 叶子节点：直接子节点只有文本（无元素子节点）
-          const hasElementChild = Array.from(node.childNodes).some(n => n.nodeType === 1)
-          if (!hasElementChild && node.textContent.trim()) {
-            result.push(node)
-          }
-        }
-        return result
-      }
-
-      _onTextBlur(el) {
-        if (!this.active) return
-        const original = this._snapshots.get(el) ?? ''
-        const current  = el.textContent
-        if (current !== original) {
-          const selector = this._getSelector(el)
-          // 去重：同 selector 的变更只保留最新
-          this.patches = this.patches.filter(p => !(p.type === 'text' && p.selector === selector))
-          this.patches.push({ type: 'text', selector, value: current })
-          this._snapshots.set(el, current)
-        }
-      }
-
-      _onDragStart(e, el) {
-        if (!this.active) return
-        // contenteditable 文本编辑时不触发拖拽
-        if (e.target.isContentEditable && e.target !== el) return
-        e.preventDefault()
-
-        const startX = e.clientX
-        const startY = e.clientY
-        const origTransform = el.style.transform || ''
-        // 解析已有偏移
-        const m = origTransform.match(/translate\(([^,]+),\s*([^)]+)\)/)
-        const baseX = m ? parseFloat(m[1]) : 0
-        const baseY = m ? parseFloat(m[2]) : 0
-
-        el.classList.add('dragging')
-        this._dragState = { el, startX, startY, baseX, baseY, dx: 0, dy: 0 }
-        this._selectedEl = el
-        this.updateOverlay(el)
-
-        const onMove = (e) => {
-          const rawDx = (e.clientX - startX) / currentScale
-          const rawDy = (e.clientY - startY) / currentScale
-          this._dragState.dx = rawDx
-          this._dragState.dy = rawDy
-          el.style.transform = `translate(${baseX + rawDx}px, ${baseY + rawDy}px)`
-          // 辅助线：接近中轴时吸附
-          this._showAlignGuides(el)
-          this.updateOverlay(el)
-        }
-
-        const onUp = () => {
-          if (!this._dragState) return
-          el.classList.remove('dragging')
-          const { dx, dy } = this._dragState
-          if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
-            const selector = this._getSelector(el)
-            this.patches = this.patches.filter(p => !(p.type === 'move' && p.selector === selector))
-            this.patches.push({ type: 'move', selector, dx: Math.round(dx), dy: Math.round(dy) })
-          }
-          this._dragState = null
-          this._hideAlignGuides()
-          document.removeEventListener('mousemove', onMove)
-          document.removeEventListener('mouseup',  onUp)
-        }
-
-        document.addEventListener('mousemove', onMove)
-        document.addEventListener('mouseup',   onUp)
-      }
-
-      _onSlideClick(e) {
-        if (!this.active) return
-        const slide = slideStage.querySelector('.slide')
-        if (!slide) return
-        // 找到被点击的直接块元素
-        let target = e.target
-        while (target && target.parentElement !== slide) {
-          target = target.parentElement
-          if (!target || target === slideStage) { this.updateOverlay(null); return }
-        }
-        if (target && target !== slide) this.updateOverlay(target)
-        else this.updateOverlay(null)
-      }
-
-      _deleteSelected() {
-        if (!this._selectedEl) return
-        const selector = this._getSelector(this._selectedEl)
-        this.patches.push({ type: 'delete', selector })
-        this._selectedEl.style.display = 'none'
-        this._selectedEl = null
-        this.updateOverlay(null)
-      }
-
-      _showAlignGuides(el) {
+      /** 显示辅助线（拖拽中调用） */
+      showGuides(el) {
         const rect     = el.getBoundingClientRect()
         const hostRect = slideStage.getBoundingClientRect()
-        const centerY  = rect.top + rect.height / 2
-        const centerX  = rect.left + rect.width / 2
-        const hostCY   = hostRect.top + hostRect.height / 2
-        const hostCX   = hostRect.left + hostRect.width / 2
-        const snap     = 8
+        const cx = rect.left + rect.width  / 2
+        const cy = rect.top  + rect.height / 2
+        const hx = hostRect.left + hostRect.width  / 2
+        const hy = hostRect.top  + hostRect.height / 2
+        const snap = 10 / currentScale
 
-        if (Math.abs(centerY - hostCY) < snap) {
-          this.$alignH.style.cssText = `display:block; top:${hostCY}px;`
-        } else {
-          this.$alignH.style.display = 'none'
-        }
-        if (Math.abs(centerX - hostCX) < snap) {
-          this.$alignV.style.cssText = `display:block; left:${hostCX}px;`
-        } else {
-          this.$alignV.style.display = 'none'
-        }
+        if (Math.abs(cy - hy) < snap) {
+          this.$alignH.style.cssText = `display:block;top:${hy}px;`
+        } else this.$alignH.style.display = 'none'
+
+        if (Math.abs(cx - hx) < snap) {
+          this.$alignV.style.cssText = `display:block;left:${hx}px;`
+        } else this.$alignV.style.display = 'none'
       }
 
-      _hideAlignGuides() {
+      hideGuides() {
         this.$alignH.style.display = 'none'
         this.$alignV.style.display = 'none'
       }
 
-      _restoreSnapshots() {
-        this._snapshots.forEach((orig, el) => { el.textContent = orig })
-        // 恢复 transform
-        this.patches.filter(p => p.type === 'move').forEach(p => {
-          try {
-            const el = slideStage.querySelector(p.selector)
-            if (el) el.style.transform = ''
-          } catch {}
-        })
-        // 恢复删除
-        this.patches.filter(p => p.type === 'delete').forEach(p => {
-          try {
-            const el = slideStage.querySelector(p.selector)
-            if (el) el.style.display = ''
-          } catch {}
-        })
+      // ── 工具栏 ──────────────────────────────────────────────────
+      _showToolbar(el) {
+        const rect = el.getBoundingClientRect()
+        const tb   = this.$toolbar
+        tb.classList.add('visible')
+
+        // 工具栏显示在元素上方居中；如果太靠顶，显示在下方
+        const tbH = 42
+        const margin = 8
+        let top  = rect.top - tbH - margin
+        let left = rect.left + rect.width / 2 - tb.offsetWidth / 2
+
+        if (top < 40) top = rect.bottom + margin
+        left = Math.max(8, Math.min(left, window.innerWidth - tb.offsetWidth - 8))
+
+        tb.style.left = `${left}px`
+        tb.style.top  = `${top}px`
+
+        // 更新工具栏状态（reflect current styles）
+        this._refreshToolbarState(el)
       }
 
-      _cleanup() {
-        // 清理代码块浮动 textarea
-        slideStage.querySelectorAll('.tang-code-textarea').forEach(ta => ta.remove())
-        slideStage.querySelectorAll('pre[data-edit-bound]').forEach(pre => {
-          delete pre.dataset.editBound
-          if (pre._editActivate) pre.removeEventListener('click', pre._editActivate)
-        })
-        // 移除所有 edit class
-        slideStage.querySelectorAll('[contenteditable]').forEach(el => {
-          el.removeAttribute('contenteditable')
-          el.classList.remove('tang-editable')
-        })
-        slideStage.querySelectorAll('.tang-draggable').forEach(el => {
-          el.classList.remove('tang-draggable')
-        })
-        slideStage.classList.remove('edit-mode')
-        document.getElementById('nav-bar').classList.remove('edit-mode')
-        this.$banner.classList.remove('show')
-        document.getElementById('btn-edit').style.display   = ''
-        document.getElementById('btn-save').style.display   = 'none'
-        document.getElementById('btn-cancel-edit').style.display = 'none'
-        this.$overlay.style.display = 'none'
-        this.$delBtn.style.display  = 'none'
-        this._hideAlignGuides()
-        this._selectedEl = null
-        this.patches     = []
+      _refreshToolbarState(el) {
+        const cs = window.getComputedStyle(el)
+        // 字体大小
+        const fsInput = document.getElementById('tb-font-size')
+        fsInput.value = Math.round(parseFloat(cs.fontSize) || 16)
+        // 文字颜色
+        const color = cs.color || '#ffffff'
+        document.getElementById('tb-color-preview').style.background = color
+        document.getElementById('tb-color-input').value = this._rgbToHex(color)
+        // 粗体/斜体/下划线
+        document.getElementById('tb-bold').classList.toggle('active', parseInt(cs.fontWeight) >= 700)
+        document.getElementById('tb-italic').classList.toggle('active', cs.fontStyle === 'italic')
+        document.getElementById('tb-underline').classList.toggle('active', cs.textDecoration.includes('underline'))
+        // 对齐
+        const ta = cs.textAlign
+        document.getElementById('tb-align-left').classList.toggle('active',   ta === 'left' || ta === 'start')
+        document.getElementById('tb-align-center').classList.toggle('active', ta === 'center')
+        document.getElementById('tb-align-right').classList.toggle('active',  ta === 'right' || ta === 'end')
       }
 
-      /** 生成稳定的 CSS selector（nth-child 路径） */
-      _getSelector(el) {
-        const parts = []
-        let node = el
-        const root = slideStage
-        while (node && node !== root) {
-          const parent = node.parentElement
-          if (!parent) break
-          const idx = Array.from(parent.children).indexOf(node) + 1
-          parts.unshift(`:nth-child(${idx})`)
-          node = parent
+      _bindToolbar() {
+        // 粗体
+        document.getElementById('tb-bold').addEventListener('click', () => {
+          if (!this._sel) return
+          const cs = window.getComputedStyle(this._sel)
+          const isBold = parseInt(cs.fontWeight) >= 700
+          editManager.applyStyleProp(this._sel, 'font-weight', isBold ? 'normal' : 'bold')
+          this._refreshToolbarState(this._sel)
+        })
+
+        // 斜体
+        document.getElementById('tb-italic').addEventListener('click', () => {
+          if (!this._sel) return
+          const cs = window.getComputedStyle(this._sel)
+          editManager.applyStyleProp(this._sel, 'font-style', cs.fontStyle === 'italic' ? 'normal' : 'italic')
+          this._refreshToolbarState(this._sel)
+        })
+
+        // 下划线
+        document.getElementById('tb-underline').addEventListener('click', () => {
+          if (!this._sel) return
+          const cs = window.getComputedStyle(this._sel)
+          const has = cs.textDecoration.includes('underline')
+          editManager.applyStyleProp(this._sel, 'text-decoration', has ? 'none' : 'underline')
+          this._refreshToolbarState(this._sel)
+        })
+
+        // 字号（input change / enter）
+        const fsInput = document.getElementById('tb-font-size')
+        const applyFontSize = () => {
+          if (!this._sel) return
+          const v = parseInt(fsInput.value)
+          if (v > 0) editManager.applyStyleProp(this._sel, 'font-size', `${v}px`)
         }
-        return '#slide-host ' + parts.join(' > ')
+        fsInput.addEventListener('change', applyFontSize)
+        fsInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); applyFontSize() } })
+
+        // 文字颜色
+        const colorInput = document.getElementById('tb-color-input')
+        colorInput.addEventListener('input', () => {
+          if (!this._sel) return
+          const hex = colorInput.value
+          document.getElementById('tb-color-preview').style.background = hex
+          editManager.applyStyleProp(this._sel, 'color', hex)
+        })
+
+        // 对齐
+        ;['left','center','right'].forEach(align => {
+          document.getElementById(`tb-align-${align}`).addEventListener('click', () => {
+            if (!this._sel) return
+            editManager.applyStyleProp(this._sel, 'text-align', align)
+            this._refreshToolbarState(this._sel)
+          })
+        })
+
+        // 置于顶层
+        document.getElementById('tb-bring-front').addEventListener('click', () => {
+          if (!this._sel) return
+          const cs = window.getComputedStyle(this._sel)
+          const cur = parseInt(cs.zIndex) || 0
+          editManager.applyStyleProp(this._sel, 'z-index', String(cur + 10))
+        })
+
+        // 删除元素
+        document.getElementById('tb-delete').addEventListener('click', () => {
+          if (!this._sel) return
+          editManager.deleteElement(this._sel)
+          this.clearSelection()
+        })
       }
 
-      _showToast(msg, bg = '#7c3aed') {
-        const toast = document.getElementById('hmr-toast')
-        toast.textContent = msg
-        toast.style.background = bg
-        toast.classList.add('show')
-        setTimeout(() => {
-          toast.classList.remove('show')
-          toast.textContent = '🔥 slide 已热更新'
-          toast.style.background = ''
-        }, 2500)
+      // ── 工具函数 ────────────────────────────────────────────────
+      _rgbToHex(rgb) {
+        const m = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/)
+        if (!m) return '#ffffff'
+        return '#' + [m[1],m[2],m[3]].map(n => parseInt(n).toString(16).padStart(2,'0')).join('')
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  PropsPanel — 右侧属性面板（宿主层）
+    // ═══════════════════════════════════════════════════════════════
+    const propsPanel = new class PropsPanel {
+      constructor() {
+        this.$panel  = document.getElementById('props-panel')
+        this.$noSel  = document.getElementById('pp-no-selection')
+        this.$content = document.getElementById('pp-content')
+        this._el     = null
+        this._ignore = false  // 防止循环更新
+
+        this._bindInputs()
+      }
+
+      open()  { this.$panel.classList.add('visible') }
+      close() { this.$panel.classList.remove('visible') }
+
+      /** 用当前选中元素的样式更新面板 */
+      update(el) {
+        this._el = el
+        this.$noSel.style.display  = 'none'
+        this.$content.style.display = 'flex'
+
+        const cs = window.getComputedStyle(el)
+        const label = el.tagName.toLowerCase() + (el.id ? `#${el.id}` : el.className?.split(' ').find(c => c && !c.startsWith('tang-')) ? `.${el.className.split(' ').find(c => c && !c.startsWith('tang-'))}` : '')
+        document.getElementById('pp-element-label').textContent = label
+
+        // 位移 (transform translate)
+        this._ignore = true
+        const t = el.style.transform || ''
+        const m = t.match(/translate\(([^,]+),\s*([^)]+)\)/)
+        document.getElementById('pp-x').value = m ? Math.round(parseFloat(m[1])) : 0
+        document.getElementById('pp-y').value = m ? Math.round(parseFloat(m[2])) : 0
+
+        // 不透明度
+        const op = parseFloat(cs.opacity ?? '1')
+        document.getElementById('pp-opacity-range').value = op
+        document.getElementById('pp-opacity-val').value   = Math.round(op * 100)
+
+        // 背景色
+        const bgRaw = cs.backgroundColor || 'transparent'
+        const bgHex = bgRaw.startsWith('rgb') ? this._rgbToHex(bgRaw) : ''
+        document.getElementById('pp-bg-swatch').style.background = bgRaw
+        if (bgHex) document.getElementById('pp-bg-input').value = bgHex
+        document.getElementById('pp-bg-hex').value = bgHex
+
+        // 圆角
+        const radius = parseInt(cs.borderRadius) || 0
+        document.getElementById('pp-radius-range').value = Math.min(radius, 80)
+        document.getElementById('pp-radius-val').value   = radius
+
+        this._ignore = false
+      }
+
+      /** 清空面板（无选中） */
+      clear() {
+        this._el = null
+        this.$noSel.style.display   = 'block'
+        this.$content.style.display = 'none'
+      }
+
+      _bindInputs() {
+        // 位移 X
+        document.getElementById('pp-x').addEventListener('change', () => {
+          if (!this._el || this._ignore) return
+          const x = parseFloat(document.getElementById('pp-x').value) || 0
+          const y = parseFloat(document.getElementById('pp-y').value) || 0
+          this._applyMove(x, y)
+        })
+        document.getElementById('pp-y').addEventListener('change', () => {
+          if (!this._el || this._ignore) return
+          const x = parseFloat(document.getElementById('pp-x').value) || 0
+          const y = parseFloat(document.getElementById('pp-y').value) || 0
+          this._applyMove(x, y)
+        })
+
+        // 不透明度（range + number 联动）
+        const opRange = document.getElementById('pp-opacity-range')
+        const opVal   = document.getElementById('pp-opacity-val')
+        opRange.addEventListener('input', () => {
+          if (!this._el || this._ignore) return
+          opVal.value = Math.round(opRange.value * 100)
+          editManager.applyStyleProp(this._el, 'opacity', opRange.value)
+        })
+        opVal.addEventListener('change', () => {
+          if (!this._el || this._ignore) return
+          const v = Math.min(100, Math.max(0, parseInt(opVal.value) || 100)) / 100
+          opRange.value = v
+          editManager.applyStyleProp(this._el, 'opacity', String(v))
+        })
+
+        // 背景色
+        const bgInput = document.getElementById('pp-bg-input')
+        const bgHex   = document.getElementById('pp-bg-hex')
+        bgInput.addEventListener('input', () => {
+          if (!this._el || this._ignore) return
+          bgHex.value = bgInput.value.toUpperCase()
+          document.getElementById('pp-bg-swatch').style.background = bgInput.value
+          editManager.applyStyleProp(this._el, 'background-color', bgInput.value)
+        })
+        bgHex.addEventListener('change', () => {
+          if (!this._el || this._ignore) return
+          const v = bgHex.value.trim()
+          if (/^#[0-9a-fA-F]{3,8}$/.test(v)) {
+            bgInput.value = v
+            document.getElementById('pp-bg-swatch').style.background = v
+            editManager.applyStyleProp(this._el, 'background-color', v)
+          }
+        })
+
+        // 圆角
+        const rrRange = document.getElementById('pp-radius-range')
+        const rrVal   = document.getElementById('pp-radius-val')
+        rrRange.addEventListener('input', () => {
+          if (!this._el || this._ignore) return
+          rrVal.value = rrRange.value
+          editManager.applyStyleProp(this._el, 'border-radius', `${rrRange.value}px`)
+        })
+        rrVal.addEventListener('change', () => {
+          if (!this._el || this._ignore) return
+          rrRange.value = Math.min(80, Math.max(0, parseInt(rrVal.value) || 0))
+          editManager.applyStyleProp(this._el, 'border-radius', `${rrRange.value}px`)
+        })
+
+        // 对齐按钮（相对 slide）
+        document.getElementById('pp-align-left').addEventListener('click',    () => this._alignEl('left'))
+        document.getElementById('pp-align-hcenter').addEventListener('click', () => this._alignEl('hcenter'))
+        document.getElementById('pp-align-right').addEventListener('click',   () => this._alignEl('right'))
+        document.getElementById('pp-align-top').addEventListener('click',     () => this._alignEl('top'))
+        document.getElementById('pp-align-vcenter').addEventListener('click', () => this._alignEl('vcenter'))
+        document.getElementById('pp-align-bottom').addEventListener('click',  () => this._alignEl('bottom'))
+      }
+
+      _applyMove(x, y) {
+        const anchor = { type: 'selector', selector: `[data-tang-line="${this._el.dataset.tangLine}"]` }
+        this._el.style.transform = `translate(${x}px, ${y}px)`
+        const anch = { type: 'line', file: this._el.dataset.tangFile, line: parseInt(this._el.dataset.tangLine) }
+        editManager.patches = editManager.patches?.filter(p => !(p.type === 'move')) ?? []
+        // Use the public API
+        editManager.applyStyleProp(this._el, 'transform', `translate(${x}px, ${y}px)`)
+      }
+
+      _alignEl(dir) {
+        if (!this._el) return
+        const el    = this._el
+        const slide = slideStage.querySelector('.slide')
+        if (!slide) return
+        const sr = slide.getBoundingClientRect()
+        const er = el.getBoundingClientRect()
+
+        // 当前已有的 translate 基值
+        const t = el.style.transform || ''
+        const m = t.match(/translate\(([^,]+),\s*([^)]+)\)/)
+        const bx = m ? parseFloat(m[1]) : 0
+        const by = m ? parseFloat(m[2]) : 0
+
+        let nx = bx, ny = by
+        const scale = currentScale
+
+        switch(dir) {
+          case 'left':    nx = bx + (sr.left - er.left) / scale; break
+          case 'right':   nx = bx + (sr.right - er.right) / scale; break
+          case 'hcenter': nx = bx + (sr.left + sr.width/2 - er.left - er.width/2) / scale; break
+          case 'top':     ny = by + (sr.top - er.top) / scale; break
+          case 'bottom':  ny = by + (sr.bottom - er.bottom) / scale; break
+          case 'vcenter': ny = by + (sr.top + sr.height/2 - er.top - er.height/2) / scale; break
+        }
+
+        nx = Math.round(nx); ny = Math.round(ny)
+        document.getElementById('pp-x').value = nx
+        document.getElementById('pp-y').value = ny
+        el.style.transform = `translate(${nx}px, ${ny}px)`
+        editManager.applyStyleProp(el, 'transform', `translate(${nx}px, ${ny}px)`)
+        editUI.updateOverlay(el)
+      }
+
+      _rgbToHex(rgb) {
+        const m = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/)
+        if (!m) return '#000000'
+        return '#' + [m[1],m[2],m[3]].map(n => parseInt(n).toString(16).padStart(2,'0')).join('')
       }
     }
 
@@ -1031,6 +1321,7 @@
       if (editManager.active) {
         if (e.key === 'Escape') { editManager.disable(); return }
         if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); editManager.save(); return }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); editManager.undo(); return }
         return  // 编辑模式下屏蔽翻页快捷键
       }
       if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigateTo(current + 1) }
@@ -1057,7 +1348,7 @@
         const idx = parseInt(match[1], 10) - 1
         if (idx === current) {
           navigateTo(current, { hmrReload: true }).then(() => {
-            editManager._showToast('🔥 slide 已热更新')
+            showToast('🔥 slide 已热更新', 'info')
           })
         }
       })
