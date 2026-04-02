@@ -167,7 +167,7 @@
       <div class="main-grid">
         <!-- 左：能力列表 -->
         <div class="cap-list">
-          <div class="cap">
+          <div class="cap" data-step="1" data-animation="fade-right" data-duration="380">
             <div class="cap-num">✏️</div>
             <div>
               <div class="cap-title">文本内联编辑</div>
@@ -178,7 +178,7 @@
               <span class="cap-code">contenteditable · TextNode 检测</span>
             </div>
           </div>
-          <div class="cap">
+          <div class="cap" data-step="2" data-animation="fade-right" data-duration="380" data-delay="50">
             <div class="cap-num">🖱️</div>
             <div>
               <div class="cap-title">元素拖拽移动</div>
@@ -189,7 +189,7 @@
               <span class="cap-code">transform: translate()</span>
             </div>
           </div>
-          <div class="cap">
+          <div class="cap" data-step="3" data-animation="fade-right" data-duration="380" data-delay="50">
             <div class="cap-num">🎨</div>
             <div>
               <div class="cap-title">样式实时预览</div>
@@ -200,7 +200,7 @@
               <span class="cap-code">style-prop patch</span>
             </div>
           </div>
-          <div class="cap">
+          <div class="cap" data-step="4" data-animation="fade-right" data-duration="380" data-delay="50">
             <div class="cap-num">🗑️</div>
             <div>
               <div class="cap-title">元素删除 &amp; 撤销</div>
@@ -269,7 +269,7 @@
     </div>
 
     <script>
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('.cap', {
           x: -20,
@@ -284,7 +284,7 @@
           duration: 0.45,
           delay: 0.2,
         })
-      }
+      })
     </script>
   </body>
 </html>

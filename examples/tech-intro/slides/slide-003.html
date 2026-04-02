@@ -123,8 +123,14 @@
     <div class="slide" data-slide-id="003" data-slide-type="content">
       <p class="eyebrow">01 · 背景</p>
       <h1 class="title">为什么需要 tang-slidex.js？</h1>
+
+      <!--
+        data-step="N"：第 N 次点击时才 reveal 此元素
+        data-animation：入场效果（fade-up/fade/zoom-in/…）
+        data-duration：动画时长 ms
+      -->
       <div class="cards">
-        <div class="card">
+        <div class="card" data-step="1" data-animation="fade-up" data-duration="450">
           <span class="card-icon">🤖</span>
           <div class="card-title">AI 能力被浪费</div>
           <div class="card-desc">
@@ -133,7 +139,7 @@
           </div>
           <span class="card-tag">痛点 #1</span>
         </div>
-        <div class="card">
+        <div class="card" data-step="2" data-animation="fade-up" data-duration="450" data-delay="80">
           <span class="card-icon">🎨</span>
           <div class="card-title">表现力的天花板</div>
           <div class="card-desc">
@@ -142,7 +148,7 @@
           </div>
           <span class="card-tag">痛点 #2</span>
         </div>
-        <div class="card">
+        <div class="card" data-step="3" data-animation="fade-up" data-duration="450" data-delay="160">
           <span class="card-icon">🔓</span>
           <div class="card-title">开放生态缺失</div>
           <div class="card-desc">
@@ -155,17 +161,12 @@
       </div>
     </div>
     <script>
-      if (window.gsap) {
-        gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
-        gsap.from('.card', {
-          y: 40,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.1,
-          delay: 0.2,
-          ease: 'power2.out',
-        })
-      }
+      tang.onLoad(() => {
+        // 标题、eyebrow 做入场动画
+        // .card 由框架步骤动画逐个 reveal（data-step=1/2/3），这里不重复
+        gsap.from('.title',   { y: -20, opacity: 0, duration: 0.45 })
+        gsap.from('.eyebrow', { opacity: 0, duration: 0.35 })
+      })
     </script>
   </body>
 </html>

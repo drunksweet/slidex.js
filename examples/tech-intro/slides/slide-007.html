@@ -162,8 +162,7 @@
       </div>
 
       <div class="sop-bar">
-        <div class="sop-card">
-          <span class="sop-icon">📏</span>
+        <div class="sop-card" data-step="1" data-animation="fade-up" data-duration="400">
           <div>
             <div class="sop-title">ppt-standards</div>
             <div class="sop-desc">
@@ -171,7 +170,7 @@
             </div>
           </div>
         </div>
-        <div class="sop-card">
+        <div class="sop-card" data-step="2" data-animation="fade-up" data-duration="400" data-delay="60">
           <span class="sop-icon">📊</span>
           <div>
             <div class="sop-title">chart-integration</div>
@@ -180,7 +179,7 @@
             </div>
           </div>
         </div>
-        <div class="sop-card">
+        <div class="sop-card" data-step="3" data-animation="fade-up" data-duration="400" data-delay="120">
           <span class="sop-icon">✨</span>
           <div>
             <div class="sop-title">animation-guide</div>
@@ -192,7 +191,7 @@
       </div>
     </div>
     <script>
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('.subtitle', { opacity: 0, duration: 0.4, delay: 0.1 })
         gsap.from('.step', {
@@ -215,7 +214,7 @@
           stagger: 0.08,
           delay: 0.5,
         })
-      }
+      })
     </script>
   </body>
 </html>

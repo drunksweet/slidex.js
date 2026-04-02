@@ -7,12 +7,7 @@
         width: 1280px;
         height: 720px;
         overflow: hidden;
-        background: linear-gradient(
-          135deg,
-          #7c3aed 0%,
-          #1e1b4b 60%,
-          #0f172a 100%
-        );
+        background: linear-gradient(135deg, #7c3aed 0%, #1e1b4b 60%, #0f172a 100%);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -30,14 +25,40 @@
         inset: 0;
         background-image:
           linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-          linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.025) 1px,
-            transparent 1px
-          );
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
         background-size: 64px 64px;
         pointer-events: none;
       }
+
+      /* 版本徽章 */
+      .version-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        border-radius: 999px;
+        padding: 6px 20px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fbbf24;
+        letter-spacing: 0.08em;
+        position: relative;
+        margin-bottom: 28px;
+      }
+      .version-badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #fbbf24;
+        box-shadow: 0 0 8px #fbbf24;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 4px #fbbf24; }
+        50%       { box-shadow: 0 0 14px #fbbf24, 0 0 28px rgba(245,158,11,0.4); }
+      }
+
       .main-text {
         font-size: 88px;
         font-weight: 800;
@@ -45,52 +66,80 @@
         letter-spacing: -0.04em;
         line-height: 1.05;
         position: relative;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
       }
       .glow-text {
-        background: linear-gradient(90deg, #a78bfa, #c4b5fd, #a78bfa);
+        background: linear-gradient(90deg, #a78bfa, #c4b5fd, #f9a8d4, #a78bfa);
         background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         animation: shimmer 3s linear infinite;
       }
       @keyframes shimmer {
-        to {
-          background-position: 200% center;
-        }
+        to { background-position: 200% center; }
       }
+
       .sub-text {
-        font-size: 20px;
-        color: rgba(255, 255, 255, 0.6);
-        max-width: 520px;
-        line-height: 1.6;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.55);
+        max-width: 600px;
+        line-height: 1.7;
         position: relative;
-        margin-bottom: 44px;
+        margin-bottom: 32px;
       }
+
+      /* v0.3 亮点 chips */
+      .chips {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        position: relative;
+        margin-bottom: 36px;
+      }
+      .chip {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 7px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        transition: all 0.2s;
+      }
+      .chip:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      .chip-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
       .links {
         display: flex;
-        gap: 20px;
+        gap: 16px;
         position: relative;
       }
       .link-btn {
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 14px 32px;
+        padding: 13px 28px;
         border-radius: 999px;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
         text-decoration: none;
         position: relative;
         overflow: hidden;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s;
       }
-      .link-btn:hover {
-        transform: translateY(-2px);
-      }
-      /* 涟漪 */
+      .link-btn:hover { transform: translateY(-2px); }
       .link-btn .ripple {
         position: absolute;
         border-radius: 50%;
@@ -100,27 +149,21 @@
         pointer-events: none;
       }
       @keyframes ripple-out {
-        to {
-          transform: scale(4);
-          opacity: 0;
-        }
+        to { transform: scale(4); opacity: 0; }
       }
       .link-btn-primary {
         background: #fff;
         color: #7c3aed;
         box-shadow: 0 4px 24px rgba(255, 255, 255, 0.2);
       }
-      .link-btn-primary:hover {
-        box-shadow: 0 8px 32px rgba(255, 255, 255, 0.35);
-      }
+      .link-btn-primary:hover { box-shadow: 0 8px 32px rgba(255, 255, 255, 0.35); }
       .link-btn-secondary {
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.25);
         color: #fff;
       }
-      .link-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.14);
-      }
+      .link-btn-secondary:hover { background: rgba(255, 255, 255, 0.14); }
+
       .bottom-info {
         position: absolute;
         bottom: 32px;
@@ -132,40 +175,67 @@
     </style>
   </head>
   <body>
-    <div class="slide" data-slide-id="006" data-slide-type="ending">
+    <div class="slide" data-slide-id="015" data-slide-type="ending">
       <canvas id="end-canvas" width="1280" height="720"></canvas>
       <div class="deco-grid"></div>
 
+      <!-- 入场后立刻可见的核心内容 -->
+      <div class="version-badge">
+        <span class="version-badge-dot"></span>
+        v0.3 · Animation System
+      </div>
+
       <div class="main-text">
-        v0.2
-        <br />
-        <span class="glow-text">已就绪.</span>
+        v0.3<br /><span class="glow-text">已就绪.</span>
       </div>
 
       <p class="sub-text">
-        AI 生成 + 浏览器编辑 + 行级写回，tang-slidex 正在开发中，欢迎 Star
-        和贡献。
+        AI 生成 · 浏览器编辑 · 步骤动画 · 行级写回<br />
+        tang-slidex 正在开发中，欢迎 Star 和贡献。
       </p>
 
-      <div class="links">
-        <a
-          href="https://github.com/tang-slidex"
-          class="link-btn link-btn-primary"
-        >
+      <!-- 步骤 1 出现：v0.3 亮点 -->
+      <div class="chips" data-step="1" data-animation="fade-up" data-duration="500">
+        <div class="chip">
+          <span class="chip-dot" style="background:#a78bfa"></span>
+          GSAP 步骤动画
+        </div>
+        <div class="chip">
+          <span class="chip-dot" style="background:#34d399"></span>
+          tang.onLoad 入场协议
+        </div>
+        <div class="chip">
+          <span class="chip-dot" style="background:#60a5fa"></span>
+          AnimateTab 可视化配置
+        </div>
+        <div class="chip">
+          <span class="chip-dot" style="background:#f59e0b"></span>
+          10 种预设效果
+        </div>
+        <div class="chip">
+          <span class="chip-dot" style="background:#f472b6"></span>
+          页面 & 元素双层动画
+        </div>
+      </div>
+
+      <!-- 步骤 2 出现：行动按钮 -->
+      <div class="links" data-step="2" data-animation="fade-up" data-duration="400">
+        <a href="https://github.com/drunksweet/slidex.js" class="link-btn link-btn-primary">
           ⭐ GitHub
         </a>
         <a href="#" class="link-btn link-btn-secondary">📖 文档</a>
+        <a href="#0" class="link-btn link-btn-secondary">⬅ 重播</a>
       </div>
 
       <div class="bottom-info">
-        <span>tang-slidex v0.2.0</span>
+        <span>tang-slidex v0.3.0</span>
         <span>MIT License</span>
         <span>Made with ❤️ by jiaoxinheng</span>
       </div>
     </div>
 
     <script>
-      // ─── 粒子背景（与封面同款） ───────────────────────────────────────────────────
+      // ─── 粒子背景 ────────────────────────────────────────────────────────────
       const canvas = document.getElementById('end-canvas')
       const ctx = canvas.getContext('2d')
       const pts = Array.from({ length: 60 }, () => ({
@@ -176,7 +246,6 @@
         vy: (Math.random() - 0.5) * 0.35,
         alpha: Math.random() * 0.45 + 0.1,
       }))
-
       ;(function draw() {
         ctx.clearRect(0, 0, 1280, 720)
         for (const p of pts) {
@@ -187,8 +256,7 @@
         }
         for (let i = 0; i < pts.length; i++) {
           for (let j = i + 1; j < pts.length; j++) {
-            const dx = pts[i].x - pts[j].x,
-              dy = pts[i].y - pts[j].y
+            const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y
             const d = Math.sqrt(dx * dx + dy * dy)
             if (d < 130) {
               ctx.beginPath()
@@ -201,48 +269,39 @@
           }
         }
         for (const p of pts) {
-          p.x += p.vx
-          p.y += p.vy
+          p.x += p.vx; p.y += p.vy
           if (p.x < 0 || p.x > 1280) p.vx *= -1
           if (p.y < 0 || p.y > 720) p.vy *= -1
         }
         requestAnimationFrame(draw)
       })()
 
-      // ─── 按钮涟漪 ─────────────────────────────────────────────────────────────────
-      document.querySelectorAll('.link-btn').forEach((btn) => {
-        btn.addEventListener('click', function (e) {
+      // ─── 按钮涟漪 ────────────────────────────────────────────────────────────
+      document.querySelectorAll('.link-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
           const rect = btn.getBoundingClientRect()
           const size = Math.max(rect.width, rect.height)
           const ripple = document.createElement('span')
           ripple.className = 'ripple'
-          ripple.style.cssText = `
-          width: ${size}px; height: ${size}px;
-          left: ${e.clientX - rect.left - size / 2}px;
-          top:  ${e.clientY - rect.top - size / 2}px;
-        `
+          ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`
           btn.appendChild(ripple)
           setTimeout(() => ripple.remove(), 700)
         })
       })
 
-      // ─── GSAP 入场动画 ────────────────────────────────────────────────────────────
-      if (window.gsap) {
+      // ─── 入场动画（页面级）──────────────────────────────────────────────────
+      tang.onLoad(() => {
+        gsap.from('.version-badge', { y: -20, opacity: 0, duration: 0.45 })
         gsap.from('.main-text', {
-          scale: 0.82,
+          scale: 0.85,
           opacity: 0,
-          duration: 0.75,
+          duration: 0.7,
+          delay: 0.1,
           ease: 'back.out(1.2)',
         })
-        gsap.from('.sub-text', {
-          y: 24,
-          opacity: 0,
-          duration: 0.5,
-          delay: 0.35,
-        })
-        gsap.from('.links', { y: 20, opacity: 0, duration: 0.5, delay: 0.5 })
+        gsap.from('.sub-text', { y: 20, opacity: 0, duration: 0.5, delay: 0.4 })
         gsap.from('.bottom-info', { opacity: 0, duration: 0.6, delay: 0.7 })
-      }
+      })
     </script>
   </body>
 </html>

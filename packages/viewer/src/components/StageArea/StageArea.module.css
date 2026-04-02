@@ -120,6 +120,30 @@
 }
 .editBtn:hover { background: rgba(251,146,60,0.22); }
 
+/* ── 步骤点（演示模式步骤动画进度） ── */
+.stepDots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 4px;
+}
+
+.stepDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  background: transparent;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.stepDotDone {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+  transform: scale(1.15);
+}
+
 /* ── 对齐辅助线 ── */
 .alignGuide {
   position: fixed;

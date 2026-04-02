@@ -259,7 +259,7 @@
         countUp(document.getElementById('cnt-contrib'), 200, 1400)
         countUp(document.getElementById('cnt-templates'), 50, 1600)
       }, 400)
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('.eco-item', {
           x: -20,
@@ -274,7 +274,7 @@
           duration: 0.5,
           delay: 0.2,
         })
-      }
+      })
     </script>
   </body>
 </html>

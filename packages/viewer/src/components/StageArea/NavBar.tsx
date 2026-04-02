@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import { useSlideStore } from '../../store/slideStore'
 import { useUiStore } from '../../store/uiStore'
+import { useAnimStore } from '../../store/animStore'
 import styles from './StageArea.module.css'
 
 interface Runner {
@@ -16,6 +17,10 @@ interface Props {
 export function NavBar({ runner }: Props) {
   const { current, total } = useSlideStore()
   const { mode, setMode } = useUiStore()
+  const { currentStep, totalSteps } = useAnimStore()
+
+  // 演示模式 + 当前页有步骤动画时才显示步骤点
+  const showStepDots = mode === 'present' && totalSteps > 0
 
   return (
     <div className={styles.navBar}>
@@ -31,6 +36,17 @@ export function NavBar({ runner }: Props) {
       <span className={styles.pageInfo}>
         {current + 1} / {total || '…'}
       </span>
+
+      {showStepDots && (
+        <div className={styles.stepDots} title={`${currentStep} / ${totalSteps} 步`}>
+          {Array.from({ length: totalSteps }, (_, i) => (
+            <span
+              key={i}
+              className={`${styles.stepDot} ${i < currentStep ? styles.stepDotDone : ''}`}
+            />
+          ))}
+        </div>
+      )}
 
       <button
         className={styles.navBtn}

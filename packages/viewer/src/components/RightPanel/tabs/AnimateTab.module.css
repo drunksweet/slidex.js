@@ -1,0 +1,225 @@
+/* ══════════════════════════════════════════════
+   AnimateTab 专属样式
+   ══════════════════════════════════════════════ */
+
+/* ── 页面动画：空状态 ── */
+.pageAnimEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 20px;
+  gap: 6px;
+  text-align: center;
+}
+.pageAnimEmptyIcon { font-size: 26px; }
+.pageAnimEmptyText {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+}
+.pageAnimEmptyHint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* ── 页面动画：状态行 ── */
+.switchRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+}
+.switchDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.switchLabel {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  flex: 1;
+}
+
+/* ── 来源标签 ── */
+.sourceTag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+/* ── 切换模式按钮 ── */
+.switchModeBtn {
+  margin-left: auto;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.switchModeBtn:hover {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+}
+
+/* ── 禁用/启用按钮 ── */
+.pageAnimDisableBtn {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: rgba(239,68,68,0.6);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.pageAnimDisableBtn:hover {
+  background: rgba(239,68,68,0.16);
+  color: #f87171;
+}
+
+.pageAnimEnableBtn {
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.2);
+  color: rgba(74,222,128,0.7);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.pageAnimEnableBtn:hover {
+  background: rgba(74,222,128,0.16);
+  color: #4ade80;
+}
+
+/* ── 脚本模式提示 ── */
+.scriptHint {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(59,130,246,0.06);
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 7px;
+  margin: 4px 0 8px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.6;
+}
+.scriptHintIcon { flex-shrink: 0; font-size: 13px; }
+.scriptHint code {
+  background: rgba(255,255,255,0.08);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 10px;
+  color: rgba(147,197,253,0.8);
+}
+
+/* ── 元素动画：空状态 ── */
+.noAnim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  gap: 8px;
+}
+.noAnimIcon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.noAnimText {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+}
+.noAnimHint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+/* ── 添加按钮 ── */
+.addBtn {
+  background: rgba(139,92,246,0.15);
+  border: 1px solid rgba(139,92,246,0.3);
+  color: #a78bfa;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.addBtn:hover {
+  background: rgba(139,92,246,0.28);
+  border-color: rgba(139,92,246,0.5);
+  color: #c4b5fd;
+}
+
+/* ── 操作区按钮 ── */
+.actions {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0 8px;
+}
+
+.previewBtn {
+  flex: 1;
+  background: rgba(139,92,246,0.15);
+  border: 1px solid rgba(139,92,246,0.28);
+  color: #a78bfa;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.previewBtn:hover {
+  background: rgba(139,92,246,0.28);
+  border-color: rgba(139,92,246,0.5);
+}
+.previewBtn:active { transform: scale(0.97); }
+
+.removeBtn {
+  flex: 1;
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: rgba(239,68,68,0.65);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.removeBtn:hover {
+  background: rgba(239,68,68,0.16);
+  border-color: rgba(239,68,68,0.4);
+  color: #f87171;
+}

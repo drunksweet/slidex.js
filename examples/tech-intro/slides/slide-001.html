@@ -197,7 +197,7 @@
 
       <div class="badge">
         <span class="badge-dot"></span>
-        开源项目介绍 · v0.2
+        开源项目介绍 · v0.3
       </div>
 
       <h1 class="title">
@@ -206,7 +206,7 @@
       </h1>
 
       <p class="subtitle">
-        首个专为 AI Agent 设计、前端技术栈原生的开源幻灯片框架
+        首个专为 AI Agent 设计、前端技术栈原生的开源幻灯片框架 —— 现已支持完整动画系统
       </p>
 
       <div class="meta">
@@ -214,22 +214,26 @@
         <div class="meta-divider"></div>
         <span>2026</span>
         <div class="meta-divider"></div>
-        <span>tang-slidex v0.2</span>
+        <span>tang-slidex v0.3</span>
       </div>
 
-      <!-- v0.2 新特性标签 -->
+      <!-- v0.3 新特性标签 -->
       <div class="feature-tags">
         <div class="ftag new">
+          <span class="ftag-dot" style="background: #f59e0b"></span>
+          ✨ v0.3 新增：步骤动画系统
+        </div>
+        <div class="ftag new">
           <span class="ftag-dot" style="background: #a78bfa"></span>
-          ✨ v0.2 新增：React 三栏编辑器
+          GSAP 驱动 · 可视化配置
         </div>
         <div class="ftag new">
           <span class="ftag-dot" style="background: #34d399"></span>
-          WYSIWYG 浏览器内可视化编辑
+          tang.onLoad + data-step 协议
         </div>
-        <div class="ftag new">
+        <div class="ftag">
           <span class="ftag-dot" style="background: #60a5fa"></span>
-          行级写回 · 零格式损耗
+          React 三栏编辑器 · WYSIWYG
         </div>
         <div class="ftag">
           <span class="ftag-dot" style="background: #94a3b8"></span>
@@ -319,35 +323,37 @@
       })
 
       if (window.gsap) {
-        gsap.from('.badge', { y: -24, opacity: 0, duration: 0.5 })
-        gsap.from('.title', {
-          y: 36,
-          opacity: 0,
-          duration: 0.65,
-          delay: 0.15,
-          ease: 'power3.out',
-        })
-        gsap.from('.subtitle', {
-          y: 20,
-          opacity: 0,
-          duration: 0.5,
-          delay: 0.35,
-        })
-        gsap.from('.meta', { opacity: 0, duration: 0.5, delay: 0.55 })
-        gsap.from('.deco-circle-1', {
-          scale: 0.7,
-          opacity: 0,
-          duration: 1.2,
-          delay: 0.1,
-          ease: 'power2.out',
-        })
-        gsap.from('.ftag', {
-          x: 30,
-          opacity: 0,
-          duration: 0.4,
-          stagger: 0.08,
-          delay: 0.6,
-          ease: 'power2.out',
+        tang.onLoad(() => {
+          gsap.from('.badge', { y: -24, opacity: 0, duration: 0.5 })
+          gsap.from('.title', {
+            y: 36,
+            opacity: 0,
+            duration: 0.65,
+            delay: 0.15,
+            ease: 'power3.out',
+          })
+          gsap.from('.subtitle', {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            delay: 0.35,
+          })
+          gsap.from('.meta', { opacity: 0, duration: 0.5, delay: 0.55 })
+          gsap.from('.deco-circle-1', {
+            scale: 0.7,
+            opacity: 0,
+            duration: 1.2,
+            delay: 0.1,
+            ease: 'power2.out',
+          })
+          gsap.from('.ftag', {
+            x: 30,
+            opacity: 0,
+            duration: 0.4,
+            stagger: 0.08,
+            delay: 0.6,
+            ease: 'power2.out',
+          })
         })
       }
     </script>

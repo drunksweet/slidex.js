@@ -107,28 +107,28 @@
         <p class="eyebrow">02 · 架构</p>
         <h1 class="title">核心工作流</h1>
         <div class="flow">
-          <div class="flow-step">
+          <div class="flow-step" data-step="1" data-animation="fade-up" data-duration="380">
             <div class="step-dot">1</div>
             <div class="step-content">
               <div class="step-title">用户写 content.md</div>
               <div class="step-desc">纯自然语言，无格式限制，随便写</div>
             </div>
           </div>
-          <div class="flow-step">
+          <div class="flow-step" data-step="2" data-animation="fade-up" data-duration="380" data-delay="60">
             <div class="step-dot">2</div>
             <div class="step-content">
               <div class="step-title">Agent 生成 execution.md</div>
               <div class="step-desc">逐页规划：类型、文案、图表、动画</div>
             </div>
           </div>
-          <div class="flow-step">
+          <div class="flow-step" data-step="3" data-animation="fade-up" data-duration="380" data-delay="60">
             <div class="step-dot">3</div>
             <div class="step-content">
               <div class="step-title">Agent 生成 slide-NNN.html</div>
               <div class="step-desc">完整的 HTML/CSS/JS，符合 PPT 规范</div>
             </div>
           </div>
-          <div class="flow-step">
+          <div class="flow-step" data-step="4" data-animation="fade-up" data-duration="380" data-delay="60">
             <div class="step-dot" style="border-color: #a78bfa; color: #a78bfa">
               4
             </div>
@@ -156,7 +156,7 @@
               </div>
             </div>
           </div>
-          <div class="flow-step">
+          <div class="flow-step" data-step="5" data-animation="fade-up" data-duration="380" data-delay="60">
             <div class="step-dot">5</div>
             <div class="step-content">
               <div class="step-title">一键导出 / 分发</div>
@@ -248,7 +248,7 @@
         ],
       })
 
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
         gsap.from('.flow-step', {
           x: -30,
@@ -263,7 +263,7 @@
           duration: 0.5,
           delay: 0.35,
         })
-      }
+      })
     </script>
   </body>
 </html>

@@ -503,7 +503,7 @@
     </div>
 
     <script>
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('.editor-layout', {
           x: -20,
@@ -518,7 +518,7 @@
           stagger: 0.08,
           delay: 0.25,
         })
-      }
+      })
     </script>
   </body>
 </html>

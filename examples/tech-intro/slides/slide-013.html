@@ -65,7 +65,7 @@
         <div class="legend">
           <div class="legend-item">
             <div class="legend-dot" style="background: #7c3aed"></div>
-            已完成 (Phase 1 + 2)
+            已完成 (Phase 1 + 2 + 3)
           </div>
           <div class="legend-item">
             <div
@@ -104,7 +104,15 @@
             tasks: 'React 三栏编辑器 · WYSIWYG 编辑 · 行级写回 · Undo/Redo',
           },
           {
-            name: 'Phase 3  Build & Export',
+            name: 'Phase 3  Animation',
+            start: 2,
+            end: 4,
+            color: '#f59e0b',
+            done: true,
+            tasks: 'GSAP 动画系统 · tang.onLoad 协议 · data-step 步骤动画 · 可视化配置面板',
+          },
+          {
+            name: 'Phase 4  Build & Export',
             start: 3,
             end: 5,
             color: '#2563eb',
@@ -112,7 +120,7 @@
             tasks: 'HTML 单文件打包 · PDF 导出 · CLI 工具 · ppt-outline Skill',
           },
           {
-            name: 'Phase 4  AI Editor',
+            name: 'Phase 5  AI Editor',
             start: 4,
             end: 7,
             color: '#d97706',
@@ -120,7 +128,7 @@
             tasks: 'AI 对话框 · 自然语言改稿 · 多模态输入 · 增量生成',
           },
           {
-            name: 'Phase 5  Ecosystem',
+            name: 'Phase 6  Ecosystem',
             start: 6,
             end: 9,
             color: '#e11d48',
@@ -247,10 +255,10 @@
         })
       }
 
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('#roadmap-chart', { opacity: 0, duration: 0.6, delay: 0.2 })
-      }
+      })
     </script>
   </body>
 </html>

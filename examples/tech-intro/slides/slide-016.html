@@ -155,7 +155,7 @@ gsap.from('.card', {
       </div>
     </div>
     <script>
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.header', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('.viewer-col', {
           x: -24,
@@ -169,7 +169,7 @@ gsap.from('.card', {
           duration: 0.45,
           delay: 0.2,
         })
-      }
+      })
     </script>
   </body>
 </html>

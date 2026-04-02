@@ -123,7 +123,7 @@
               <div class="layer-desc">content.md — 自然语言描述 PPT 内容</div>
             </div>
           </div>
-          <div class="layer">
+          <div class="layer" data-step="1" data-animation="fade-right" data-duration="380">
             <div class="layer-badge" style="background: #5b21b6">Skills 层</div>
             <div class="layer-body">
               <div class="layer-title">@tang-slidex/skills</div>
@@ -135,7 +135,7 @@
               </div>
             </div>
           </div>
-          <div class="layer">
+          <div class="layer" data-step="2" data-animation="fade-right" data-duration="380" data-delay="50">
             <div class="layer-badge" style="background: #2563eb">Core 层</div>
             <div class="layer-body">
               <div class="layer-title">@tang-slidex/core</div>
@@ -149,7 +149,7 @@
               </div>
             </div>
           </div>
-          <div class="layer">
+          <div class="layer" data-step="3" data-animation="fade-right" data-duration="380" data-delay="100">
             <div class="layer-badge" style="background: #059669">
               Builder 层
             </div>
@@ -165,7 +165,7 @@
               </div>
             </div>
           </div>
-          <div class="layer">
+          <div class="layer" data-step="4" data-animation="fade-right" data-duration="380" data-delay="150">
             <div class="layer-badge" style="background: #d97706">Editor 层</div>
             <div class="layer-body">
               <div class="layer-title">@tang-slidex/editor</div>
@@ -180,7 +180,7 @@
               </div>
             </div>
           </div>
-          <div class="layer">
+          <div class="layer" data-step="5" data-animation="fade-right" data-duration="380" data-delay="200">
             <div class="layer-badge" style="background: #0e9f6e">Viewer 层</div>
             <div
               class="layer-body"
@@ -201,7 +201,7 @@
                     border-radius: 999px;
                   "
                 >
-                  v0.2 NEW
+                  v0.3 NEW
                 </span>
               </div>
               <div class="layer-desc">
@@ -313,7 +313,7 @@
           ],
         })
       }
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('.layer', {
           x: -24,
@@ -328,7 +328,7 @@
           duration: 0.6,
           delay: 0.3,
         })
-      }
+      })
     </script>
   </body>
 </html>

@@ -291,7 +291,7 @@
     </div>
 
     <script>
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
         gsap.from('.prop', {
           x: -20,
@@ -306,7 +306,7 @@
           duration: 0.5,
           delay: 0.2,
         })
-      }
+      })
     </script>
   </body>
 </html>

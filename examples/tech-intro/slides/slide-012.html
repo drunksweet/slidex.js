@@ -8,12 +8,15 @@
         height: 720px;
         overflow: hidden;
         background-color: var(--color-background, #0f172a);
-        padding: 44px 64px;
+        padding: 44px 72px 36px;
         display: grid;
         grid-template-rows: auto 1fr;
         gap: 20px;
       }
       .header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
       }
       .eyebrow {
         font-size: 12px;
@@ -24,279 +27,324 @@
         margin-bottom: 8px;
       }
       .title {
-        font-size: 38px;
+        font-size: 40px;
         font-weight: 800;
         color: var(--color-text, #f1f5f9);
-        line-height: 1.2;
+        line-height: 1.1;
         letter-spacing: -0.02em;
       }
-      .subtitle {
-        font-size: 14px;
-        color: var(--color-text-muted, #94a3b8);
-        margin-top: 6px;
+      .new-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(245,158,11,0.15);
+        border: 1px solid rgba(245,158,11,0.35);
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #fbbf24;
+        margin-left: 14px;
+        vertical-align: middle;
       }
-
-      .cols {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 20px;
-      }
-      .chart-box {
-        background: var(--color-surface, #1e293b);
-        border: 1px solid var(--color-border, #334155);
-        border-radius: 10px;
-        padding: 16px;
+      .header-legend {
         display: flex;
-        flex-direction: column;
-      }
-      .chart-label {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--color-text-muted, #94a3b8);
-        margin-bottom: 10px;
-      }
-      #chart-bar {
-        width: 100%;
-        height: 200px;
-      }
-      #chart-line {
-        width: 100%;
-        height: 200px;
-      }
-
-      /* 动画演示区 */
-      .anim-box {
-        background: var(--color-surface, #1e293b);
-        border: 1px solid var(--color-border, #334155);
-        border-radius: 10px;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-      }
-      .anim-demos {
-        display: flex;
-        flex-direction: column;
         gap: 16px;
+        font-size: 12px;
+        color: rgba(255,255,255,0.35);
+        padding-bottom: 6px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+
+      /* ── 主体：左右两栏 ── */
+      .body {
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 24px;
+        min-height: 0;
+      }
+
+      /* ── 左：协议说明 ── */
+      .protocol-col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .protocol-card {
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: 10px;
+        padding: 18px 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      .protocol-card::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: var(--color-primary, #7c3aed);
+        border-radius: 2px;
+      }
+      .protocol-card.orange::before { background: #f59e0b; }
+      .protocol-card.blue::before   { background: #3b82f6; }
+      .pc-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.3);
+        margin-bottom: 6px;
+      }
+      .pc-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin-bottom: 5px;
+      }
+      .pc-desc {
+        font-size: 13px;
+        color: #94a3b8;
+        line-height: 1.6;
+      }
+      .pc-code {
+        margin-top: 10px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-family: ui-monospace, 'Fira Code', monospace;
+        font-size: 12px;
+        color: #a78bfa;
+        line-height: 1.7;
+        white-space: pre;
+      }
+      .pc-code .kw  { color: #60a5fa; }
+      .pc-code .str { color: #34d399; }
+      .pc-code .num { color: #fbbf24; }
+      .pc-code .cmt { color: #475569; }
+
+      /* ── 右：动画能力展示 ── */
+      .demo-col {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .demo-box {
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: 10px;
+        padding: 14px 16px;
         flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 0;
+      }
+      .demo-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.3);
+        flex-shrink: 0;
+      }
+
+      /* 预设效果 pill 网格 */
+      .preset-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .preset-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(124,58,237,0.1);
+        border: 1px solid rgba(124,58,237,0.2);
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #a78bfa;
+        cursor: pointer;
+        transition: all 0.15s;
+        user-select: none;
+      }
+      .preset-pill:hover,
+      .preset-pill.active {
+        background: rgba(124,58,237,0.25);
+        border-color: rgba(124,58,237,0.5);
+        color: #c4b5fd;
+      }
+      .preset-pill .pill-icon { font-size: 13px; }
+
+      /* 步骤动画演示区域 */
+      .step-stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
         justify-content: center;
       }
-      .anim-row {
+      .step-item {
         display: flex;
         align-items: center;
         gap: 12px;
         padding: 10px 14px;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 6px;
+        background: rgba(0,0,0,0.2);
+        border-radius: 8px;
+        border: 1px solid transparent;
+        transition: border-color 0.2s;
       }
-      .anim-tag {
-        font-size: 11px;
-        font-weight: 700;
-        color: var(--color-text-muted, #94a3b8);
-        min-width: 64px;
-      }
-      .dots {
+      .step-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 1.5px solid #7c3aed;
         display: flex;
-        gap: 7px;
-      }
-      .dot-a {
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: var(--color-primary, #7c3aed);
-        animation: bounce2 1.2s ease-in-out infinite;
-      }
-      .dot-a:nth-child(2) {
-        animation-delay: 0.15s;
-        background: #5b21b6;
-      }
-      .dot-a:nth-child(3) {
-        animation-delay: 0.3s;
-        background: #2563eb;
-      }
-      .dot-a:nth-child(4) {
-        animation-delay: 0.45s;
-        background: #059669;
-      }
-      @keyframes bounce2 {
-        0%,
-        80%,
-        100% {
-          transform: scale(1);
-          opacity: 0.8;
-        }
-        40% {
-          transform: scale(1.6) translateY(-6px);
-          opacity: 1;
-        }
-      }
-      .bars {
-        display: flex;
-        align-items: flex-end;
-        gap: 4px;
-        height: 36px;
-      }
-      .bar-e {
-        width: 11px;
-        background: var(--color-primary, #7c3aed);
-        border-radius: 2px 2px 0 0;
-        animation: barP 1.5s ease-in-out infinite;
-      }
-      .bar-e:nth-child(2) {
-        animation-delay: 0.2s;
-        height: 60%;
-      }
-      .bar-e:nth-child(3) {
-        animation-delay: 0.4s;
-        height: 80%;
-      }
-      .bar-e:nth-child(4) {
-        animation-delay: 0.6s;
-        height: 45%;
-      }
-      .bar-e:nth-child(5) {
-        animation-delay: 0.8s;
-        height: 90%;
-      }
-      @keyframes barP {
-        0%,
-        100% {
-          opacity: 0.7;
-          transform: scaleY(1);
-        }
-        50% {
-          opacity: 1;
-          transform: scaleY(1.15);
-        }
-      }
-      .shimmer-box {
-        font-size: 14px;
-        font-weight: 700;
-        background: linear-gradient(90deg, #7c3aed, #a78bfa, #7c3aed);
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shimmer2 2s linear infinite;
-      }
-      @keyframes shimmer2 {
-        to {
-          background-position: 200% center;
-        }
-      }
-      .spin-box {
-        width: 28px;
-        height: 28px;
-        border: 2px solid transparent;
-        border-top-color: #7c3aed;
-        border-right-color: #a78bfa;
-        border-radius: 50%;
-        animation: spin 1.2s linear infinite;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .pulse-box {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: #7c3aed;
-        animation: pulse2 1.5s ease-in-out infinite;
-      }
-      @keyframes pulse2 {
-        0%,
-        100% {
-          box-shadow: 0 0 4px #7c3aed;
-          transform: scale(1);
-        }
-        50% {
-          box-shadow:
-            0 0 16px #a78bfa,
-            0 0 30px rgba(124, 58, 237, 0.4);
-          transform: scale(1.2);
-        }
-      }
-
-      .gsap-label {
+        align-items: center;
+        justify-content: center;
         font-size: 11px;
         font-weight: 700;
         color: #a78bfa;
-        background: rgba(124, 58, 237, 0.12);
-        padding: 2px 8px;
-        border-radius: 999px;
-        margin-left: auto;
+        flex-shrink: 0;
+        font-family: ui-monospace;
       }
+      .step-text {
+        font-size: 13px;
+        color: #94a3b8;
+      }
+      .step-badge {
+        margin-left: auto;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+      .step-badge.purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+      .step-badge.orange { background: rgba(245,158,11,0.15); color: #fbbf24; }
+      .step-badge.blue   { background: rgba(59,130,246,0.12); color: #93c5fd; }
     </style>
   </head>
   <body>
     <div class="slide" data-slide-id="012" data-slide-type="content">
+      <!-- Header -->
       <div class="header">
-        <p class="eyebrow">能力展示 · 12</p>
-        <h1 class="title">数据可视化 &amp; 动画能力</h1>
-        <p class="subtitle">
-          ECharts 5 原生集成 · GSAP 入场动画 · CSS Keyframes · 主题自适应
-        </p>
+        <div>
+          <p class="eyebrow">09 · v0.3 动画系统</p>
+          <h1 class="title">
+            步骤动画 & 入场动画
+            <span class="new-badge">⚡ v0.3 NEW</span>
+          </h1>
+        </div>
+        <div class="header-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#7c3aed"></div>
+            页面级（tang.onLoad）
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#f59e0b"></div>
+            元素级（data-step）
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#3b82f6"></div>
+            GSAP 全量支持
+          </div>
+        </div>
       </div>
 
-      <div class="cols">
-        <!-- ECharts 柱状图 -->
-        <div class="chart-box">
-          <div class="chart-label">📊 ECharts 5 · 柱状图</div>
-          <div id="chart-bar"></div>
+      <!-- Body -->
+      <div class="body">
+
+        <!-- 左：双层动画协议说明 -->
+        <div class="protocol-col">
+
+          <!-- Layer A：页面级入场动画 -->
+          <div class="protocol-card" data-step="1" data-animation="fade-right" data-duration="450">
+            <div class="pc-label">Layer A · 页面级入场动画</div>
+            <div class="pc-title">tang.onLoad( ) — 整页入场</div>
+            <div class="pc-desc">
+              每次翻到此页时触发，驱动整页元素的入场 GSAP 序列。
+              编辑模式可一键 禁用 / 启用，或切换为框架预设效果。
+            </div>
+            <div class="pc-code"><span class="cmt">// slide.html &lt;script&gt;</span>
+<span class="kw">tang</span>.onLoad(<span class="kw">()</span> =&gt; {
+  gsap.from(<span class="str">'.title'</span>,   { y: -<span class="num">20</span>, opacity: <span class="num">0</span>, duration: <span class="num">0.45</span> })
+  gsap.from(<span class="str">'.card'</span>, { y: <span class="num">30</span>, opacity: <span class="num">0</span>, stagger: <span class="num">0.08</span> })
+})</div>
+          </div>
+
+          <!-- Layer B：元素级步骤动画 -->
+          <div class="protocol-card orange" data-step="2" data-animation="fade-right" data-duration="450" data-delay="60">
+            <div class="pc-label">Layer B · 元素级步骤动画</div>
+            <div class="pc-title">data-step="N" — 点击逐步展现</div>
+            <div class="pc-desc">
+              为元素添加 data-step="N" 属性，演示时第 N 次点击才显示。
+              支持 10 种预设效果 + 时长/延迟/缓动全量配置。
+            </div>
+            <div class="pc-code"><span class="cmt">&lt;!-- 在右侧面板可视化配置，或直接写属性 --&gt;</span>
+&lt;div <span class="kw">data-step</span>=<span class="str">"1"</span>
+     <span class="kw">data-animation</span>=<span class="str">"fade-up"</span>
+     <span class="kw">data-duration</span>=<span class="str">"450"</span>
+     <span class="kw">data-ease</span>=<span class="str">"power2.out"</span>&gt;
+  内容在第 1 次点击后显示
+&lt;/div&gt;</div>
+          </div>
         </div>
 
-        <!-- ECharts 折线图 -->
-        <div class="chart-box">
-          <div class="chart-label">📈 ECharts 5 · 折线图</div>
-          <div id="chart-line"></div>
-        </div>
+        <!-- 右：动画能力展示 -->
+        <div class="demo-col">
 
-        <!-- 动画演示 -->
-        <div class="anim-box">
-          <div class="chart-label">✨ CSS &amp; JS 动画库</div>
-          <div class="anim-demos">
-            <div class="anim-row">
-              <div class="anim-tag">Bounce</div>
-              <div class="dots">
-                <div class="dot-a"></div>
-                <div class="dot-a"></div>
-                <div class="dot-a"></div>
-                <div class="dot-a"></div>
+          <!-- 预设效果列表 -->
+          <div class="demo-box" data-step="3" data-animation="fade-left" data-duration="400">
+            <div class="demo-label">10 种内置预设效果</div>
+            <div class="preset-grid">
+              <span class="preset-pill"><span class="pill-icon">✨</span>淡入</span>
+              <span class="preset-pill active"><span class="pill-icon">⬆️</span>向上淡入</span>
+              <span class="preset-pill"><span class="pill-icon">⬇️</span>向下淡入</span>
+              <span class="preset-pill"><span class="pill-icon">➡️</span>从左淡入</span>
+              <span class="preset-pill"><span class="pill-icon">⬅️</span>从右淡入</span>
+              <span class="preset-pill"><span class="pill-icon">🔍</span>缩小出现</span>
+              <span class="preset-pill"><span class="pill-icon">🔎</span>放大出现</span>
+              <span class="preset-pill"><span class="pill-icon">🚀</span>从下滑入</span>
+              <span class="preset-pill"><span class="pill-icon">💫</span>从左滑入</span>
+              <span class="preset-pill"><span class="pill-icon">⚡</span>无效果</span>
+            </div>
+          </div>
+
+          <!-- 步骤演示 -->
+          <div class="demo-box" data-step="4" data-animation="fade-left" data-duration="400" data-delay="40">
+            <div class="demo-label">步骤动画示例 — 本页 4 步共 5 次点击</div>
+            <div class="step-stage">
+              <div class="step-item">
+                <span class="step-num">1</span>
+                <span class="step-text">Layer A 协议说明（fade-right 入场）</span>
+                <span class="step-badge purple">data-step="1"</span>
               </div>
-              <div class="gsap-label">CSS Keyframes</div>
-            </div>
-            <div class="anim-row">
-              <div class="anim-tag">Bar Pulse</div>
-              <div class="bars">
-                <div class="bar-e" style="height: 70%"></div>
-                <div class="bar-e"></div>
-                <div class="bar-e"></div>
-                <div class="bar-e"></div>
-                <div class="bar-e"></div>
+              <div class="step-item">
+                <span class="step-num">2</span>
+                <span class="step-text">Layer B 协议说明（fade-right + delay）</span>
+                <span class="step-badge orange">data-step="2"</span>
               </div>
-              <div class="gsap-label">CSS Keyframes</div>
-            </div>
-            <div class="anim-row">
-              <div class="anim-tag">Shimmer</div>
-              <div class="shimmer-box">tang-slidex</div>
-              <div class="gsap-label">Gradient Anim</div>
-            </div>
-            <div class="anim-row">
-              <div class="anim-tag">Spin</div>
-              <div class="spin-box"></div>
-              <div class="gsap-label">CSS transform</div>
-            </div>
-            <div class="anim-row">
-              <div class="anim-tag">Pulse Glow</div>
-              <div class="pulse-box"></div>
-              <div class="gsap-label">box-shadow</div>
-            </div>
-            <div class="anim-row">
-              <div class="anim-tag">GSAP</div>
-              <div style="font-size: 12px; color: #94a3b8">
-                入场 · 交错 · 缓动
+              <div class="step-item">
+                <span class="step-num">3</span>
+                <span class="step-text">内置预设效果列表（fade-left）</span>
+                <span class="step-badge purple">data-step="3"</span>
               </div>
-              <div class="gsap-label">gsap.from()</div>
+              <div class="step-item">
+                <span class="step-num">4</span>
+                <span class="step-text">本步骤说明（fade-left + delay）</span>
+                <span class="step-badge blue">data-step="4"</span>
+              </div>
             </div>
           </div>
         </div>
@@ -304,115 +352,11 @@
     </div>
 
     <script>
-      if (typeof echarts !== 'undefined') {
-        const bar = echarts.init(document.getElementById('chart-bar'))
-        bar.setOption({
-          backgroundColor: 'transparent',
-          grid: { left: 36, right: 12, top: 12, bottom: 28 },
-          xAxis: {
-            type: 'category',
-            data: ['Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2', 'Q3', 'Q4'],
-            axisLine: { lineStyle: { color: '#334155' } },
-            axisLabel: { color: '#64748b', fontSize: 10 },
-          },
-          yAxis: {
-            type: 'value',
-            axisLine: { show: false },
-            splitLine: { lineStyle: { color: '#1e293b' } },
-            axisLabel: { color: '#64748b', fontSize: 10 },
-          },
-          series: [
-            {
-              type: 'bar',
-              data: [12, 28, 41, 55, 68, 82, 95, 114],
-              itemStyle: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  { offset: 0, color: '#7c3aed' },
-                  { offset: 1, color: '#5b21b6' },
-                ]),
-                borderRadius: [3, 3, 0, 0],
-              },
-            },
-          ],
-          tooltip: {
-            trigger: 'axis',
-            backgroundColor: '#1e293b',
-            borderColor: '#334155',
-            textStyle: { color: '#f1f5f9', fontSize: 11 },
-          },
-        })
-
-        const line = echarts.init(document.getElementById('chart-line'))
-        line.setOption({
-          backgroundColor: 'transparent',
-          grid: { left: 36, right: 12, top: 16, bottom: 28 },
-          xAxis: {
-            type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
-            axisLine: { lineStyle: { color: '#334155' } },
-            axisLabel: { color: '#64748b', fontSize: 10 },
-          },
-          yAxis: {
-            type: 'value',
-            axisLine: { show: false },
-            splitLine: { lineStyle: { color: '#1e293b' } },
-            axisLabel: { color: '#64748b', fontSize: 10 },
-          },
-          legend: {
-            top: -3,
-            right: 0,
-            textStyle: { color: '#94a3b8', fontSize: 10 },
-          },
-          series: [
-            {
-              name: 'tang-slidex',
-              type: 'line',
-              smooth: true,
-              data: [4, 12, 22, 38, 58, 76, 92, 115],
-              lineStyle: { color: '#7c3aed', width: 2 },
-              areaStyle: {
-                color: {
-                  type: 'linear',
-                  x: 0,
-                  y: 0,
-                  x2: 0,
-                  y2: 1,
-                  colorStops: [
-                    { offset: 0, color: 'rgba(124,58,237,0.3)' },
-                    { offset: 1, color: 'transparent' },
-                  ],
-                },
-              },
-              itemStyle: { color: '#7c3aed' },
-            },
-            {
-              name: 'Slidev',
-              type: 'line',
-              smooth: true,
-              data: [40, 42, 44, 45, 46, 47, 48, 50],
-              lineStyle: { color: '#334155', width: 2 },
-              itemStyle: { color: '#475569' },
-            },
-          ],
-          tooltip: {
-            trigger: 'axis',
-            backgroundColor: '#1e293b',
-            borderColor: '#334155',
-            textStyle: { color: '#f1f5f9', fontSize: 11 },
-          },
-        })
-      }
-      if (window.gsap) {
-        gsap.from('.title', { y: -18, opacity: 0, duration: 0.4 })
-        gsap.from('.chart-box', {
-          y: 20,
-          opacity: 0,
-          duration: 0.4,
-          stagger: 0.1,
-          delay: 0.2,
-        })
-        gsap.from('.anim-box', { y: 20, opacity: 0, duration: 0.4, delay: 0.3 })
-      }
+      tang.onLoad(() => {
+        gsap.from('.eyebrow', { opacity: 0, duration: 0.3 })
+        gsap.from('.title',   { y: -18, opacity: 0, duration: 0.45, delay: 0.05 })
+        gsap.from('.header-legend', { opacity: 0, duration: 0.4, delay: 0.3 })
+      })
     </script>
   </body>
 </html>

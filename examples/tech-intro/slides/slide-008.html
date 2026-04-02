@@ -221,7 +221,7 @@
     </div>
 
     <script>
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
         gsap.from('.tech-group', {
           y: 30,
@@ -230,7 +230,7 @@
           stagger: 0.08,
           delay: 0.2,
         })
-      }
+      })
     </script>
   </body>
 </html>

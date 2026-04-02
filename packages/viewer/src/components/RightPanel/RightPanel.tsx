@@ -1,7 +1,8 @@
 import { useUiStore, type RightTab } from '../../store/uiStore'
 import { useEditStore } from '../../store/editStore'
-import { StyleTab }  from './tabs/StyleTab'
-import { LayoutTab } from './tabs/LayoutTab'
+import { StyleTab }   from './tabs/StyleTab'
+import { LayoutTab }  from './tabs/LayoutTab'
+import { AnimateTab } from './tabs/AnimateTab'
 import styles from './RightPanel.module.css'
 
 /**
@@ -65,10 +66,10 @@ export function RightPanel() {
         {!selectedEl && (
           <p className={styles.noSel}>点击 PPT 中的元素以查看属性</p>
         )}
-        {/* StyleTab 用 leafEl（用户实际点击的节点），LayoutTab 用 selectedEl（块级元素） */}
-        {selectedEl && activeTab === 'style'  && <StyleTab  key={(leafEl ?? selectedEl) as unknown as string} el={leafEl ?? selectedEl} />}
-        {selectedEl && activeTab === 'layout' && <LayoutTab key={selectedEl as unknown as string} el={selectedEl} />}
-        {(activeTab === 'animate' || activeTab === 'ai') && (
+        {selectedEl && activeTab === 'style'   && <StyleTab  key={(leafEl ?? selectedEl) as unknown as string} el={leafEl ?? selectedEl} />}
+        {selectedEl && activeTab === 'layout'  && <LayoutTab key={selectedEl as unknown as string} el={selectedEl} />}
+        {            activeTab === 'animate'   && <AnimateTab />}
+        {(activeTab === 'ai') && (
           <p className={styles.comingSoon}>即将推出 🚧</p>
         )}
       </div>

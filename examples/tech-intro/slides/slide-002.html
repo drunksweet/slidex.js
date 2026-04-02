@@ -173,11 +173,11 @@
           <em>Overview</em>
         </h1>
         <p class="toc-note">
-          16 页 · 覆盖从背景洞察到 v0.2 Viewer 编辑器的完整故事
+          16 页 · 覆盖从背景洞察到 v0.3 动画系统的完整故事
         </p>
         <div class="toc-version">
           <span class="toc-version-dot"></span>
-          当前版本 v0.2
+          当前版本 v0.3
         </div>
       </div>
 
@@ -212,22 +212,24 @@
         </div>
         <div>
           <div class="toc-section">
-            v0.2 Viewer 编辑器
+            v0.3 动画系统
             <span class="toc-new">NEW</span>
           </div>
           <div class="toc-item">
             <span class="toc-num">09</span>
             <span class="toc-name">三栏编辑器架构</span>
-            <span class="toc-new">NEW</span>
           </div>
           <div class="toc-item">
             <span class="toc-num">10</span>
             <span class="toc-name">WYSIWYG 编辑模式</span>
-            <span class="toc-new">NEW</span>
           </div>
           <div class="toc-item">
             <span class="toc-num">11</span>
             <span class="toc-name">行级写回引擎</span>
+          </div>
+          <div class="toc-item">
+            <span class="toc-num">12</span>
+            <span class="toc-name">动画能力展示</span>
             <span class="toc-new">NEW</span>
           </div>
           <div class="toc-section">能力展示 & 路线</div>
@@ -252,7 +254,7 @@
     </div>
 
     <script>
-      if (window.gsap) {
+      tang.onLoad(() => {
         gsap.from('.toc-heading', {
           x: -30,
           opacity: 0,
@@ -285,7 +287,7 @@
           delay: 0.25,
           ease: 'power2.out',
         })
-      }
+      })
     </script>
   </body>
 </html>
