@@ -9,7 +9,7 @@
  */
 
 export { EditManager }      from './editManager.js'
-export type { EditManagerOptions } from './editManager.js'
+export type { EditManagerOptions, ResizeDirection } from './editManager.js'
 
 export { SelectionManager } from './selectionManager.js'
 export type { SelectionManagerOptions } from './selectionManager.js'
@@ -26,6 +26,7 @@ export type {
   TextPatch,
   MovePatch,
   ResizePatch,
+  RotatePatch,
   StylePropPatch,
   ClassAddPatch,
   ClassRemovePatch,

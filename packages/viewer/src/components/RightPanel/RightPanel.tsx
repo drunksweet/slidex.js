@@ -13,10 +13,10 @@ const TABS: { id: RightTab; label: string }[] = [
 
 export function RightPanel() {
   const { rightTab, setRightTab } = useUiStore()
-  const { selectedEl } = useEditStore()
+  const { selectedEl, leafEl } = useEditStore()
 
   return (
-    <aside className={styles.panel}>
+    <aside id="right-panel" className={styles.panel}>
       {/* Tab 切换 */}
       <div className={styles.tabs}>
         {TABS.map((t) => (
@@ -35,8 +35,8 @@ export function RightPanel() {
         {!selectedEl && (
           <p className={styles.noSel}>点击 PPT 中的元素以查看属性</p>
         )}
-        {/* key={selectedEl} 保证每次选中不同元素时面板数据刷新 */}
-        {selectedEl && rightTab === 'style'  && <StyleTab  key={selectedEl as unknown as string} el={selectedEl} />}
+        {/* StyleTab 用 leafEl（用户实际点击的节点），LayoutTab 用 selectedEl（块级元素） */}
+        {selectedEl && rightTab === 'style'  && <StyleTab  key={(leafEl ?? selectedEl) as unknown as string} el={leafEl ?? selectedEl} />}
         {selectedEl && rightTab === 'layout' && <LayoutTab key={selectedEl as unknown as string} el={selectedEl} />}
         {(rightTab === 'animate' || rightTab === 'ai') && (
           <p className={styles.comingSoon}>即将推出 🚧</p>

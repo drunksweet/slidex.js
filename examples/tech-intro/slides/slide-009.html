@@ -7,100 +7,296 @@
       width: 1280px; height: 720px; overflow: hidden;
       background-color: var(--color-background, #0f172a);
       padding: 44px 64px;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 20px 40px;
     }
-    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 12px; }
-    .title   { font-size: 38px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 8px; }
-    .subtitle { font-size: 15px; color: var(--color-text-muted, #94a3b8); margin-bottom: 0; }
-    .left-top { grid-column: 1; grid-row: 1; }
-    #chart-bar { width: 100%; height: 280px; }
-    #chart-line { width: 100%; height: 260px; }
-    .chart-box {
+    .header { grid-column: 1 / 3; }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 8px; }
+    .title   { font-size: 38px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; letter-spacing: -0.02em; }
+    .new-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35);
+      border-radius: 999px; padding: 4px 12px;
+      font-size: 11px; font-weight: 700; color: #a78bfa;
+      margin-left: 14px; vertical-align: middle;
+    }
+
+    /* 三栏布局可视化 */
+    .editor-layout {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .editor-titlebar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px;
+      background: #161b22; border-bottom: 1px solid #21262d; flex-shrink: 0;
+    }
+    .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .t-title { font-size: 12px; color: #8b949e; margin-left: 8px; font-family: ui-monospace; }
+    .editor-body {
+      display: grid;
+      grid-template-columns: 140px 1fr 160px;
+      flex: 1;
+      overflow: hidden;
+      gap: 0;
+    }
+    .col {
+      border-right: 1px solid #21262d;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .col:last-child { border-right: none; }
+    .col-hd {
+      padding: 6px 10px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #8b949e; border-bottom: 1px solid #21262d; flex-shrink: 0;
+      background: #161b22;
+    }
+    .col-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+
+    /* 缩略图列 */
+    .thumb-list { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .thumb {
+      border-radius: 4px; border: 1px solid #30363d;
+      aspect-ratio: 16/9; background: #1c2128;
+      position: relative; overflow: hidden; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .thumb.active { border-color: #7c3aed; }
+    .thumb-num {
+      position: absolute; bottom: 2px; right: 4px;
+      font-size: 8px; color: #8b949e; font-family: ui-monospace;
+    }
+    .thumb-bg { position: absolute; inset: 0; }
+
+    /* 舞台 */
+    .stage-wrap {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      background: #0a0e14; padding: 12px; overflow: hidden;
+    }
+    .stage-inner {
+      aspect-ratio: 16/9; width: 100%;
+      background: #1e293b;
+      border-radius: 4px;
+      border: 1px solid #30363d;
+      position: relative; overflow: hidden;
+    }
+    .stage-overlay {
+      position: absolute; border: 2px solid #7c3aed;
+      border-radius: 3px;
+      box-shadow: 0 0 0 4px rgba(124,58,237,0.15);
+    }
+    .stage-handle {
+      position: absolute; width: 7px; height: 7px;
+      background: #7c3aed; border-radius: 50%;
+      bottom: -4px; right: -4px;
+    }
+    /* 模拟 slide 内容 */
+    .fake-title-bar { position: absolute; top: 12%; left: 8%; width: 45%; height: 8%; background: rgba(255,255,255,0.08); border-radius: 3px; }
+    .fake-body-1 { position: absolute; top: 30%; left: 8%; width: 35%; height: 5%; background: rgba(255,255,255,0.05); border-radius: 2px; }
+    .fake-body-2 { position: absolute; top: 40%; left: 8%; width: 55%; height: 5%; background: rgba(255,255,255,0.05); border-radius: 2px; }
+    .fake-body-3 { position: absolute; top: 50%; left: 8%; width: 42%; height: 5%; background: rgba(255,255,255,0.05); border-radius: 2px; }
+
+    /* 属性面板 */
+    .prop-list { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .prop-section-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: #8b949e; padding: 6px 4px 3px;
+    }
+    .prop-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 6px; border-radius: 4px; background: #1c2128;
+    }
+    .prop-label { font-size: 10px; color: #8b949e; flex: 1; font-family: ui-monospace; }
+    .prop-val {
+      font-size: 10px; color: #f1f5f9; font-family: ui-monospace;
+      background: #0d1117; padding: 2px 6px; border-radius: 3px;
+    }
+    .prop-color {
+      width: 14px; height: 14px; border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    /* topbar */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 14px;
+      background: #0e0e18; border-bottom: 1px solid #1c2128; flex-shrink: 0;
+    }
+    .topbar-logo { font-size: 11px; font-weight: 700; color: #a78bfa; font-family: ui-monospace; }
+    .topbar-btns { display: flex; gap: 6px; }
+    .tbtn {
+      font-size: 9px; font-weight: 600; padding: 3px 8px; border-radius: 4px;
+      border: 1px solid #30363d; color: #8b949e; background: transparent;
+    }
+    .tbtn.primary { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.4); color: #a78bfa; }
+    .tbtn.edit    { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.35); color: #f87171; }
+
+    /* 右侧说明 */
+    .feat-list { display: flex; flex-direction: column; gap: 14px; }
+    .feat {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 13px 16px;
       background: var(--color-surface, #1e293b);
       border: 1px solid var(--color-border, #334155);
-      border-radius: 10px; padding: 16px;
+      border-radius: 8px;
+      transition: border-color 0.2s;
     }
-    .chart-label { font-size: 13px; font-weight: 600; color: var(--color-text-muted, #94a3b8); margin-bottom: 8px; }
+    .feat:hover { border-color: var(--color-primary, #7c3aed); }
+    .feat-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .feat-title { font-size: 14px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 3px; }
+    .feat-desc  { font-size: 12.5px; color: var(--color-text-muted, #94a3b8); line-height: 1.5; }
+    .feat-tag   { display: inline-block; margin-top: 5px; font-size: 10px; font-weight: 700; color: var(--color-primary, #7c3aed); background: rgba(124,58,237,0.12); padding: 2px 7px; border-radius: 999px; }
   </style>
 </head>
 <body>
   <div class="slide" data-slide-id="009" data-slide-type="content">
-    <div style="grid-column:1/3;">
-      <p class="eyebrow">06 · 能力展示</p>
-      <h1 class="title">数据可视化能力</h1>
-      <p class="subtitle">ECharts 5 原生集成 · 主题自适应 · 动态数据 · 交互式图表</p>
-    </div>
-    <div class="chart-box">
-      <div class="chart-label">📊 月活用户增长（万）</div>
-      <div id="chart-bar"></div>
-    </div>
-    <div class="chart-box">
-      <div class="chart-label">📈 框架使用趋势对比</div>
-      <div id="chart-line"></div>
-    </div>
-  </div>
-  <script>
-    if (typeof echarts !== 'undefined') {
-      const bar = echarts.init(document.getElementById('chart-bar'))
-      bar.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: 40, right: 16, top: 16, bottom: 30 },
-        xAxis: {
-          type: 'category',
-          data: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-          axisLine: { lineStyle: { color: '#334155' } },
-          axisLabel: { color: '#64748b', fontSize: 11 },
-        },
-        yAxis: {
-          type: 'value',
-          axisLine: { show: false },
-          splitLine: { lineStyle: { color: '#1e293b' } },
-          axisLabel: { color: '#64748b', fontSize: 11 },
-        },
-        series: [{
-          type: 'bar',
-          data: [2.1, 3.8, 5.2, 7.1, 9.4, 12.3, 15.8, 19.2, 23.5, 28.1, 34.0, 41.2],
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: '#7c3aed' },
-              { offset: 1, color: '#5b21b6' },
-            ]),
-            borderRadius: [4, 4, 0, 0],
-          },
-          showBackground: true,
-          backgroundStyle: { color: 'rgba(124,58,237,0.06)', borderRadius: [4,4,0,0] },
-        }],
-        tooltip: { trigger: 'axis', backgroundColor: '#1e293b', borderColor: '#334155', textStyle: { color: '#f1f5f9', fontSize: 12 } },
-      })
 
-      const line = echarts.init(document.getElementById('chart-line'))
-      line.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: 40, right: 40, top: 16, bottom: 30 },
-        legend: { top: -4, right: 0, textStyle: { color: '#94a3b8', fontSize: 11 } },
-        xAxis: {
-          type: 'category',
-          data: ['Q1','Q2','Q3','Q4','Q1\'27'],
-          axisLine: { lineStyle: { color: '#334155' } },
-          axisLabel: { color: '#64748b', fontSize: 11 },
-        },
-        yAxis: {
-          type: 'value',
-          axisLine: { show: false },
-          splitLine: { lineStyle: { color: '#1e293b' } },
-          axisLabel: { color: '#64748b', fontSize: 11 },
-        },
-        series: [
-          { name: 'tang-slidex', type: 'line', smooth: true, symbol: 'circle', symbolSize: 6, data: [0, 12, 45, 130, 280], lineStyle: { color: '#7c3aed', width: 2.5 }, itemStyle: { color: '#7c3aed' }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(124,58,237,0.25)' }, { offset: 1, color: 'rgba(124,58,237,0)' }]) } },
-          { name: 'Slidev', type: 'line', smooth: true, symbol: 'circle', symbolSize: 5, data: [80, 90, 95, 100, 105], lineStyle: { color: '#2563eb', width: 2 }, itemStyle: { color: '#2563eb' } },
-          { name: 'reveal.js', type: 'line', smooth: true, symbol: 'circle', symbolSize: 5, data: [60, 62, 63, 64, 64], lineStyle: { color: '#64748b', width: 2 }, itemStyle: { color: '#64748b' } },
-        ],
-        tooltip: { trigger: 'axis', backgroundColor: '#1e293b', borderColor: '#334155', textStyle: { color: '#f1f5f9', fontSize: 12 } },
-      })
-    }
+    <div class="header">
+      <p class="eyebrow">v0.2 · Viewer — 01</p>
+      <h1 class="title">三栏编辑器架构 <span class="new-badge">✨ v0.2 NEW</span></h1>
+    </div>
+
+    <!-- 左：编辑器可视化 -->
+    <div class="editor-layout">
+      <div class="topbar">
+        <div class="topbar-logo">tang-slidex</div>
+        <div class="topbar-btns">
+          <div class="tbtn">◀ ▶</div>
+          <div class="tbtn primary">编辑模式</div>
+          <div class="tbtn primary">💾 保存</div>
+          <div class="tbtn edit">✕ 放弃</div>
+        </div>
+      </div>
+      <div class="editor-body">
+        <!-- 左侧导航 -->
+        <div class="col">
+          <div class="col-hd">幻灯片导航</div>
+          <div class="col-body">
+            <div class="thumb-list">
+              <div class="thumb active">
+                <div class="thumb-bg" style="background:linear-gradient(135deg,#7c3aed,#1e1b4b)"></div>
+                <div class="thumb-num">01</div>
+              </div>
+              <div class="thumb">
+                <div class="thumb-bg" style="background:#1e293b"></div>
+                <div class="thumb-num">02</div>
+              </div>
+              <div class="thumb">
+                <div class="thumb-bg" style="background:#1e293b"></div>
+                <div class="thumb-num">03</div>
+              </div>
+              <div class="thumb">
+                <div class="thumb-bg" style="background:#1e293b"></div>
+                <div class="thumb-num">04</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中间舞台 -->
+        <div class="col" style="border-right:1px solid #21262d;">
+          <div class="col-hd">演示舞台（16:9 缩放）</div>
+          <div class="col-body">
+            <div class="stage-wrap">
+              <div class="stage-inner">
+                <div class="fake-title-bar"></div>
+                <div class="fake-body-1"></div>
+                <div class="fake-body-2"></div>
+                <div class="fake-body-3"></div>
+                <!-- 选中框 -->
+                <div class="stage-overlay" style="top:28%;left:7%;width:45%;height:10%;">
+                  <div class="stage-handle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧属性面板 -->
+        <div class="col">
+          <div class="col-hd">属性面板</div>
+          <div class="col-body">
+            <div class="prop-list">
+              <div class="prop-section-title">样式</div>
+              <div class="prop-row">
+                <div class="prop-label">color</div>
+                <div class="prop-color" style="background:#a78bfa"></div>
+                <div class="prop-val">#a78bfa</div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-label">font-size</div>
+                <div class="prop-val">44px</div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-label">font-weight</div>
+                <div class="prop-val">800</div>
+              </div>
+              <div class="prop-section-title">布局</div>
+              <div class="prop-row">
+                <div class="prop-label">translate</div>
+                <div class="prop-val">0, 0</div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-label">width</div>
+                <div class="prop-val">520px</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧特性 -->
+    <div class="feat-list">
+      <div class="feat">
+        <div class="feat-icon">🗂️</div>
+        <div>
+          <div class="feat-title">左侧缩略图导航</div>
+          <div class="feat-desc">实时 iframe 缩略图，点击即跳转，显示当前页码</div>
+          <span class="feat-tag">useSlideRunner</span>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🎬</div>
+        <div>
+          <div class="feat-title">中间演示舞台</div>
+          <div class="feat-desc">CSS scale 等比缩放适配，保持 1280×720 原生尺寸，编辑模式叠加选中框与拖拽手柄</div>
+          <span class="feat-tag">16:9 · scale()</span>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🎨</div>
+        <div>
+          <div class="feat-title">右侧属性面板</div>
+          <div class="feat-desc">Style Tab（颜色/字体）+ Layout Tab（位置/尺寸），精准作用到点击节点</div>
+          <span class="feat-tag">StyleTab · LayoutTab</span>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">⌨️</div>
+        <div>
+          <div class="feat-title">TopBar 操作栏</div>
+          <div class="feat-desc">保存 / 放弃修改 / 编辑模式切换 / 撤销（Ctrl+Z）</div>
+          <span class="feat-tag">tang:save · tang:discard</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
     if (window.gsap) {
-      gsap.from('.title',     { y: -20, opacity: 0, duration: 0.4 })
-      gsap.from('.chart-box', { y: 30, opacity: 0, duration: 0.45, stagger: 0.12, delay: 0.2 })
+      gsap.from('.title',        { y: -20, opacity: 0, duration: 0.4 })
+      gsap.from('.editor-layout',{ x: -20, opacity: 0, duration: 0.5, delay: 0.15 })
+      gsap.from('.feat',         { x: 24, opacity: 0, duration: 0.35, stagger: 0.08, delay: 0.25 })
     }
   </script>
 </body>

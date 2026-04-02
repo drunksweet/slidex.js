@@ -6,106 +6,184 @@
     .slide {
       width: 1280px; height: 720px; overflow: hidden;
       background-color: var(--color-background, #0f172a);
-      padding: 48px 72px;
+      padding: 44px 64px;
+      display: grid;
+      grid-template-columns: 1fr 540px;
+      gap: 44px;
+      align-items: start;
     }
-    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 10px; }
-    .title   { font-size: 40px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 6px; }
-    .subtitle{ font-size: 15px; color: var(--color-text-muted, #94a3b8); margin-bottom: 28px; }
-    .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .demo-card {
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 8px; }
+    .title   { font-size: 38px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 6px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 14px; color: var(--color-text-muted, #94a3b8); margin-bottom: 22px; }
+    .new-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35);
+      border-radius: 999px; padding: 4px 12px;
+      font-size: 11px; font-weight: 700; color: #a78bfa;
+      margin-left: 14px; vertical-align: middle;
+    }
+
+    .prop-list { display: flex; flex-direction: column; gap: 10px; }
+    .prop {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 13px 16px;
       background: var(--color-surface, #1e293b);
       border: 1px solid var(--color-border, #334155);
-      border-radius: 12px; padding: 24px;
-      text-align: center; cursor: default;
-      transition: border-color 0.25s, transform 0.2s;
-      position: relative; overflow: hidden;
+      border-radius: 8px; border-left: 3px solid transparent;
+      transition: border-left-color 0.2s, transform 0.2s;
     }
-    .demo-card:hover { border-color: var(--color-primary, #7c3aed); transform: translateY(-3px); }
-    .demo-icon { font-size: 36px; margin-bottom: 12px; display: block; }
-    .demo-title { font-size: 17px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 8px; }
-    .demo-desc  { font-size: 13px; color: var(--color-text-muted, #94a3b8); line-height: 1.6; }
-    /* 动画演示区 */
-    .anim-demo {
-      height: 60px; margin-top: 14px;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
+    .prop:hover { border-left-color: var(--color-primary, #7c3aed); transform: translateX(3px); }
+    .prop-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .prop-title { font-size: 14px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 3px; }
+    .prop-desc  { font-size: 12.5px; color: var(--color-text-muted, #94a3b8); line-height: 1.5; }
+    .prop-code  {
+      display: inline-block; font-family: ui-monospace; font-size: 11px;
+      background: rgba(0,0,0,0.3); color: #a78bfa;
+      padding: 2px 7px; border-radius: 4px; margin-top: 4px;
     }
-    .dot-anim {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--color-primary, #7c3aed);
-      animation: bounce 1.2s ease-in-out infinite;
+
+    /* 右侧代码窗口 */
+    .code-window {
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid #21262d;
+      font-family: 'ui-monospace', monospace;
+      display: flex; flex-direction: column;
+      height: 580px;
     }
-    .dot-anim:nth-child(2) { animation-delay: 0.15s; background: #5b21b6; }
-    .dot-anim:nth-child(3) { animation-delay: 0.30s; background: #2563eb; }
-    .dot-anim:nth-child(4) { animation-delay: 0.45s; background: #059669; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(1); opacity: 0.8; }
-      40% { transform: scale(1.6) translateY(-6px); opacity: 1; }
+    .code-titlebar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 14px;
+      background: #161b22; border-bottom: 1px solid #21262d;
+      flex-shrink: 0;
     }
-    .bar-anim {
-      display: flex; align-items: flex-end; gap: 4px; height: 40px;
+    .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-filename { font-size: 12px; color: #8b949e; margin-left: 8px; }
+    .code-body {
+      flex: 1; overflow-y: auto;
+      background: #0d1117;
+      padding: 16px 18px;
+      font-size: 12px; line-height: 1.75;
+      color: #e6edf3;
     }
-    .bar-el {
-      width: 10px; background: var(--color-primary, #7c3aed); border-radius: 2px 2px 0 0;
-      animation: barPulse 1.5s ease-in-out infinite;
+    /* 简单语法高亮 */
+    .kw  { color: #ff7b72; }
+    .fn  { color: #d2a8ff; }
+    .str { color: #a5d6ff; }
+    .cm  { color: #8b949e; font-style: italic; }
+    .num { color: #79c0ff; }
+    .key { color: #ffa657; }
+    .hl  {
+      background: rgba(124,58,237,0.12);
+      border-left: 2px solid #7c3aed;
+      display: block; margin: 0 -18px; padding: 0 18px;
     }
-    @keyframes barPulse {
-      0%, 100% { transform: scaleY(0.4); }
-      50%       { transform: scaleY(1); }
-    }
-    .spin-anim {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 3px solid rgba(124,58,237,0.2);
-      border-top-color: var(--color-primary, #7c3aed);
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <div class="slide" data-slide-id="011" data-slide-type="content">
-    <p class="eyebrow">08 · 动画 & 交互</p>
-    <h1 class="title">动画 & 交互能力</h1>
-    <p class="subtitle">前端技术栈的天然优势：任何 CSS/JS 动画都可以直接用</p>
-    <div class="demo-grid">
-      <div class="demo-card">
-        <span class="demo-icon">✨</span>
-        <div class="demo-title">GSAP 入场动画</div>
-        <div class="demo-desc">逐元素 stagger 动画、缓动函数、Timeline 精确控制时序</div>
-        <div class="anim-demo">
-          <div class="dot-anim"></div>
-          <div class="dot-anim"></div>
-          <div class="dot-anim"></div>
-          <div class="dot-anim"></div>
+
+    <div>
+      <p class="eyebrow">v0.2 · Viewer — 03</p>
+      <h1 class="title">行级写回引擎 <span class="new-badge">✨ v0.2 NEW</span></h1>
+      <p class="subtitle">零格式损耗 · 注释/缩进/间距全部保留 · 精确到行号</p>
+
+      <div class="prop-list">
+        <div class="prop">
+          <div class="prop-icon">🔍</div>
+          <div>
+            <div class="prop-title">slideInspectorPlugin — 注入行号</div>
+            <div class="prop-desc">Vite 插件在内存中为每个元素注入 data-tang-line，不修改源文件，HMR 友好</div>
+            <span class="prop-code">data-tang-line="42"</span>
+          </div>
         </div>
-      </div>
-      <div class="demo-card">
-        <span class="demo-icon">📊</span>
-        <div class="demo-title">图表动态加载</div>
-        <div class="demo-desc">ECharts 数字滚动、渐进加载、实时数据流更新</div>
-        <div class="anim-demo">
-          <div class="bar-anim">
-            <div class="bar-el" style="height:32px;animation-delay:0s"></div>
-            <div class="bar-el" style="height:24px;animation-delay:0.2s"></div>
-            <div class="bar-el" style="height:40px;animation-delay:0.4s"></div>
-            <div class="bar-el" style="height:18px;animation-delay:0.1s"></div>
-            <div class="bar-el" style="height:36px;animation-delay:0.3s"></div>
+        <div class="prop">
+          <div class="prop-icon">✂️</div>
+          <div>
+            <div class="prop-title">applyPatchesByLine — 行级替换</div>
+            <div class="prop-desc">按行号精准定位，正则替换单个属性值，其余行字节级不变，杜绝整文件序列化带来的格式破坏</div>
+            <span class="prop-code">setInlineStyleProp() · lines[i]</span>
+          </div>
+        </div>
+        <div class="prop">
+          <div class="prop-icon">📚</div>
+          <div>
+            <div class="prop-title">editHistory 历史栈 — 文件级 Undo</div>
+            <div class="prop-desc">保存前把当前文件内容入栈（最多 30 版），POST /api/undo 弹栈还原并触发浏览器重载</div>
+            <span class="prop-code">Map&lt;filePath, string[]&gt;</span>
+          </div>
+        </div>
+        <div class="prop">
+          <div class="prop-icon">🧹</div>
+          <div>
+            <div class="prop-title">cleanInjectAttrs — 防污染</div>
+            <div class="prop-desc">写回前自动移除所有 data-tang-line / data-tang-file 注入属性，源文件保持干净</div>
+            <span class="prop-code">cleanInjectAttrs(html)</span>
           </div>
         </div>
       </div>
-      <div class="demo-card">
-        <span class="demo-icon">🌐</span>
-        <div class="demo-title">Canvas / WebGL</div>
-        <div class="demo-desc">粒子系统、Three.js 3D 场景、自定义着色器，无限可能</div>
-        <div class="anim-demo">
-          <div class="spin-anim"></div>
-        </div>
-      </div>
     </div>
+
+    <!-- 右侧：applyPatchesByLine 核心代码 -->
+    <div class="code-window">
+      <div class="code-titlebar">
+        <div class="t-dot" style="background:#ff5f57"></div>
+        <div class="t-dot" style="background:#febc2e"></div>
+        <div class="t-dot" style="background:#28c840"></div>
+        <div class="code-filename">slideSavePlugin.ts · applyPatchesByLine</div>
+      </div>
+      <div class="code-body"><pre style="margin:0;background:transparent;padding:0;font-size:inherit;line-height:inherit;"><code><span class="kw">export function</span> <span class="fn">applyPatchesByLine</span>(
+  html: <span class="str">string</span>,
+  patches: <span class="fn">WysiwygPatch</span>[]
+): <span class="str">string</span> {
+  <span class="kw">const</span> lines = html.<span class="fn">split</span>(<span class="str">'\n'</span>)
+
+  <span class="kw">for</span> (<span class="kw">const</span> patch <span class="kw">of</span> patches) {
+    <span class="cm">// 以行号定位目标元素</span>
+    <span class="kw">const</span> i = patch.anchor.line - <span class="num">1</span>
+    <span class="kw">const</span> line = lines[i]
+
+    <span class="kw">switch</span> (patch.type) {
+      <span class="kw">case</span> <span class="str">'style-prop'</span>:<span class="hl">
+        <span class="cm">// 精确替换 / 追加单个 CSS 属性</span>
+        lines[i] = <span class="fn">setInlineStyleProp</span>(
+          line, patch.property, patch.value
+        )</span>
+        <span class="kw">break</span>
+
+      <span class="kw">case</span> <span class="str">'text'</span>:
+        <span class="cm">// 只改标签内文本，不碰其他属性</span>
+        lines[i] = line.<span class="fn">replace</span>(
+          <span class="str">/(>[^&lt;]*)(&lt;\/)/</span>,
+          <span class="str">`&gt;${escaped}$2`</span>
+        )
+        <span class="kw">break</span>
+
+      <span class="kw">case</span> <span class="str">'move'</span>:
+        lines[i] = <span class="fn">setInlineStyleProp</span>(
+          line, <span class="str">'transform'</span>,
+          <span class="str">`translate(${patch.dx}px,${patch.dy}px)`</span>
+        )
+        <span class="kw">break</span>
+
+      <span class="kw">case</span> <span class="str">'delete'</span>:
+        <span class="cm">// 注释整个元素块</span>
+        lines.<span class="fn">splice</span>(i, end-i+<span class="num">1</span>,
+          <span class="str">`&lt;!-- [tang-deleted]\n${block}\n--&gt;`</span>)
+        <span class="kw">break</span>
+    }
+  }
+
+  <span class="kw">return</span> <span class="fn">cleanInjectAttrs</span>(lines.<span class="fn">join</span>(<span class="str">'\n'</span>))
+}</code></pre></div>
+    </div>
+
   </div>
+
   <script>
     if (window.gsap) {
-      gsap.from('.title',     { y: -20, opacity: 0, duration: 0.4 })
-      gsap.from('.demo-card', { y: 36, opacity: 0, duration: 0.45, stagger: 0.1, delay: 0.2, ease: 'power2.out' })
+      gsap.from('.title',       { y: -20, opacity: 0, duration: 0.4 })
+      gsap.from('.prop',        { x: -20, opacity: 0, duration: 0.35, stagger: 0.07, delay: 0.15 })
+      gsap.from('.code-window', { x: 24, opacity: 0, duration: 0.5, delay: 0.2 })
     }
   </script>
 </body>

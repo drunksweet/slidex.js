@@ -1,0 +1,115 @@
+/* SelectionBox.module.css
+ * 编辑模式选中框：4 条边框条（move）+ 8 个手柄（resize）+ 旋转手柄
+ */
+
+/* 外层容器：pointer-events:none（中心透穿） */
+.box {
+  position: fixed;
+  display: none;
+  z-index: 400;
+  pointer-events: none;
+  outline: 2px solid #3b82f6;
+  outline-offset: -1px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.10);
+}
+
+/* label */
+.box::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -22px;
+  left: -2px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  padding: 2px 8px;
+  border-radius: 4px 4px 0 0;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── 4 条边框条（move） ── */
+.edge {
+  position: absolute;
+  pointer-events: all;
+  cursor: move;
+  background: transparent;
+  z-index: 1;
+}
+.edgeTop    { top: -3px;    left: 6px;  right: 6px;  height: 8px; }
+.edgeBottom { bottom: -3px; left: 6px;  right: 6px;  height: 8px; }
+.edgeLeft   { top: 6px;  bottom: 6px; left: -3px;   width: 8px;  }
+.edgeRight  { top: 6px;  bottom: 6px; right: -3px;  width: 8px;  }
+
+/* ── 缩放手柄 ── */
+.handle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  border: 2px solid #3b82f6;
+  border-radius: 2px;
+  pointer-events: all;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  transition: background 0.12s, transform 0.12s;
+}
+.handle:hover {
+  background: #3b82f6;
+  transform: translate(-50%, -50%) scale(1.4);
+}
+
+/* 四角 */
+.handleNW { top: 0;    left: 0;    cursor: nwse-resize; }
+.handleNE { top: 0;    left: 100%; cursor: nesw-resize; }
+.handleSW { top: 100%; left: 0;    cursor: nesw-resize; }
+.handleSE { top: 100%; left: 100%; cursor: nwse-resize; }
+/* 四边中点 */
+.handleN  { top: 0;    left: 50%;  cursor: ns-resize;  }
+.handleS  { top: 100%; left: 50%;  cursor: ns-resize;  }
+.handleW  { top: 50%;  left: 0;    cursor: ew-resize;  }
+.handleE  { top: 50%;  left: 100%; cursor: ew-resize;  }
+
+/* ── 旋转手柄 ── */
+
+/* 连接线：从 top-center 向上 20px */
+.rotateLine {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  width: 1px;
+  height: 22px;
+  background: #3b82f6;
+  transform: translateX(-50%) translateY(-100%);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* 旋转手柄圆圈 */
+.rotateHandle {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: 2px solid #3b82f6;
+  border-radius: 50%;
+  pointer-events: all;
+  z-index: 3;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24'><path fill='%233b82f6' d='M12 2a9.93 9.93 0 0 0-7.06 2.94L3 3v6h6l-2.21-2.21A7.93 7.93 0 0 1 12 4a8 8 0 1 1-8 8H2a10 10 0 1 0 10-10z'/></svg>") 9 9, crosshair;
+  /* 圆心对准 top-center（偏移 -8px 水平居中，往上偏移手柄高度+线长） */
+  transform: translate(-50%, calc(-100% - 22px));
+  transition: background 0.12s, transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.3);
+}
+
+.rotateHandle:hover {
+  background: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.5);
+  transform: translate(-50%, calc(-100% - 22px)) scale(1.2);
+}

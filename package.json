@@ -1,6 +1,6 @@
 {
   "name": "tang-slidex",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "private": true,
   "description": "首个专为 AI Agent 设计、前端技术栈原生的开源幻灯片框架",
   "scripts": {

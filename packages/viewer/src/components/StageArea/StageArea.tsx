@@ -6,6 +6,8 @@ import { useSlideRunner } from '../../hooks/useSlideRunner'
 import { useEditManager } from '../../hooks/useEditManager'
 import { useResizeObserver } from '../../hooks/useResizeObserver'
 import { NavBar } from './NavBar'
+import { SelectionBox } from './SelectionBox'
+import type { SelectionBoxHandle } from './SelectionBox'
 import styles from './StageArea.module.css'
 
 const SLIDE_W = 1280
@@ -40,7 +42,7 @@ export function StageArea() {
   const containerRef = useRef<HTMLDivElement>(null) // stageCanvas
   const hostRef      = useRef<HTMLDivElement>(null)
 
-  const overlayRef = useRef<HTMLDivElement>(null)
+  const selBoxRef  = useRef<SelectionBoxHandle>(null)
   const alignHRef  = useRef<HTMLDivElement>(null)
   const alignVRef  = useRef<HTMLDivElement>(null)
 
@@ -48,7 +50,7 @@ export function StageArea() {
   const { mode, setMode, showToast } = useUiStore()
 
   const runner     = useSlideRunner(hostRef)
-  const managerRef = useEditManager(hostRef, overlayRef, alignHRef, alignVRef)
+  const managerRef = useEditManager(hostRef, selBoxRef, alignHRef, alignVRef)
 
   // ── 自适应缩放：containerRef 是 stageCanvas，其高度已经不含 NavBar ───────────
   const didInitRef = useRef(false)
@@ -103,7 +105,10 @@ export function StageArea() {
     const onSave = async () => {
       const mgr = managerRef.current
       if (!mgr) return
-      try { await mgr.save() }
+      try {
+        await mgr.save()
+        useEditStore.getState().setDirty(mgr.patches.length > 0)
+      }
       catch (err: unknown) { showToast('❌ 保存失败: ' + (err as Error).message, 'error') }
     }
     const onUndo = async () => {
@@ -111,6 +116,19 @@ export function StageArea() {
       if (!mgr) return
       try { await mgr.undo() }
       catch { showToast('❌ 撤销失败', 'error') }
+    }
+    const onDiscard = () => {
+      const mgr = managerRef.current
+      if (!mgr) return
+      // disable 会还原 DOM 快照；然后切 mode → useEffect 感知到 present 就不会再 enable
+      mgr.disable()
+      setMode('present')
+    }
+    const onReloadSlide = (e: Event) => {
+      // undo 后重新加载当前 slide（文件已被还原）
+      const idx = (e as CustomEvent<{ index: number }>).detail?.index
+        ?? runner.currentRef.current
+      runner.navigateTo(idx, { instant: true })
     }
     const onApplyStyle = (e: Event) => {
       const { el, prop, val } = (e as CustomEvent).detail
@@ -121,15 +139,19 @@ export function StageArea() {
       useEditStore.getState().setDirty(mgr.patches.length > 0)
     }
 
-    document.addEventListener('tang:navigate',   onNavigate)
-    document.addEventListener('tang:save',        onSave)
-    document.addEventListener('tang:undo',        onUndo)
-    document.addEventListener('tang:apply-style', onApplyStyle)
+    document.addEventListener('tang:navigate',     onNavigate)
+    document.addEventListener('tang:save',          onSave)
+    document.addEventListener('tang:undo',          onUndo)
+    document.addEventListener('tang:discard',       onDiscard)
+    document.addEventListener('tang:reload-slide',  onReloadSlide)
+    document.addEventListener('tang:apply-style',   onApplyStyle)
     return () => {
-      document.removeEventListener('tang:navigate',   onNavigate)
-      document.removeEventListener('tang:save',        onSave)
-      document.removeEventListener('tang:undo',        onUndo)
-      document.removeEventListener('tang:apply-style', onApplyStyle)
+      document.removeEventListener('tang:navigate',     onNavigate)
+      document.removeEventListener('tang:save',          onSave)
+      document.removeEventListener('tang:undo',          onUndo)
+      document.removeEventListener('tang:discard',       onDiscard)
+      document.removeEventListener('tang:reload-slide',  onReloadSlide)
+      document.removeEventListener('tang:apply-style',   onApplyStyle)
     }
   }, [runner, managerRef, showToast])
 
@@ -138,7 +160,8 @@ export function StageArea() {
     const onKey = (e: KeyboardEvent) => {
       const mgr = managerRef.current
       if (mgr?.active) {
-        if (e.key === 'Escape') { mgr.disable(); return }
+        // 编辑模式内：Escape → 退出编辑（通过 setMode，让 useEffect 统一处理）
+        if (e.key === 'Escape') { setMode('present'); return }
         if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); document.dispatchEvent(new CustomEvent('tang:save')); return }
         if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); document.dispatchEvent(new CustomEvent('tang:undo')); return }
         return
@@ -182,13 +205,14 @@ export function StageArea() {
     })
   }, [runner, showToast])
 
-  // ── 编辑模式切换（mode 变化时重新算缩放）
+  // ── 编辑模式切换（mode 是唯一真相源，只在这里 enable/disable mgr）
   useEffect(() => {
     const mgr = managerRef.current
     if (!mgr) return
     if (mode === 'edit') {
       if (!mgr.active) mgr.enable()
     } else {
+      // 退出编辑：先 disable mgr（还原 DOM），不在此 dispatch 其他事件
       if (mgr.active) mgr.disable()
     }
 
@@ -214,7 +238,36 @@ export function StageArea() {
         <div ref={hostRef} id="slide-host" />
       </div>
 
-      <div ref={overlayRef} id="selection-overlay" data-label="" className={styles.selectionOverlay} />
+      <SelectionBox
+        ref={selBoxRef}
+        managerRef={managerRef}
+        onDragMove={(el) => {
+          // 同步更新辅助线
+          const stageEl = hostRef.current
+          if (!stageEl || !alignHRef.current || !alignVRef.current) return
+          const rect     = el.getBoundingClientRect()
+          const hostRect = stageEl.getBoundingClientRect()
+          const cx = rect.left + rect.width  / 2
+          const cy = rect.top  + rect.height / 2
+          const hx = hostRect.left + hostRect.width  / 2
+          const hy = hostRect.top  + hostRect.height / 2
+          const snap = 10 / useSlideStore.getState().scale
+          if (Math.abs(cy - hy) < snap) {
+            alignHRef.current.style.cssText = `display:block;top:${hy}px;`
+          } else {
+            alignHRef.current.style.display = 'none'
+          }
+          if (Math.abs(cx - hx) < snap) {
+            alignVRef.current.style.cssText = `display:block;left:${hx}px;`
+          } else {
+            alignVRef.current.style.display = 'none'
+          }
+        }}
+        onDragEnd={() => {
+          if (alignHRef.current) alignHRef.current.style.display = 'none'
+          if (alignVRef.current) alignVRef.current.style.display = 'none'
+        }}
+      />
       <div ref={alignHRef} id="align-h" className={`${styles.alignGuide} ${styles.alignH}`} />
       <div ref={alignVRef} id="align-v" className={`${styles.alignGuide} ${styles.alignV}`} />
 

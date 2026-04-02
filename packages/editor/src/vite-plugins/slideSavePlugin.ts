@@ -109,8 +109,24 @@ export function applyPatchesByLine(html: string, patches: WysiwygPatch[]): strin
       }
 
       case 'move': {
-        const newTranslate = `translate(${patch.dx}px, ${patch.dy}px)`
-        lines[i] = setInlineStyleProp(line, 'transform', newTranslate)
+        // 合并已有的 rotate（如果有的话），只替换 translate 部分
+        const existing = _parseTransformStr(line)
+        const newT = `translate(${patch.dx}px, ${patch.dy}px)`
+        const composed = existing.rotate
+          ? `${newT} ${existing.rotate}`
+          : newT
+        lines[i] = setInlineStyleProp(line, 'transform', composed)
+        break
+      }
+
+      case 'rotate': {
+        // 合并已有的 translate（如果有的话），只替换 rotate 部分
+        const existing = _parseTransformStr(line)
+        const newR = `rotate(${patch.deg}deg)`
+        const composed = existing.translate
+          ? `${existing.translate} ${newR}`
+          : newR
+        lines[i] = setInlineStyleProp(line, 'transform', composed)
         break
       }
 
@@ -177,6 +193,20 @@ function escapeHtml(str: string): string {
 
 function escapeAttr(str: string): string {
   return str.replace(/"/g, '&quot;')
+}
+
+/**
+ * 从 CSS transform 字符串中提取 translate/rotate 子串（用于 move/rotate patch 合并）
+ */
+function _parseTransformStr(line: string): { translate: string; rotate: string } {
+  const styleMatch = line.match(/transform:\s*([^;}"]+)/)
+  const val = styleMatch ? styleMatch[1]!.trim() : ''
+  const tMatch = val.match(/translate\([^)]+\)/)
+  const rMatch = val.match(/rotate\([^)]+\)/)
+  return {
+    translate: tMatch ? tMatch[0]! : '',
+    rotate:    rMatch ? rMatch[0]! : '',
+  }
 }
 
 // ─── Vite 插件 ─────────────────────────────────────────────────────────────────

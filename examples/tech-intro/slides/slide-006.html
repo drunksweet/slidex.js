@@ -52,7 +52,7 @@
 </head>
 <body>
   <div class="slide" data-slide-id="006" data-slide-type="content">
-    <div>
+    <div style="transform: translate(-8px, -25px)">
       <p class="eyebrow">03 · 架构</p>
       <h1 class="title">系统架构分层</h1>
       <div class="layers">
@@ -91,8 +91,19 @@
           <div class="layer-badge" style="background:#d97706;">Editor 层</div>
           <div class="layer-body">
             <div class="layer-title">@tang-slidex/editor</div>
-            <div class="layer-desc">Electron 三栏 IDE：文件树 · 预览 · AI 对话</div>
-            <div class="layer-tags"><span class="layer-tag">React 19</span><span class="layer-tag">Electron</span><span class="layer-tag">AI SDK</span></div>
+            <div class="layer-desc">Vite 插件：slideInspectorPlugin · slideSavePlugin · slideUndoPlugin</div>
+            <div class="layer-tags"><span class="layer-tag">行级写回</span><span class="layer-tag">data-tang-line</span><span class="layer-tag">HMR</span></div>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-badge" style="background:#0e9f6e;">Viewer 层</div>
+          <div class="layer-body" style="border-color:rgba(14,159,110,0.4);">
+            <div class="layer-title" style="display:flex;align-items:center;gap:8px;">
+              @tang-slidex/viewer
+              <span style="font-size:10px;font-weight:700;background:rgba(14,159,110,0.2);color:#34d399;padding:2px 8px;border-radius:999px;">v0.2 NEW</span>
+            </div>
+            <div class="layer-desc">React 三栏编辑器：导航缩略图 · 舞台 · 属性面板 · WYSIWYG 编辑模式</div>
+            <div class="layer-tags"><span class="layer-tag">React 19</span><span class="layer-tag">Zustand</span><span class="layer-tag">EditManager</span><span class="layer-tag">Vite</span></div>
           </div>
         </div>
       </div>

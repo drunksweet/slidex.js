@@ -49,20 +49,30 @@ export function TopBar() {
         </div>
       )}
 
-      {/* 右区：保存 / 全屏 */}
+      {/* 右区：保存 / 放弃 / 全屏 */}
       <div className={styles.right}>
         {isEdit && (
-          <button
-            className={`${styles.actionBtn} ${isDirty ? styles.dirty : ''}`}
-            title="保存 (Ctrl+S)"
-            onClick={() => {
-              // EditManager.save() 通过 editManager ref 调用（由 StageArea 管理）
-              document.dispatchEvent(new CustomEvent('tang:save'))
-            }}
-          >
-            <Save size={14} />
-            {isDirty ? '保存 ●' : '已保存'}
-          </button>
+          <>
+            <button
+              className={`${styles.actionBtn} ${isDirty ? styles.dirty : ''}`}
+              title="保存 (Ctrl+S)"
+              onClick={() => {
+                document.dispatchEvent(new CustomEvent('tang:save'))
+              }}
+            >
+              <Save size={14} />
+              {isDirty ? '保存 ●' : '已保存'}
+            </button>
+            <button
+              className={styles.discardBtn}
+              title="放弃修改，退出编辑模式"
+              onClick={() => {
+                document.dispatchEvent(new CustomEvent('tang:discard'))
+              }}
+            >
+              ✕ 放弃
+            </button>
+          </>
         )}
         <button
           className={styles.iconBtn}

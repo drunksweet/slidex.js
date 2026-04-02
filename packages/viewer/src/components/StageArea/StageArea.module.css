@@ -120,25 +120,6 @@
 }
 .editBtn:hover { background: rgba(251,146,60,0.22); }
 
-/* ── 元素选中框 ── */
-.selectionOverlay {
-  position: fixed;
-  border: 2px solid #3b82f6;
-  border-radius: 4px;
-  pointer-events: none;
-  z-index: 400;
-  display: none;
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
-}
-.selectionOverlay::before {
-  content: attr(data-label);
-  position: absolute; top: -21px; left: -2px;
-  background: #3b82f6; color: #fff;
-  font-size: 10px; font-weight: 700; font-family: ui-monospace;
-  padding: 1px 7px; border-radius: 4px 4px 0 0;
-  white-space: nowrap; pointer-events: none;
-}
-
 /* ── 对齐辅助线 ── */
 .alignGuide {
   position: fixed;

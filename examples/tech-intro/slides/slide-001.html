@@ -9,12 +9,10 @@
       padding: 80px 100px;
       position: relative;
     }
-    /* 粒子画布 */
     #particle-canvas {
       position: absolute; inset: 0;
       pointer-events: none;
     }
-    /* 鼠标光晕 */
     #cursor-glow {
       position: absolute;
       width: 400px; height: 400px;
@@ -70,7 +68,6 @@
     }
     .title-accent {
       color: #a78bfa;
-      /* 文字渐变光泽 */
       background: linear-gradient(90deg, #a78bfa, #7c3aed, #c4b5fd, #a78bfa);
       background-size: 200% auto;
       -webkit-background-clip: text;
@@ -91,6 +88,21 @@
       font-size: 14px; color: rgba(255,255,255,0.35);
     }
     .meta-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.2); }
+    /* v0.2 新增：右下角特性标签 */
+    .feature-tags {
+      position: absolute; right: 100px; bottom: 80px;
+      display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+    }
+    .ftag {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      font-weight: 500;
+    }
+    .ftag-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .ftag.new { border-color: rgba(124,58,237,0.4); color: #c4b5fd; background: rgba(124,58,237,0.12); }
   </style>
 </head>
 <body>
@@ -103,11 +115,11 @@
 
     <div class="badge">
       <span class="badge-dot"></span>
-      开源项目介绍
+      开源项目介绍 · v0.2
     </div>
 
     <h1 class="title">
-      tang-<span class="title-accent">slidex.js!</span>
+      tang-<span class="title-accent">slidex.js</span>
     </h1>
 
     <p class="subtitle">
@@ -119,12 +131,31 @@
       <div class="meta-divider"></div>
       <span>2026</span>
       <div class="meta-divider"></div>
-      <span>tang-slidex.js v0.1</span>
+      <span>tang-slidex v0.2</span>
+    </div>
+
+    <!-- v0.2 新特性标签 -->
+    <div class="feature-tags">
+      <div class="ftag new">
+        <span class="ftag-dot" style="background:#a78bfa"></span>
+        ✨ v0.2 新增：React 三栏编辑器
+      </div>
+      <div class="ftag new">
+        <span class="ftag-dot" style="background:#34d399"></span>
+        WYSIWYG 浏览器内可视化编辑
+      </div>
+      <div class="ftag new">
+        <span class="ftag-dot" style="background:#60a5fa"></span>
+        行级写回 · 零格式损耗
+      </div>
+      <div class="ftag">
+        <span class="ftag-dot" style="background:#94a3b8"></span>
+        AI Agent 原生 · HTML/CSS/JS
+      </div>
     </div>
   </div>
 
   <script>
-    // ─── Canvas 粒子系统 ─────────────────────────────────────────────────────────
     const canvas = document.getElementById('particle-canvas')
     const ctx    = canvas.getContext('2d')
     canvas.width  = 1280
@@ -132,7 +163,6 @@
 
     const PARTICLE_COUNT = 80
     const particles = []
-
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       particles.push({
         x:  Math.random() * 1280,
@@ -141,96 +171,67 @@
         vx: (Math.random() - 0.5) * 0.4,
         vy: (Math.random() - 0.5) * 0.4,
         alpha: Math.random() * 0.5 + 0.1,
-        // 连线距离阈值
       })
     }
 
-    let mouseX = 640, mouseY = 360
-
     function drawParticles() {
       ctx.clearRect(0, 0, 1280, 720)
-
-      // 画粒子
       for (const p of particles) {
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
         ctx.fillStyle = `rgba(167,139,250,${p.alpha})`
         ctx.fill()
       }
-
-      // 画连线（距离 < 140px）
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x
           const dy = particles[i].y - particles[j].y
           const d  = Math.sqrt(dx * dx + dy * dy)
           if (d < 140) {
-            const alpha = (1 - d / 140) * 0.12
             ctx.beginPath()
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `rgba(124,58,237,${alpha})`
+            ctx.strokeStyle = `rgba(124,58,237,${(1 - d / 140) * 0.12})`
             ctx.lineWidth = 1
             ctx.stroke()
           }
         }
       }
-
-      // 更新位置
       for (const p of particles) {
-        p.x += p.vx
-        p.y += p.vy
+        p.x += p.vx; p.y += p.vy
         if (p.x < 0 || p.x > 1280) p.vx *= -1
         if (p.y < 0 || p.y > 720)  p.vy *= -1
       }
-
       requestAnimationFrame(drawParticles)
     }
     drawParticles()
 
-    // ─── 鼠标光晕跟随 ────────────────────────────────────────────────────────────
-    const glow = document.getElementById('cursor-glow')
+    const glow  = document.getElementById('cursor-glow')
     const slide = document.querySelector('.slide')
-
     slide.addEventListener('mousemove', (e) => {
       const rect = slide.getBoundingClientRect()
-      // 注意：slide 被 scale 缩放了，需要逆变换坐标
-      const scaleX = 1280 / rect.width
-      const scaleY = 720  / rect.height
-      const x = (e.clientX - rect.left) * scaleX
-      const y = (e.clientY - rect.top)  * scaleY
-      glow.style.left    = x + 'px'
-      glow.style.top     = y + 'px'
-      glow.style.opacity = '1'
-
-      // 粒子被鼠标轻微吸引
-      mouseX = x; mouseY = y
+      const x = (e.clientX - rect.left) * (1280 / rect.width)
+      const y = (e.clientY - rect.top)  * (720  / rect.height)
+      glow.style.left = x + 'px'; glow.style.top = y + 'px'; glow.style.opacity = '1'
       for (const p of particles) {
-        const dx = x - p.x
-        const dy = y - p.y
+        const dx = x - p.x, dy = y - p.y
         const d  = Math.sqrt(dx * dx + dy * dy)
         if (d < 180) {
-          p.vx += dx / d * 0.06
-          p.vy += dy / d * 0.06
-          // 限速
+          p.vx += dx / d * 0.06; p.vy += dy / d * 0.06
           const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy)
           if (speed > 1.5) { p.vx = p.vx / speed * 1.5; p.vy = p.vy / speed * 1.5 }
         }
       }
     })
-    slide.addEventListener('mouseleave', () => {
-      glow.style.opacity = '0'
-    })
+    slide.addEventListener('mouseleave', () => { glow.style.opacity = '0' })
 
-    // ─── GSAP 入场动画 ────────────────────────────────────────────────────────────
     if (window.gsap) {
-      gsap.from('.badge',    { y: -24, opacity: 0, duration: 0.5 })
-      gsap.from('.title',    { y:  36, opacity: 0, duration: 0.65, delay: 0.15, ease: 'power3.out' })
-      gsap.from('.subtitle', { y:  20, opacity: 0, duration: 0.5,  delay: 0.35 })
-      gsap.from('.meta',     { opacity: 0, duration: 0.5, delay: 0.55 })
+      gsap.from('.badge',         { y: -24, opacity: 0, duration: 0.5 })
+      gsap.from('.title',         { y:  36, opacity: 0, duration: 0.65, delay: 0.15, ease: 'power3.out' })
+      gsap.from('.subtitle',      { y:  20, opacity: 0, duration: 0.5,  delay: 0.35 })
+      gsap.from('.meta',          { opacity: 0, duration: 0.5, delay: 0.55 })
       gsap.from('.deco-circle-1', { scale: 0.7, opacity: 0, duration: 1.2, delay: 0.1, ease: 'power2.out' })
+      gsap.from('.ftag',          { x: 30, opacity: 0, duration: 0.4, stagger: 0.08, delay: 0.6, ease: 'power2.out' })
     }
   </script>
-
-
 </body></html>

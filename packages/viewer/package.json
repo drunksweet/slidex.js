@@ -1,6 +1,6 @@
 {
   "name": "@tang-slidex/viewer",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "tang-slidex 展示交互层 — React + PWA",
   "private": true,
   "type": "module",

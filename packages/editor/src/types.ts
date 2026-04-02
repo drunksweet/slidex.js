@@ -51,6 +51,13 @@ export interface ResizePatch {
   height: number
 }
 
+/** 旋转角度（单位：deg，正顺时针） */
+export interface RotatePatch {
+  type: 'rotate'
+  anchor: LineAnchor
+  deg: number
+}
+
 /** 修改单个内联 style 属性 */
 export interface StylePropPatch {
   type: 'style-prop'
@@ -92,6 +99,7 @@ export type WysiwygPatch =
   | TextPatch
   | MovePatch
   | ResizePatch
+  | RotatePatch
   | StylePropPatch
   | ClassAddPatch
   | ClassRemovePatch
