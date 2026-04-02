@@ -1,0 +1,50 @@
+/* FillSection 独有样式 */
+
+.modeTabs {
+  display: flex;
+  gap: 2px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 7px;
+  padding: 2px;
+  margin-bottom: 10px;
+}
+
+.modeTab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+}
+
+.modeTab:hover { color: rgba(255,255,255,0.7); }
+
+.modeActive {
+  background: rgba(59,130,246,0.18) !important;
+  color: #93c5fd !important;
+}
+
+/* 渐变预览条 */
+.gradPreview {
+  width: 28px;
+  height: 16px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 透明提示 */
+.noneHint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  text-align: center;
+  padding: 10px 0;
+  margin: 0;
+}

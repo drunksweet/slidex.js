@@ -1,0 +1,33 @@
+/* TransformSection 独有样式 */
+
+.flipBtns {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.flipBtn {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.45);
+  border-radius: 5px;
+  padding: 5px 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+  text-align: center;
+}
+
+.flipBtn:hover {
+  background: rgba(99,179,237,0.1);
+  border-color: rgba(99,179,237,0.25);
+  color: #93c5fd;
+}
+
+.flipActive {
+  background: rgba(59,130,246,0.18) !important;
+  border-color: rgba(59,130,246,0.4) !important;
+  color: #93c5fd !important;
+}

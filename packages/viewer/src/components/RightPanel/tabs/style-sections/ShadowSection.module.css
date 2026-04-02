@@ -1,0 +1,65 @@
+/* ShadowSection 独有样式 */
+
+/* 开关行 */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.toggleLabel {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+}
+
+/* Toggle 开关（同 BorderSection） */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.toggleTrack {
+  position: relative;
+  width: 30px;
+  height: 16px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+.toggle input:checked + .toggleTrack { background: #3b82f6; }
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+.toggle input:checked + .toggleTrack .toggleThumb { transform: translateX(14px); }
+
+/* 展开区域 */
+.shadowBody {
+  padding-left: 4px;
+  margin-bottom: 4px;
+}
+
+/* 内阴影 checkbox 行 */
+.insetRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  margin-top: 4px;
+  user-select: none;
+}
+.insetRow input { cursor: pointer; accent-color: #3b82f6; }

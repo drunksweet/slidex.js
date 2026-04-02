@@ -94,6 +94,12 @@ export interface DeletePatch {
   anchor: LineAnchor
 }
 
+/** 清除 inline style（style="" 写回文件） */
+export interface ClearStylePatch {
+  type: 'clear-style'
+  anchor: LineAnchor
+}
+
 /** 第一层所有 Patch 的联合类型 */
 export type WysiwygPatch =
   | TextPatch
@@ -105,6 +111,7 @@ export type WysiwygPatch =
   | ClassRemovePatch
   | AttrSetPatch
   | DeletePatch
+  | ClearStylePatch
 
 // ─── Agent 上下文（第二、三层） ───────────────────────────────────────────────
 

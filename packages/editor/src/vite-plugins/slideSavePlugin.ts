@@ -162,9 +162,12 @@ export function applyPatchesByLine(html: string, patches: WysiwygPatch[]): strin
       }
 
       case 'attr-set': {
-        const attrRe = new RegExp(`${escapeRegExp(patch.attr)}="[^"]*"`)
-        if (attrRe.test(line)) {
-          lines[i] = line.replace(attrRe, `${patch.attr}="${escapeAttr(patch.value)}"`)
+        const attrRe = new RegExp(`\\s*${escapeRegExp(patch.attr)}="[^"]*"`)
+        if (patch.value === '') {
+          // 空值 = 移除该属性
+          lines[i] = line.replace(attrRe, '')
+        } else if (attrRe.test(line)) {
+          lines[i] = line.replace(attrRe, ` ${patch.attr}="${escapeAttr(patch.value)}"`)
         } else {
           lines[i] = line.replace(/(\/?>)/, ` ${patch.attr}="${escapeAttr(patch.value)}"$1`)
         }
@@ -176,6 +179,12 @@ export function applyPatchesByLine(html: string, patches: WysiwygPatch[]): strin
         const endIdx = findClosingLine(lines, i)
         const block = lines.slice(i, endIdx + 1).join('\n')
         lines.splice(i, endIdx - i + 1, `<!-- [tang-deleted]\n${block}\n-->`)
+        break
+      }
+
+      case 'clear-style': {
+        // 移除 style="..." 属性（保留其他属性）
+        lines[i] = line.replace(/\s+style="[^"]*"/, '')
         break
       }
     }

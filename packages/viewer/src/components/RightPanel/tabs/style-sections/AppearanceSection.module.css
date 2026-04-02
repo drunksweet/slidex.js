@@ -1,0 +1,198 @@
+/* AppearanceSection 独有样式 */
+
+/* 开关行 */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.toggleLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggleLabel {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+}
+
+/* 毛玻璃小预览缩略图 */
+.glassPreview {
+  width: 22px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  flex-shrink: 0;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.glassActive {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px) saturate(180%);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* 展开体 */
+.body {
+  padding-left: 4px;
+}
+
+/* ── 液态玻璃入口行 ── */
+.glassEntry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.glassEntryLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 小图标：模拟液态玻璃外观 */
+.glassIcon {
+  width: 32px;
+  height: 22px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.glassIconInner {
+  position: absolute;
+  inset: 2px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(4px) saturate(160%);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.glassTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.3;
+}
+
+.glassDesc {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+.glassToggleBtn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+  border-radius: 5px;
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+.glassToggleBtn:hover {
+  background: rgba(59,130,246,0.12);
+  border-color: rgba(59,130,246,0.3);
+  color: #93c5fd;
+}
+.glassToggleActive {
+  background: rgba(59,130,246,0.15) !important;
+  border-color: rgba(59,130,246,0.35) !important;
+  color: #93c5fd !important;
+}
+
+/* 展开的参数面板 */
+.glassPanel {
+  margin-bottom: 6px;
+}
+
+/* Toggle 开关 */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.toggleTrack {
+  position: relative;
+  width: 30px;
+  height: 16px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+.toggle input:checked + .toggleTrack { background: #3b82f6; }
+
+.toggleThumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 12px; height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+.toggle input:checked + .toggleTrack .toggleThumb { transform: translateX(14px); }
+
+/* 滤镜标签 */
+.filterLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 6px;
+}
+
+/* 预设按钮组 */
+.presetBtns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  margin-bottom: 4px;
+}
+
+.presetBtn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.45);
+  border-radius: 5px;
+  padding: 4px 2px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+  text-align: center;
+}
+
+.presetBtn:hover {
+  background: rgba(99,179,237,0.1);
+  color: #93c5fd;
+}
+
+.presetActive {
+  background: rgba(59,130,246,0.18) !important;
+  border-color: rgba(59,130,246,0.4) !important;
+  color: #93c5fd !important;
+}

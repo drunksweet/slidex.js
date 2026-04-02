@@ -1,5 +1,6 @@
 import { useRef, useCallback } from 'react'
 import { useSlideStore } from '../store/slideStore'
+import { rehydrateAll } from '../utils/liquidGlassManager'
 
 /** 与 tech-intro/index.html 相同的直接 DOM 注入方案（非 Shadow DOM）
  *  这样 EditManager 可以正常绑定、getBoundingClientRect 正常工作 */
@@ -93,6 +94,9 @@ export function useSlideRunner(hostRef: React.RefObject<HTMLDivElement | null>) 
       currentRef.current = index
       history.replaceState(null, '', `#${index}`)
       setCurrent(index)
+
+      // 刷新后自动重注入带 data-liquid-glass 的元素
+      rehydrateAll(host)
 
       // 换页完成后通知 EditManager 重新绑定（若当前处于编辑模式）
       // 用自定义事件解耦，避免循环依赖

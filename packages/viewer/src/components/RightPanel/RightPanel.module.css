@@ -7,6 +7,19 @@
   overflow: hidden;
 }
 
+/* 元素类型标签 */
+.kindBadge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(147,197,253,0.7);
+  background: rgba(59,130,246,0.08);
+  border-bottom: 1px solid rgba(59,130,246,0.12);
+  padding: 5px 12px;
+  user-select: none;
+}
+
 .tabs {
   display: flex;
   border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -200,4 +213,41 @@
   height: 1px;
   background: rgba(255,255,255,0.06);
   margin: 12px 0;
+}
+
+/* section 内部细分隔（比 divider 轻） */
+.rowDivider {
+  height: 1px;
+  background: rgba(255,255,255,0.04);
+  margin: 6px 0;
+}
+
+/* 单位标签 */
+.unit {
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+}
+
+/* 下拉选择器 */
+.select {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px;
+  color: #f1f5f9;
+  font-size: 11px;
+  padding: 4px 7px;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+.select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: rgba(59,130,246,0.08);
 }

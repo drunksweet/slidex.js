@@ -7,6 +7,10 @@
  *   - .rotateHandle（top-center 上方）：mousedown → rotate（改 rotate deg）
  *   - data-label（左上角标签通过 CSS ::before）
  *
+ * 两种模式（data-mode 属性驱动 CSS）：
+ *   normal       — 正常：边框 + 8 handle + 旋转手柄全部激活
+ *   text-editing — 文字编辑中：细虚线边框标记位置，所有手柄禁用（不抢焦点）
+ *
  * 关键设计：中心区完全透穿（pointer-events: none on .box），
  * 只有边框条、手柄、旋转手柄接收事件，内部 contenteditable 正常可点。
  */
@@ -16,7 +20,7 @@ import type { EditManager } from '@tang-slidex/editor'
 import styles from './SelectionBox.module.css'
 
 export interface SelectionBoxHandle {
-  update(el: HTMLElement): void
+  update(el: HTMLElement, mode?: 'normal' | 'text-editing'): void
   hide(): void
 }
 
@@ -32,15 +36,23 @@ export const SelectionBox = forwardRef<SelectionBoxHandle, Props>(
   function SelectionBox({ managerRef, onDragMove, onDragEnd }, ref) {
     const boxRef    = useRef<HTMLDivElement>(null)
     const targetRef = useRef<HTMLElement | null>(null)
+    const modeRef   = useRef<'normal' | 'text-editing'>('normal')
 
     useImperativeHandle(ref, () => ({
-      update(el: HTMLElement) {
+      update(el: HTMLElement, mode: 'normal' | 'text-editing' = 'normal') {
         targetRef.current = el
+        modeRef.current   = mode
         positionBox(el)
+        const box = boxRef.current
+        if (box) box.dataset.mode = mode
       },
       hide() {
         targetRef.current = null
-        if (boxRef.current) boxRef.current.style.display = 'none'
+        modeRef.current   = 'normal'
+        if (boxRef.current) {
+          boxRef.current.style.display = 'none'
+          delete boxRef.current.dataset.mode
+        }
       },
     }))
 
@@ -77,6 +89,7 @@ export const SelectionBox = forwardRef<SelectionBoxHandle, Props>(
 
     // ── 边框条 → move ────────────────────────────────────────────────────────
     function onEdgeMouseDown(e: React.MouseEvent) {
+      if (modeRef.current === 'text-editing') return  // 文字编辑中：禁用拖拽
       const mgr = managerRef.current
       const el  = targetRef.current
       if (!mgr || !el) return
@@ -88,6 +101,7 @@ export const SelectionBox = forwardRef<SelectionBoxHandle, Props>(
 
     // ── 手柄 → resize ────────────────────────────────────────────────────────
     function onHandleMouseDown(e: React.MouseEvent, dir: ResizeDirection) {
+      if (modeRef.current === 'text-editing') return  // 文字编辑中：禁用手柄
       const mgr = managerRef.current
       const el  = targetRef.current
       if (!mgr || !el) return
@@ -99,6 +113,7 @@ export const SelectionBox = forwardRef<SelectionBoxHandle, Props>(
 
     // ── 旋转手柄 → rotate ────────────────────────────────────────────────────
     function onRotateMouseDown(e: React.MouseEvent) {
+      if (modeRef.current === 'text-editing') return  // 文字编辑中：禁用旋转
       const mgr = managerRef.current
       const el  = targetRef.current
       if (!mgr || !el) return
@@ -112,7 +127,12 @@ export const SelectionBox = forwardRef<SelectionBoxHandle, Props>(
     useEffect(() => {
       const onLoaded = () => {
         targetRef.current = null
-        if (boxRef.current) boxRef.current.style.display = 'none'
+        modeRef.current   = 'normal'
+        const box = boxRef.current
+        if (box) {
+          box.style.display = 'none'
+          delete box.dataset.mode
+        }
       }
       document.addEventListener('tang:slide-loaded', onLoaded)
       return () => document.removeEventListener('tang:slide-loaded', onLoaded)

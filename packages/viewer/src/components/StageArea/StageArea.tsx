@@ -137,7 +137,21 @@ export function StageArea() {
       const mgr = managerRef.current
       if (!mgr) return
       if (!mgr.active) mgr.enable()
-      mgr.applyStyleProp(el, prop, val)
+      // data-* 属性走 attr-set patch；CSS 属性走 style-prop patch
+      if (prop.startsWith('data-')) {
+        mgr.applyAttr(el, prop, val)
+      } else {
+        mgr.applyStyleProp(el, prop, val)
+      }
+      useEditStore.getState().setDirty(mgr.patches.length > 0)
+    }
+
+    const onClearStyle = (e: Event) => {
+      const { el } = (e as CustomEvent).detail
+      const mgr = managerRef.current
+      if (!mgr) return
+      if (!mgr.active) mgr.enable()
+      mgr.clearStyle(el)
       useEditStore.getState().setDirty(mgr.patches.length > 0)
     }
 
@@ -147,6 +161,7 @@ export function StageArea() {
     document.addEventListener('tang:discard',       onDiscard)
     document.addEventListener('tang:reload-slide',  onReloadSlide)
     document.addEventListener('tang:apply-style',   onApplyStyle)
+    document.addEventListener('tang:clear-style',   onClearStyle)
     return () => {
       document.removeEventListener('tang:navigate',     onNavigate)
       document.removeEventListener('tang:save',          onSave)
@@ -154,6 +169,7 @@ export function StageArea() {
       document.removeEventListener('tang:discard',       onDiscard)
       document.removeEventListener('tang:reload-slide',  onReloadSlide)
       document.removeEventListener('tang:apply-style',   onApplyStyle)
+      document.removeEventListener('tang:clear-style',   onClearStyle)
     }
   }, [runner, managerRef, showToast])
 

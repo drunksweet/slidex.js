@@ -12,6 +12,23 @@
   outline-offset: -1px;
   border-radius: 3px;
   box-shadow: 0 0 0 4px rgba(59,130,246,0.10);
+  transition: outline-color 0.15s, outline-style 0.15s, box-shadow 0.15s;
+}
+
+/* text-editing 模式：虚线细边框，提示"位置在这，但我不能拖" */
+.box[data-mode="text-editing"] {
+  outline: 1.5px dashed rgba(99,179,237,0.55);
+  box-shadow: none;
+}
+/* text-editing 模式下隐藏所有手柄和旋转控件 */
+.box[data-mode="text-editing"] .handle,
+.box[data-mode="text-editing"] .rotateLine,
+.box[data-mode="text-editing"] .rotateHandle {
+  display: none;
+}
+/* text-editing 模式下边框条不可拖（cursor 变回默认，pointer-events 由 JS 控制） */
+.box[data-mode="text-editing"] .edge {
+  cursor: text;
 }
 
 /* label */

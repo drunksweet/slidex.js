@@ -386,6 +386,47 @@ export class EditManager {
   }
 
   /**
+   * 设置 HTML attribute（供工具面板调用，如 data-liquid-glass）
+   * value 为空字符串时移除该属性
+   */
+  applyAttr(el: Element, attr: string, value: string): void {
+    if (!this.active) return
+    const anchor = getAnchor(el, this.opts.slideStage)
+    if (anchor.type !== 'line') return
+    // 去掉同一元素同一 attr 的旧 patch，保持幂等
+    this.patches = this.patches.filter(
+      p => !(p.type === 'attr-set' && _anchorKey(p.anchor) === _anchorKey(anchor) && p.attr === attr)
+    )
+    if (value !== '') {
+      this.patches.push({ type: 'attr-set', anchor, attr, value })
+      ;(el as HTMLElement).setAttribute(attr, value)
+    } else {
+      // 空字符串 = 移除属性；补一个 attr-set value='' 让 save 端清除
+      this.patches.push({ type: 'attr-set', anchor, attr, value: '' })
+      ;(el as HTMLElement).removeAttribute(attr)
+    }
+  }
+
+  /**
+   * 清除 inline style（供清除格式按钮调用）
+   */
+  clearStyle(el: Element): void {
+    if (!this.active) return
+    const anchor = getAnchor(el, this.opts.slideStage)
+    if (anchor.type !== 'line') return
+    // 移除同一元素的所有 style-prop patch（已不再需要）
+    this.patches = this.patches.filter(
+      p => !(
+        (p.type === 'style-prop' || p.type === 'clear-style') &&
+        _anchorKey(p.anchor) === _anchorKey(anchor)
+      )
+    )
+    this.patches.push({ type: 'clear-style', anchor })
+    // 实时清除 DOM inline style（视觉反馈）
+    ;(el as HTMLElement).removeAttribute('style')
+  }
+
+  /**
    * 添加 class（供工具面板调用）
    */
   applyClassAdd(el: Element, className: string): void {
