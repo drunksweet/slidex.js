@@ -114,6 +114,12 @@ export function useEditManager(
           }
         }
         // el = .slide 直接子元素；target = 实际点击元素
+        // contenteditable 优先级高于 SelectionBox：
+        // 点击 tang-editable 文本元素时，隐藏 SelectionBox，让浏览器自然给 span/p/h1 等 focus
+        if (target.classList.contains('tang-editable')) {
+          clearSelection()   // 清掉之前可能残留的 SelectionBox
+          return
+        }
         if (el && el !== slide) selectElement(el, target)
       })
     }

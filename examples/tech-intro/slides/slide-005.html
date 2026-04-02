@@ -1,143 +1,269 @@
-<!DOCTYPE html><html lang="zh"><head>
-  <meta charset="UTF-8">
-  <style>
-    .slide {
-      width: 1280px; height: 720px; overflow: hidden;
-      background-color: var(--color-background, #0f172a);
-      padding: 52px 72px;
-      display: grid; grid-template-columns: 1fr 480px; gap: 56px;
-      align-items: center;
-    }
-    .left { }
-    .eyebrow {
-      font-size: 12px; font-weight: 700; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 14px;
-    }
-    .title {
-      font-size: 44px; font-weight: 800; color: var(--color-text, #f1f5f9);
-      line-height: 1.2; margin-bottom: 32px; letter-spacing: -0.02em;
-    }
-    .flow { display: flex; flex-direction: column; gap: 0; }
-    .flow-step {
-      display: flex; align-items: flex-start; gap: 20px;
-      padding: 16px 0; position: relative;
-    }
-    .flow-step:not(:last-child)::after {
-      content: ''; position: absolute;
-      left: 17px; top: 52px; width: 2px; height: calc(100% - 20px);
-      background: var(--color-border, #334155);
-    }
-    .step-dot {
-      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-      background: var(--color-accent, #1e1b4b);
-      border: 2px solid var(--color-primary, #7c3aed);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 700; color: var(--color-primary, #7c3aed);
-      font-family: var(--font-mono, ui-monospace);
-    }
-    .step-content { padding-top: 6px; }
-    .step-title { font-size: 19px; font-weight: 600; color: var(--color-text, #f1f5f9); margin-bottom: 4px; }
-    .step-desc  { font-size: 15px; color: var(--color-text-muted, #94a3b8); line-height: 1.55; }
-    /* 右侧图表 */
-    .chart-box {
-      background: var(--color-surface, #1e293b);
-      border: 1px solid var(--color-border, #334155);
-      border-radius: var(--border-radius, 12px);
-      padding: 24px;
-    }
-    .chart-title { font-size: 16px; font-weight: 600; color: var(--color-text-muted, #94a3b8); margin-bottom: 16px; }
-    #chart-004-stack { width: 100%; height: 360px; }
-  </style>
-</head>
-<body>
-  <div class="slide" data-slide-id="004" data-slide-type="content">
-    <div class="left">
-      <p class="eyebrow">02 · 架构</p>
-      <h1 class="title">核心工作流</h1>
-      <div class="flow">
-        <div class="flow-step">
-          <div class="step-dot">1</div>
-          <div class="step-content">
-            <div class="step-title">用户写 content.md</div>
-            <div class="step-desc">纯自然语言，无格式限制，随便写</div>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="step-dot">2</div>
-          <div class="step-content">
-            <div class="step-title">Agent 生成 execution.md</div>
-            <div class="step-desc">逐页规划：类型、文案、图表、动画</div>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="step-dot">3</div>
-          <div class="step-content">
-            <div class="step-title">Agent 生成 slide-NNN.html</div>
-            <div class="step-desc">完整的 HTML/CSS/JS，符合 PPT 规范</div>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="step-dot" style="border-color:#a78bfa;color:#a78bfa;">4</div>
-          <div class="step-content">
-            <div class="step-title" style="display:flex;align-items:center;gap:8px;">
-              Viewer 中浏览 &amp; 可视化编辑
-              <span style="font-size:10px;font-weight:700;background:rgba(124,58,237,0.2);color:#a78bfa;padding:2px 8px;border-radius:999px;">v0.2 NEW</span>
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .slide {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background-color: var(--color-background, #0f172a);
+        padding: 52px 72px;
+        display: grid;
+        grid-template-columns: 1fr 480px;
+        gap: 56px;
+        align-items: center;
+      }
+      .left {
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-primary, #7c3aed);
+        margin-bottom: 14px;
+      }
+      .title {
+        font-size: 44px;
+        font-weight: 800;
+        color: var(--color-text, #f1f5f9);
+        line-height: 1.2;
+        margin-bottom: 32px;
+        letter-spacing: -0.02em;
+      }
+      .flow {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .flow-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 16px 0;
+        position: relative;
+      }
+      .flow-step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 17px;
+        top: 52px;
+        width: 2px;
+        height: calc(100% - 20px);
+        background: var(--color-border, #334155);
+      }
+      .step-dot {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: var(--color-accent, #1e1b4b);
+        border: 2px solid var(--color-primary, #7c3aed);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--color-primary, #7c3aed);
+        font-family: var(--font-mono, ui-monospace);
+      }
+      .step-content {
+        padding-top: 6px;
+      }
+      .step-title {
+        font-size: 19px;
+        font-weight: 600;
+        color: var(--color-text, #f1f5f9);
+        margin-bottom: 4px;
+      }
+      .step-desc {
+        font-size: 15px;
+        color: var(--color-text-muted, #94a3b8);
+        line-height: 1.55;
+      }
+      /* 右侧图表 */
+      .chart-box {
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: var(--border-radius, 12px);
+        padding: 24px;
+      }
+      .chart-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--color-text-muted, #94a3b8);
+        margin-bottom: 16px;
+      }
+      #chart-004-stack {
+        width: 100%;
+        height: 360px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide" data-slide-id="004" data-slide-type="content">
+      <div class="left">
+        <p class="eyebrow">02 · 架构</p>
+        <h1 class="title">核心工作流</h1>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="step-dot">1</div>
+            <div class="step-content">
+              <div class="step-title">用户写 content.md</div>
+              <div class="step-desc">纯自然语言，无格式限制，随便写</div>
             </div>
-            <div class="step-desc">React 三栏布局，WYSIWYG 编辑，行级写回 HTML</div>
           </div>
-        </div>
-        <div class="flow-step">
-          <div class="step-dot">5</div>
-          <div class="step-content">
-            <div class="step-title">一键导出 / 分发</div>
-            <div class="step-desc">单文件 HTML 内联 / Puppeteer 转 PDF</div>
+          <div class="flow-step">
+            <div class="step-dot">2</div>
+            <div class="step-content">
+              <div class="step-title">Agent 生成 execution.md</div>
+              <div class="step-desc">逐页规划：类型、文案、图表、动画</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-dot">3</div>
+            <div class="step-content">
+              <div class="step-title">Agent 生成 slide-NNN.html</div>
+              <div class="step-desc">完整的 HTML/CSS/JS，符合 PPT 规范</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-dot" style="border-color: #a78bfa; color: #a78bfa">
+              4
+            </div>
+            <div class="step-content">
+              <div
+                class="step-title"
+                style="display: flex; align-items: center; gap: 8px"
+              >
+                Viewer 中浏览 &amp; 可视化编辑
+                <span
+                  style="
+                    font-size: 10px;
+                    font-weight: 700;
+                    background: rgba(124, 58, 237, 0.2);
+                    color: #a78bfa;
+                    padding: 2px 8px;
+                    border-radius: 999px;
+                  "
+                >
+                  v0.2 NEW
+                </span>
+              </div>
+              <div class="step-desc">
+                React 三栏布局，WYSIWYG 编辑，行级写回 HTML
+              </div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-dot">5</div>
+            <div class="step-content">
+              <div class="step-title">一键导出 / 分发</div>
+              <div class="step-desc">单文件 HTML 内联 / Puppeteer 转 PDF</div>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="chart-box" style="transform: translate(9px, 0px)">
+        <div class="chart-title">分层架构</div>
+        <div id="chart-004-stack"></div>
+      </div>
     </div>
 
-    <div class="chart-box" style="transform: translate(9px, 0px)">
-      <div class="chart-title">分层架构</div>
-      <div id="chart-004-stack"></div>
-    </div>
-  </div>
-
-  <script>
-    // ECharts 分层架构图
-    const chart = echarts.init(document.getElementById('chart-004-stack'))
-    chart.setOption({
-      backgroundColor: 'transparent',
-      tooltip: { trigger: 'item', backgroundColor: '#1e293b', borderColor: '#334155', textStyle: { color: '#f1f5f9' } },
-      series: [{
-        type: 'treemap',
-        width: '100%', height: '100%',
-        roam: false, nodeClick: false,
-        label: { show: true, fontSize: 14, fontWeight: 600, color: '#fff' },
-        upperLabel: { show: true, height: 28, fontSize: 12, color: 'rgba(255,255,255,0.7)' },
-        itemStyle: { borderWidth: 2, borderColor: '#0f172a', gapWidth: 2 },
-        levels: [
-          { itemStyle: { borderWidth: 4, borderColor: '#0f172a', gapWidth: 4 } },
-          { colorSaturation: [0.4, 0.7] }
+    <script>
+      // ECharts 分层架构图
+      const chart = echarts.init(document.getElementById('chart-004-stack'))
+      chart.setOption({
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: '#1e293b',
+          borderColor: '#334155',
+          textStyle: { color: '#f1f5f9' },
+        },
+        series: [
+          {
+            type: 'treemap',
+            width: '100%',
+            height: '100%',
+            roam: false,
+            nodeClick: false,
+            label: { show: true, fontSize: 14, fontWeight: 600, color: '#fff' },
+            upperLabel: {
+              show: true,
+              height: 28,
+              fontSize: 12,
+              color: 'rgba(255,255,255,0.7)',
+            },
+            itemStyle: { borderWidth: 2, borderColor: '#0f172a', gapWidth: 2 },
+            levels: [
+              {
+                itemStyle: {
+                  borderWidth: 4,
+                  borderColor: '#0f172a',
+                  gapWidth: 4,
+                },
+              },
+              { colorSaturation: [0.4, 0.7] },
+            ],
+            data: [
+              {
+                name: 'Skills 层',
+                value: 30,
+                itemStyle: { color: '#7c3aed' },
+                children: [
+                  { name: 'Agent SOP', value: 15 },
+                  { name: '用户引导', value: 15 },
+                ],
+              },
+              {
+                name: 'Core 层',
+                value: 40,
+                itemStyle: { color: '#2563eb' },
+                children: [
+                  { name: 'SlideRunner', value: 20 },
+                  { name: 'PPT 规范', value: 10 },
+                  { name: '主题系统', value: 10 },
+                ],
+              },
+              {
+                name: 'Builder 层',
+                value: 20,
+                itemStyle: { color: '#059669' },
+                children: [
+                  { name: 'HTML 打包', value: 10 },
+                  { name: 'PDF 导出', value: 10 },
+                ],
+              },
+              {
+                name: 'Editor 层',
+                value: 10,
+                itemStyle: { color: '#d97706' },
+                children: [{ name: 'IDE 编辑器', value: 10 }],
+              },
+            ],
+          },
         ],
-        data: [
-          { name: 'Skills 层', value: 30, itemStyle: { color: '#7c3aed' },
-            children: [{ name: 'Agent SOP', value: 15 }, { name: '用户引导', value: 15 }] },
-          { name: 'Core 层', value: 40, itemStyle: { color: '#2563eb' },
-            children: [{ name: 'SlideRunner', value: 20 }, { name: 'PPT 规范', value: 10 }, { name: '主题系统', value: 10 }] },
-          { name: 'Builder 层', value: 20, itemStyle: { color: '#059669' },
-            children: [{ name: 'HTML 打包', value: 10 }, { name: 'PDF 导出', value: 10 }] },
-          { name: 'Editor 层', value: 10, itemStyle: { color: '#d97706' },
-            children: [{ name: 'IDE 编辑器', value: 10 }] },
-        ]
-      }]
-    })
+      })
 
-    if (window.gsap) {
-      gsap.from('.title',      { y: -20, opacity: 0, duration: 0.45 })
-      gsap.from('.flow-step',  { x: -30, opacity: 0, duration: 0.4, stagger: 0.08, delay: 0.2 })
-      gsap.from('.chart-box',  { opacity: 0, x: 30, duration: 0.5, delay: 0.35 })
-    }
-  </script>
-
-
-</body></html>
+      if (window.gsap) {
+        gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
+        gsap.from('.flow-step', {
+          x: -30,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          delay: 0.2,
+        })
+        gsap.from('.chart-box', {
+          opacity: 0,
+          x: 30,
+          duration: 0.5,
+          delay: 0.35,
+        })
+      }
+    </script>
+  </body>
+</html>

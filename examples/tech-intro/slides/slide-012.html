@@ -1,243 +1,418 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <style>
-    .slide {
-      width: 1280px; height: 720px; overflow: hidden;
-      background-color: var(--color-background, #0f172a);
-      padding: 44px 64px;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 20px;
-    }
-    .header { }
-    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 8px; }
-    .title   { font-size: 38px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; letter-spacing: -0.02em; }
-    .subtitle{ font-size: 14px; color: var(--color-text-muted, #94a3b8); margin-top: 6px; }
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .slide {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background-color: var(--color-background, #0f172a);
+        padding: 44px 64px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 20px;
+      }
+      .header {
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-primary, #7c3aed);
+        margin-bottom: 8px;
+      }
+      .title {
+        font-size: 38px;
+        font-weight: 800;
+        color: var(--color-text, #f1f5f9);
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+      }
+      .subtitle {
+        font-size: 14px;
+        color: var(--color-text-muted, #94a3b8);
+        margin-top: 6px;
+      }
 
-    .cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-    .chart-box {
-      background: var(--color-surface, #1e293b);
-      border: 1px solid var(--color-border, #334155);
-      border-radius: 10px; padding: 16px;
-      display: flex; flex-direction: column;
-    }
-    .chart-label { font-size: 13px; font-weight: 600; color: var(--color-text-muted, #94a3b8); margin-bottom: 10px; }
-    #chart-bar  { width: 100%; height: 200px; }
-    #chart-line { width: 100%; height: 200px; }
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+      }
+      .chart-box {
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: 10px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .chart-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--color-text-muted, #94a3b8);
+        margin-bottom: 10px;
+      }
+      #chart-bar {
+        width: 100%;
+        height: 200px;
+      }
+      #chart-line {
+        width: 100%;
+        height: 200px;
+      }
 
-    /* 动画演示区 */
-    .anim-box {
-      background: var(--color-surface, #1e293b);
-      border: 1px solid var(--color-border, #334155);
-      border-radius: 10px; padding: 16px;
-      display: flex; flex-direction: column;
-    }
-    .anim-demos { display: flex; flex-direction: column; gap: 16px; flex: 1; justify-content: center; }
-    .anim-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;
-    }
-    .anim-tag { font-size: 11px; font-weight: 700; color: var(--color-text-muted, #94a3b8); min-width: 64px; }
-    .dots { display: flex; gap: 7px; }
-    .dot-a {
-      width: 11px; height: 11px; border-radius: 50%;
-      background: var(--color-primary, #7c3aed);
-      animation: bounce2 1.2s ease-in-out infinite;
-    }
-    .dot-a:nth-child(2) { animation-delay: 0.15s; background: #5b21b6; }
-    .dot-a:nth-child(3) { animation-delay: 0.30s; background: #2563eb; }
-    .dot-a:nth-child(4) { animation-delay: 0.45s; background: #059669; }
-    @keyframes bounce2 {
-      0%, 80%, 100% { transform: scale(1); opacity: 0.8; }
-      40% { transform: scale(1.6) translateY(-6px); opacity: 1; }
-    }
-    .bars { display: flex; align-items: flex-end; gap: 4px; height: 36px; }
-    .bar-e {
-      width: 11px; background: var(--color-primary, #7c3aed); border-radius: 2px 2px 0 0;
-      animation: barP 1.5s ease-in-out infinite;
-    }
-    .bar-e:nth-child(2) { animation-delay: 0.2s; height: 60%; }
-    .bar-e:nth-child(3) { animation-delay: 0.4s; height: 80%; }
-    .bar-e:nth-child(4) { animation-delay: 0.6s; height: 45%; }
-    .bar-e:nth-child(5) { animation-delay: 0.8s; height: 90%; }
-    @keyframes barP {
-      0%, 100% { opacity: 0.7; transform: scaleY(1); }
-      50% { opacity: 1; transform: scaleY(1.15); }
-    }
-    .shimmer-box {
-      font-size: 14px; font-weight: 700;
-      background: linear-gradient(90deg, #7c3aed, #a78bfa, #7c3aed);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer2 2s linear infinite;
-    }
-    @keyframes shimmer2 { to { background-position: 200% center; } }
-    .spin-box {
-      width: 28px; height: 28px; border: 2px solid transparent;
-      border-top-color: #7c3aed; border-right-color: #a78bfa;
-      border-radius: 50%; animation: spin 1.2s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .pulse-box {
-      width: 14px; height: 14px; border-radius: 50%;
-      background: #7c3aed; animation: pulse2 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse2 {
-      0%, 100% { box-shadow: 0 0 4px #7c3aed; transform: scale(1); }
-      50% { box-shadow: 0 0 16px #a78bfa, 0 0 30px rgba(124,58,237,0.4); transform: scale(1.2); }
-    }
+      /* 动画演示区 */
+      .anim-box {
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: 10px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .anim-demos {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        flex: 1;
+        justify-content: center;
+      }
+      .anim-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+      }
+      .anim-tag {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--color-text-muted, #94a3b8);
+        min-width: 64px;
+      }
+      .dots {
+        display: flex;
+        gap: 7px;
+      }
+      .dot-a {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--color-primary, #7c3aed);
+        animation: bounce2 1.2s ease-in-out infinite;
+      }
+      .dot-a:nth-child(2) {
+        animation-delay: 0.15s;
+        background: #5b21b6;
+      }
+      .dot-a:nth-child(3) {
+        animation-delay: 0.3s;
+        background: #2563eb;
+      }
+      .dot-a:nth-child(4) {
+        animation-delay: 0.45s;
+        background: #059669;
+      }
+      @keyframes bounce2 {
+        0%,
+        80%,
+        100% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        40% {
+          transform: scale(1.6) translateY(-6px);
+          opacity: 1;
+        }
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 36px;
+      }
+      .bar-e {
+        width: 11px;
+        background: var(--color-primary, #7c3aed);
+        border-radius: 2px 2px 0 0;
+        animation: barP 1.5s ease-in-out infinite;
+      }
+      .bar-e:nth-child(2) {
+        animation-delay: 0.2s;
+        height: 60%;
+      }
+      .bar-e:nth-child(3) {
+        animation-delay: 0.4s;
+        height: 80%;
+      }
+      .bar-e:nth-child(4) {
+        animation-delay: 0.6s;
+        height: 45%;
+      }
+      .bar-e:nth-child(5) {
+        animation-delay: 0.8s;
+        height: 90%;
+      }
+      @keyframes barP {
+        0%,
+        100% {
+          opacity: 0.7;
+          transform: scaleY(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scaleY(1.15);
+        }
+      }
+      .shimmer-box {
+        font-size: 14px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #7c3aed, #a78bfa, #7c3aed);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer2 2s linear infinite;
+      }
+      @keyframes shimmer2 {
+        to {
+          background-position: 200% center;
+        }
+      }
+      .spin-box {
+        width: 28px;
+        height: 28px;
+        border: 2px solid transparent;
+        border-top-color: #7c3aed;
+        border-right-color: #a78bfa;
+        border-radius: 50%;
+        animation: spin 1.2s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .pulse-box {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #7c3aed;
+        animation: pulse2 1.5s ease-in-out infinite;
+      }
+      @keyframes pulse2 {
+        0%,
+        100% {
+          box-shadow: 0 0 4px #7c3aed;
+          transform: scale(1);
+        }
+        50% {
+          box-shadow:
+            0 0 16px #a78bfa,
+            0 0 30px rgba(124, 58, 237, 0.4);
+          transform: scale(1.2);
+        }
+      }
 
-    .gsap-label {
-      font-size: 11px; font-weight: 700;
-      color: #a78bfa; background: rgba(124,58,237,0.12);
-      padding: 2px 8px; border-radius: 999px; margin-left: auto;
-    }
-  </style>
-</head>
-<body>
-  <div class="slide" data-slide-id="012" data-slide-type="content">
-    <div class="header">
-      <p class="eyebrow">能力展示 · 12</p>
-      <h1 class="title">数据可视化 &amp; 动画能力</h1>
-      <p class="subtitle">ECharts 5 原生集成 · GSAP 入场动画 · CSS Keyframes · 主题自适应</p>
-    </div>
-
-    <div class="cols">
-      <!-- ECharts 柱状图 -->
-      <div class="chart-box">
-        <div class="chart-label">📊 ECharts 5 · 柱状图</div>
-        <div id="chart-bar"></div>
+      .gsap-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #a78bfa;
+        background: rgba(124, 58, 237, 0.12);
+        padding: 2px 8px;
+        border-radius: 999px;
+        margin-left: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide" data-slide-id="012" data-slide-type="content">
+      <div class="header">
+        <p class="eyebrow">能力展示 · 12</p>
+        <h1 class="title">数据可视化 &amp; 动画能力</h1>
+        <p class="subtitle">
+          ECharts 5 原生集成 · GSAP 入场动画 · CSS Keyframes · 主题自适应
+        </p>
       </div>
 
-      <!-- ECharts 折线图 -->
-      <div class="chart-box">
-        <div class="chart-label">📈 ECharts 5 · 折线图</div>
-        <div id="chart-line"></div>
-      </div>
+      <div class="cols">
+        <!-- ECharts 柱状图 -->
+        <div class="chart-box">
+          <div class="chart-label">📊 ECharts 5 · 柱状图</div>
+          <div id="chart-bar"></div>
+        </div>
 
-      <!-- 动画演示 -->
-      <div class="anim-box">
-        <div class="chart-label">✨ CSS &amp; JS 动画库</div>
-        <div class="anim-demos">
-          <div class="anim-row">
-            <div class="anim-tag">Bounce</div>
-            <div class="dots">
-              <div class="dot-a"></div><div class="dot-a"></div>
-              <div class="dot-a"></div><div class="dot-a"></div>
+        <!-- ECharts 折线图 -->
+        <div class="chart-box">
+          <div class="chart-label">📈 ECharts 5 · 折线图</div>
+          <div id="chart-line"></div>
+        </div>
+
+        <!-- 动画演示 -->
+        <div class="anim-box">
+          <div class="chart-label">✨ CSS &amp; JS 动画库</div>
+          <div class="anim-demos">
+            <div class="anim-row">
+              <div class="anim-tag">Bounce</div>
+              <div class="dots">
+                <div class="dot-a"></div>
+                <div class="dot-a"></div>
+                <div class="dot-a"></div>
+                <div class="dot-a"></div>
+              </div>
+              <div class="gsap-label">CSS Keyframes</div>
             </div>
-            <div class="gsap-label">CSS Keyframes</div>
-          </div>
-          <div class="anim-row">
-            <div class="anim-tag">Bar Pulse</div>
-            <div class="bars">
-              <div class="bar-e" style="height:70%"></div>
-              <div class="bar-e"></div><div class="bar-e"></div>
-              <div class="bar-e"></div><div class="bar-e"></div>
+            <div class="anim-row">
+              <div class="anim-tag">Bar Pulse</div>
+              <div class="bars">
+                <div class="bar-e" style="height: 70%"></div>
+                <div class="bar-e"></div>
+                <div class="bar-e"></div>
+                <div class="bar-e"></div>
+                <div class="bar-e"></div>
+              </div>
+              <div class="gsap-label">CSS Keyframes</div>
             </div>
-            <div class="gsap-label">CSS Keyframes</div>
-          </div>
-          <div class="anim-row">
-            <div class="anim-tag">Shimmer</div>
-            <div class="shimmer-box">tang-slidex</div>
-            <div class="gsap-label">Gradient Anim</div>
-          </div>
-          <div class="anim-row">
-            <div class="anim-tag">Spin</div>
-            <div class="spin-box"></div>
-            <div class="gsap-label">CSS transform</div>
-          </div>
-          <div class="anim-row">
-            <div class="anim-tag">Pulse Glow</div>
-            <div class="pulse-box"></div>
-            <div class="gsap-label">box-shadow</div>
-          </div>
-          <div class="anim-row">
-            <div class="anim-tag">GSAP</div>
-            <div style="font-size:12px;color:#94a3b8;">入场 · 交错 · 缓动</div>
-            <div class="gsap-label">gsap.from()</div>
+            <div class="anim-row">
+              <div class="anim-tag">Shimmer</div>
+              <div class="shimmer-box">tang-slidex</div>
+              <div class="gsap-label">Gradient Anim</div>
+            </div>
+            <div class="anim-row">
+              <div class="anim-tag">Spin</div>
+              <div class="spin-box"></div>
+              <div class="gsap-label">CSS transform</div>
+            </div>
+            <div class="anim-row">
+              <div class="anim-tag">Pulse Glow</div>
+              <div class="pulse-box"></div>
+              <div class="gsap-label">box-shadow</div>
+            </div>
+            <div class="anim-row">
+              <div class="anim-tag">GSAP</div>
+              <div style="font-size: 12px; color: #94a3b8">
+                入场 · 交错 · 缓动
+              </div>
+              <div class="gsap-label">gsap.from()</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    if (typeof echarts !== 'undefined') {
-      const bar = echarts.init(document.getElementById('chart-bar'))
-      bar.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: 36, right: 12, top: 12, bottom: 28 },
-        xAxis: {
-          type: 'category',
-          data: ['Q1','Q2','Q3','Q4','Q1','Q2','Q3','Q4'],
-          axisLine: { lineStyle: { color: '#334155' } },
-          axisLabel: { color: '#64748b', fontSize: 10 },
-        },
-        yAxis: {
-          type: 'value',
-          axisLine: { show: false },
-          splitLine: { lineStyle: { color: '#1e293b' } },
-          axisLabel: { color: '#64748b', fontSize: 10 },
-        },
-        series: [{
-          type: 'bar',
-          data: [12, 28, 41, 55, 68, 82, 95, 114],
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: '#7c3aed' },
-              { offset: 1, color: '#5b21b6' },
-            ]),
-            borderRadius: [3, 3, 0, 0],
+    <script>
+      if (typeof echarts !== 'undefined') {
+        const bar = echarts.init(document.getElementById('chart-bar'))
+        bar.setOption({
+          backgroundColor: 'transparent',
+          grid: { left: 36, right: 12, top: 12, bottom: 28 },
+          xAxis: {
+            type: 'category',
+            data: ['Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2', 'Q3', 'Q4'],
+            axisLine: { lineStyle: { color: '#334155' } },
+            axisLabel: { color: '#64748b', fontSize: 10 },
           },
-        }],
-        tooltip: { trigger: 'axis', backgroundColor: '#1e293b', borderColor: '#334155', textStyle: { color: '#f1f5f9', fontSize: 11 } },
-      })
+          yAxis: {
+            type: 'value',
+            axisLine: { show: false },
+            splitLine: { lineStyle: { color: '#1e293b' } },
+            axisLabel: { color: '#64748b', fontSize: 10 },
+          },
+          series: [
+            {
+              type: 'bar',
+              data: [12, 28, 41, 55, 68, 82, 95, 114],
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: '#7c3aed' },
+                  { offset: 1, color: '#5b21b6' },
+                ]),
+                borderRadius: [3, 3, 0, 0],
+              },
+            },
+          ],
+          tooltip: {
+            trigger: 'axis',
+            backgroundColor: '#1e293b',
+            borderColor: '#334155',
+            textStyle: { color: '#f1f5f9', fontSize: 11 },
+          },
+        })
 
-      const line = echarts.init(document.getElementById('chart-line'))
-      line.setOption({
-        backgroundColor: 'transparent',
-        grid: { left: 36, right: 12, top: 16, bottom: 28 },
-        xAxis: {
-          type: 'category',
-          data: ['1月','2月','3月','4月','5月','6月','7月','8月'],
-          axisLine: { lineStyle: { color: '#334155' } },
-          axisLabel: { color: '#64748b', fontSize: 10 },
-        },
-        yAxis: {
-          type: 'value',
-          axisLine: { show: false },
-          splitLine: { lineStyle: { color: '#1e293b' } },
-          axisLabel: { color: '#64748b', fontSize: 10 },
-        },
-        legend: { top: -3, right: 0, textStyle: { color: '#94a3b8', fontSize: 10 } },
-        series: [
-          {
-            name: 'tang-slidex',
-            type: 'line', smooth: true,
-            data: [4, 12, 22, 38, 58, 76, 92, 115],
-            lineStyle: { color: '#7c3aed', width: 2 },
-            areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(124,58,237,0.3)' }, { offset: 1, color: 'transparent' }] } },
-            itemStyle: { color: '#7c3aed' },
+        const line = echarts.init(document.getElementById('chart-line'))
+        line.setOption({
+          backgroundColor: 'transparent',
+          grid: { left: 36, right: 12, top: 16, bottom: 28 },
+          xAxis: {
+            type: 'category',
+            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+            axisLine: { lineStyle: { color: '#334155' } },
+            axisLabel: { color: '#64748b', fontSize: 10 },
           },
-          {
-            name: 'Slidev',
-            type: 'line', smooth: true,
-            data: [40, 42, 44, 45, 46, 47, 48, 50],
-            lineStyle: { color: '#334155', width: 2 },
-            itemStyle: { color: '#475569' },
+          yAxis: {
+            type: 'value',
+            axisLine: { show: false },
+            splitLine: { lineStyle: { color: '#1e293b' } },
+            axisLabel: { color: '#64748b', fontSize: 10 },
           },
-        ],
-        tooltip: { trigger: 'axis', backgroundColor: '#1e293b', borderColor: '#334155', textStyle: { color: '#f1f5f9', fontSize: 11 } },
-      })
-    }
-    if (window.gsap) {
-      gsap.from('.title',     { y: -18, opacity: 0, duration: 0.4 })
-      gsap.from('.chart-box', { y: 20, opacity: 0, duration: 0.4, stagger: 0.1, delay: 0.2 })
-      gsap.from('.anim-box',  { y: 20, opacity: 0, duration: 0.4, delay: 0.3 })
-    }
-  </script>
-</body>
+          legend: {
+            top: -3,
+            right: 0,
+            textStyle: { color: '#94a3b8', fontSize: 10 },
+          },
+          series: [
+            {
+              name: 'tang-slidex',
+              type: 'line',
+              smooth: true,
+              data: [4, 12, 22, 38, 58, 76, 92, 115],
+              lineStyle: { color: '#7c3aed', width: 2 },
+              areaStyle: {
+                color: {
+                  type: 'linear',
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    { offset: 0, color: 'rgba(124,58,237,0.3)' },
+                    { offset: 1, color: 'transparent' },
+                  ],
+                },
+              },
+              itemStyle: { color: '#7c3aed' },
+            },
+            {
+              name: 'Slidev',
+              type: 'line',
+              smooth: true,
+              data: [40, 42, 44, 45, 46, 47, 48, 50],
+              lineStyle: { color: '#334155', width: 2 },
+              itemStyle: { color: '#475569' },
+            },
+          ],
+          tooltip: {
+            trigger: 'axis',
+            backgroundColor: '#1e293b',
+            borderColor: '#334155',
+            textStyle: { color: '#f1f5f9', fontSize: 11 },
+          },
+        })
+      }
+      if (window.gsap) {
+        gsap.from('.title', { y: -18, opacity: 0, duration: 0.4 })
+        gsap.from('.chart-box', {
+          y: 20,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.1,
+          delay: 0.2,
+        })
+        gsap.from('.anim-box', { y: 20, opacity: 0, duration: 0.4, delay: 0.3 })
+      }
+    </script>
+  </body>
 </html>

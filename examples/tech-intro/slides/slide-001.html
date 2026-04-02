@@ -1,237 +1,355 @@
-<!DOCTYPE html><html lang="zh"><head>
-  <meta charset="UTF-8">
-  <style>
-    .slide {
-      width: 1280px; height: 720px; overflow: hidden;
-      background: linear-gradient(135deg, #7c3aed 0%, #1e1b4b 60%, #0f172a 100%);
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: flex-start;
-      padding: 80px 100px;
-      position: relative;
-    }
-    #particle-canvas {
-      position: absolute; inset: 0;
-      pointer-events: none;
-    }
-    #cursor-glow {
-      position: absolute;
-      width: 400px; height: 400px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      transition: opacity 0.3s;
-      opacity: 0;
-    }
-    .deco-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 64px 64px;
-      pointer-events: none;
-    }
-    .deco-circle-1 {
-      position: absolute; right: -60px; top: -60px;
-      width: 420px; height: 420px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.06);
-      pointer-events: none;
-    }
-    .deco-circle-2 {
-      position: absolute; right: 100px; bottom: -100px;
-      width: 260px; height: 260px; border-radius: 50%;
-      background: rgba(124,58,237,0.15);
-      pointer-events: none;
-    }
-    .badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(124,58,237,0.3);
-      border: 1px solid rgba(124,58,237,0.5);
-      color: #c4b5fd; font-size: 13px; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 6px 16px; border-radius: 999px;
-      margin-bottom: 36px; position: relative;
-    }
-    .badge-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #a78bfa; box-shadow: 0 0 8px #a78bfa;
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 4px #a78bfa; }
-      50%       { box-shadow: 0 0 14px #a78bfa, 0 0 28px rgba(167,139,250,0.4); }
-    }
-    .title {
-      font-size: 72px; font-weight: 800; color: #fff;
-      line-height: 1.05; letter-spacing: -0.03em;
-      margin-bottom: 16px; position: relative;
-    }
-    .title-accent {
-      color: #a78bfa;
-      background: linear-gradient(90deg, #a78bfa, #7c3aed, #c4b5fd, #a78bfa);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 4s linear infinite;
-    }
-    @keyframes shimmer {
-      to { background-position: 200% center; }
-    }
-    .subtitle {
-      font-size: 22px; color: rgba(255,255,255,0.6);
-      font-weight: 400; max-width: 580px; line-height: 1.6;
-      position: relative;
-    }
-    .meta {
-      display: flex; align-items: center; gap: 28px;
-      margin-top: 52px; position: relative;
-      font-size: 14px; color: rgba(255,255,255,0.35);
-    }
-    .meta-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.2); }
-    /* v0.2 新增：右下角特性标签 */
-    .feature-tags {
-      position: absolute; right: 100px; bottom: 80px;
-      display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
-    }
-    .ftag {
-      display: flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px; padding: 8px 16px;
-      font-size: 13px; color: rgba(255,255,255,0.65);
-      font-weight: 500;
-    }
-    .ftag-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .ftag.new { border-color: rgba(124,58,237,0.4); color: #c4b5fd; background: rgba(124,58,237,0.12); }
-  </style>
-</head>
-<body>
-  <div class="slide" data-slide-id="001" data-slide-type="cover">
-    <canvas id="particle-canvas"></canvas>
-    <div id="cursor-glow"></div>
-    <div class="deco-grid"></div>
-    <div class="deco-circle-1"></div>
-    <div class="deco-circle-2"></div>
-
-    <div class="badge">
-      <span class="badge-dot"></span>
-      开源项目介绍 · v0.2
-    </div>
-
-    <h1 class="title">
-      tang-<span class="title-accent">slidex.js</span>
-    </h1>
-
-    <p class="subtitle">
-      首个专为 AI Agent 设计、前端技术栈原生的开源幻灯片框架
-    </p>
-
-    <div class="meta">
-      <span>jiaoxinheng</span>
-      <div class="meta-divider"></div>
-      <span>2026</span>
-      <div class="meta-divider"></div>
-      <span>tang-slidex v0.2</span>
-    </div>
-
-    <!-- v0.2 新特性标签 -->
-    <div class="feature-tags">
-      <div class="ftag new">
-        <span class="ftag-dot" style="background:#a78bfa"></span>
-        ✨ v0.2 新增：React 三栏编辑器
-      </div>
-      <div class="ftag new">
-        <span class="ftag-dot" style="background:#34d399"></span>
-        WYSIWYG 浏览器内可视化编辑
-      </div>
-      <div class="ftag new">
-        <span class="ftag-dot" style="background:#60a5fa"></span>
-        行级写回 · 零格式损耗
-      </div>
-      <div class="ftag">
-        <span class="ftag-dot" style="background:#94a3b8"></span>
-        AI Agent 原生 · HTML/CSS/JS
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const canvas = document.getElementById('particle-canvas')
-    const ctx    = canvas.getContext('2d')
-    canvas.width  = 1280
-    canvas.height = 720
-
-    const PARTICLE_COUNT = 80
-    const particles = []
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push({
-        x:  Math.random() * 1280,
-        y:  Math.random() * 720,
-        r:  Math.random() * 1.8 + 0.4,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        alpha: Math.random() * 0.5 + 0.1,
-      })
-    }
-
-    function drawParticles() {
-      ctx.clearRect(0, 0, 1280, 720)
-      for (const p of particles) {
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(167,139,250,${p.alpha})`
-        ctx.fill()
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .slide {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background: linear-gradient(
+          135deg,
+          #7c3aed 0%,
+          #1e1b4b 60%,
+          #0f172a 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 80px 100px;
+        position: relative;
       }
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const d  = Math.sqrt(dx * dx + dy * dy)
-          if (d < 140) {
-            ctx.beginPath()
-            ctx.moveTo(particles[i].x, particles[i].y)
-            ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `rgba(124,58,237,${(1 - d / 140) * 0.12})`
-            ctx.lineWidth = 1
-            ctx.stroke()
+      #particle-canvas {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      #cursor-glow {
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.18) 0%,
+          transparent 70%
+        );
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
+      .deco-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px
+          );
+        background-size: 64px 64px;
+        pointer-events: none;
+      }
+      .deco-circle-1 {
+        position: absolute;
+        right: -60px;
+        top: -60px;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        pointer-events: none;
+      }
+      .deco-circle-2 {
+        position: absolute;
+        right: 100px;
+        bottom: -100px;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: rgba(124, 58, 237, 0.15);
+        pointer-events: none;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(124, 58, 237, 0.3);
+        border: 1px solid rgba(124, 58, 237, 0.5);
+        color: #c4b5fd;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 999px;
+        margin-bottom: 36px;
+        position: relative;
+      }
+      .badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #a78bfa;
+        box-shadow: 0 0 8px #a78bfa;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 4px #a78bfa;
+        }
+        50% {
+          box-shadow:
+            0 0 14px #a78bfa,
+            0 0 28px rgba(167, 139, 250, 0.4);
+        }
+      }
+      .title {
+        font-size: 72px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .title-accent {
+        color: #a78bfa;
+        background: linear-gradient(90deg, #a78bfa, #7c3aed, #c4b5fd, #a78bfa);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 4s linear infinite;
+      }
+      @keyframes shimmer {
+        to {
+          background-position: 200% center;
+        }
+      }
+      .subtitle {
+        font-size: 22px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 400;
+        max-width: 580px;
+        line-height: 1.6;
+        position: relative;
+      }
+      .meta {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        margin-top: 52px;
+        position: relative;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .meta-divider {
+        width: 1px;
+        height: 14px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      /* v0.2 新增：右下角特性标签 */
+      .feature-tags {
+        position: absolute;
+        right: 100px;
+        bottom: 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+      }
+      .ftag {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.65);
+        font-weight: 500;
+      }
+      .ftag-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .ftag.new {
+        border-color: rgba(124, 58, 237, 0.4);
+        color: #c4b5fd;
+        background: rgba(124, 58, 237, 0.12);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide" data-slide-id="001" data-slide-type="cover">
+      <canvas id="particle-canvas"></canvas>
+      <div id="cursor-glow"></div>
+      <div class="deco-grid"></div>
+      <div class="deco-circle-1"></div>
+      <div class="deco-circle-2"></div>
+
+      <div class="badge">
+        <span class="badge-dot"></span>
+        开源项目介绍 · v0.2
+      </div>
+
+      <h1 class="title">
+        tang-
+        <span class="title-accent">slidex.js</span>
+      </h1>
+
+      <p class="subtitle">
+        首个专为 AI Agent 设计、前端技术栈原生的开源幻灯片框架
+      </p>
+
+      <div class="meta">
+        <span>jiaoxinheng</span>
+        <div class="meta-divider"></div>
+        <span>2026</span>
+        <div class="meta-divider"></div>
+        <span>tang-slidex v0.3</span>
+      </div>
+
+      <!-- v0.2 新特性标签 -->
+      <div class="feature-tags">
+        <div class="ftag new">
+          <span class="ftag-dot" style="background: #a78bfa"></span>
+          ✨ v0.2 新增：React 三栏编辑器
+        </div>
+        <div class="ftag new">
+          <span class="ftag-dot" style="background: #34d399"></span>
+          WYSIWYG 浏览器内可视化编辑
+        </div>
+        <div class="ftag new">
+          <span class="ftag-dot" style="background: #60a5fa"></span>
+          行级写回 · 零格式损耗
+        </div>
+        <div class="ftag">
+          <span class="ftag-dot" style="background: #94a3b8"></span>
+          AI Agent 原生 · HTML/CSS/JS
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById('particle-canvas')
+      const ctx = canvas.getContext('2d')
+      canvas.width = 1280
+      canvas.height = 720
+
+      const PARTICLE_COUNT = 80
+      const particles = []
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push({
+          x: Math.random() * 1280,
+          y: Math.random() * 720,
+          r: Math.random() * 1.8 + 0.4,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          alpha: Math.random() * 0.5 + 0.1,
+        })
+      }
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, 1280, 720)
+        for (const p of particles) {
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(167,139,250,${p.alpha})`
+          ctx.fill()
+        }
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x
+            const dy = particles[i].y - particles[j].y
+            const d = Math.sqrt(dx * dx + dy * dy)
+            if (d < 140) {
+              ctx.beginPath()
+              ctx.moveTo(particles[i].x, particles[i].y)
+              ctx.lineTo(particles[j].x, particles[j].y)
+              ctx.strokeStyle = `rgba(124,58,237,${(1 - d / 140) * 0.12})`
+              ctx.lineWidth = 1
+              ctx.stroke()
+            }
           }
         }
-      }
-      for (const p of particles) {
-        p.x += p.vx; p.y += p.vy
-        if (p.x < 0 || p.x > 1280) p.vx *= -1
-        if (p.y < 0 || p.y > 720)  p.vy *= -1
-      }
-      requestAnimationFrame(drawParticles)
-    }
-    drawParticles()
-
-    const glow  = document.getElementById('cursor-glow')
-    const slide = document.querySelector('.slide')
-    slide.addEventListener('mousemove', (e) => {
-      const rect = slide.getBoundingClientRect()
-      const x = (e.clientX - rect.left) * (1280 / rect.width)
-      const y = (e.clientY - rect.top)  * (720  / rect.height)
-      glow.style.left = x + 'px'; glow.style.top = y + 'px'; glow.style.opacity = '1'
-      for (const p of particles) {
-        const dx = x - p.x, dy = y - p.y
-        const d  = Math.sqrt(dx * dx + dy * dy)
-        if (d < 180) {
-          p.vx += dx / d * 0.06; p.vy += dy / d * 0.06
-          const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy)
-          if (speed > 1.5) { p.vx = p.vx / speed * 1.5; p.vy = p.vy / speed * 1.5 }
+        for (const p of particles) {
+          p.x += p.vx
+          p.y += p.vy
+          if (p.x < 0 || p.x > 1280) p.vx *= -1
+          if (p.y < 0 || p.y > 720) p.vy *= -1
         }
+        requestAnimationFrame(drawParticles)
       }
-    })
-    slide.addEventListener('mouseleave', () => { glow.style.opacity = '0' })
+      drawParticles()
 
-    if (window.gsap) {
-      gsap.from('.badge',         { y: -24, opacity: 0, duration: 0.5 })
-      gsap.from('.title',         { y:  36, opacity: 0, duration: 0.65, delay: 0.15, ease: 'power3.out' })
-      gsap.from('.subtitle',      { y:  20, opacity: 0, duration: 0.5,  delay: 0.35 })
-      gsap.from('.meta',          { opacity: 0, duration: 0.5, delay: 0.55 })
-      gsap.from('.deco-circle-1', { scale: 0.7, opacity: 0, duration: 1.2, delay: 0.1, ease: 'power2.out' })
-      gsap.from('.ftag',          { x: 30, opacity: 0, duration: 0.4, stagger: 0.08, delay: 0.6, ease: 'power2.out' })
-    }
-  </script>
-</body></html>
+      const glow = document.getElementById('cursor-glow')
+      const slide = document.querySelector('.slide')
+      slide.addEventListener('mousemove', (e) => {
+        const rect = slide.getBoundingClientRect()
+        const x = (e.clientX - rect.left) * (1280 / rect.width)
+        const y = (e.clientY - rect.top) * (720 / rect.height)
+        glow.style.left = x + 'px'
+        glow.style.top = y + 'px'
+        glow.style.opacity = '1'
+        for (const p of particles) {
+          const dx = x - p.x,
+            dy = y - p.y
+          const d = Math.sqrt(dx * dx + dy * dy)
+          if (d < 180) {
+            p.vx += (dx / d) * 0.06
+            p.vy += (dy / d) * 0.06
+            const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy)
+            if (speed > 1.5) {
+              p.vx = (p.vx / speed) * 1.5
+              p.vy = (p.vy / speed) * 1.5
+            }
+          }
+        }
+      })
+      slide.addEventListener('mouseleave', () => {
+        glow.style.opacity = '0'
+      })
+
+      if (window.gsap) {
+        gsap.from('.badge', { y: -24, opacity: 0, duration: 0.5 })
+        gsap.from('.title', {
+          y: 36,
+          opacity: 0,
+          duration: 0.65,
+          delay: 0.15,
+          ease: 'power3.out',
+        })
+        gsap.from('.subtitle', {
+          y: 20,
+          opacity: 0,
+          duration: 0.5,
+          delay: 0.35,
+        })
+        gsap.from('.meta', { opacity: 0, duration: 0.5, delay: 0.55 })
+        gsap.from('.deco-circle-1', {
+          scale: 0.7,
+          opacity: 0,
+          duration: 1.2,
+          delay: 0.1,
+          ease: 'power2.out',
+        })
+        gsap.from('.ftag', {
+          x: 30,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          delay: 0.6,
+          ease: 'power2.out',
+        })
+      }
+    </script>
+  </body>
+</html>

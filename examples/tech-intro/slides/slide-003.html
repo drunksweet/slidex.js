@@ -1,80 +1,171 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <style>
-    .slide {
-      width: 1280px; height: 720px; overflow: hidden;
-      background-color: var(--color-background, #0f172a);
-      padding: 52px 80px;
-    }
-    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 12px; }
-    .title   { font-size: 42px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 36px; letter-spacing: -0.02em; }
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .slide {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background-color: var(--color-background, #0f172a);
+        padding: 52px 80px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-primary, #7c3aed);
+        margin-bottom: 12px;
+      }
+      .title {
+        font-size: 42px;
+        font-weight: 800;
+        color: var(--color-text, #f1f5f9);
+        line-height: 1.2;
+        margin-bottom: 36px;
+        letter-spacing: -0.02em;
+      }
 
-    /* 卡片 hover 光效 */
-    .card {
-      background: var(--color-surface, #1e293b);
-      border: 1px solid var(--color-border, #334155);
-      border-radius: var(--border-radius, 12px);
-      padding: 28px; position: relative; overflow: hidden;
-      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
-    }
-    .card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: var(--color-primary, #7c3aed);
-    }
-    .card::after {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 0%, rgba(124,58,237,0.08) 0%, transparent 70%);
-      opacity: 0; transition: opacity 0.3s;
-    }
-    .card:hover { border-color: var(--color-primary, #7c3aed); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(124,58,237,0.2); }
-    .card:hover::after { opacity: 1; }
+      /* 卡片 hover 光效 */
+      .card {
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: var(--border-radius, 12px);
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.25s,
+          transform 0.2s,
+          box-shadow 0.25s;
+      }
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--color-primary, #7c3aed);
+      }
+      .card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 50% 0%,
+          rgba(124, 58, 237, 0.08) 0%,
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .card:hover {
+        border-color: var(--color-primary, #7c3aed);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 32px rgba(124, 58, 237, 0.2);
+      }
+      .card:hover::after {
+        opacity: 1;
+      }
 
-    .card-icon  { font-size: 30px; margin-bottom: 14px; display: block; position: relative; z-index: 1; transition: transform 0.3s; }
-    .card:hover .card-icon { transform: scale(1.15); }
-    .card-title { font-size: 19px; font-weight: 700; color: var(--color-text, #f1f5f9); margin-bottom: 10px; position: relative; z-index: 1; }
-    .card-desc  { font-size: 15px; color: var(--color-text-muted, #94a3b8); line-height: 1.65; position: relative; z-index: 1; }
-    .card-tag   {
-      display: inline-block; margin-top: 14px; font-size: 11px; font-weight: 700;
-      color: var(--color-primary, #7c3aed); background: rgba(124,58,237,0.12);
-      padding: 3px 10px; border-radius: 999px; position: relative; z-index: 1;
-      transition: background 0.2s;
-    }
-    .card:hover .card-tag { background: rgba(124,58,237,0.25); }
-    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  </style>
-</head>
-<body>
-  <div class="slide" data-slide-id="003" data-slide-type="content">
-    <p class="eyebrow">01 · 背景</p>
-    <h1 class="title">为什么需要 tang-slidex？</h1>
-    <div class="cards">
-      <div class="card">
-        <span class="card-icon">🤖</span>
-        <div class="card-title">AI 能力被浪费</div>
-        <div class="card-desc">AI Agent 写前端页面的能力已极为成熟，可轻松生成高质量 HTML/CSS/JS。但主流 PPT 工具对 AI 的支持仍停留在"辅助插件"层面。</div>
-        <span class="card-tag">痛点 #1</span>
-      </div>
-      <div class="card">
-        <span class="card-icon">🎨</span>
-        <div class="card-title">表现力的天花板</div>
-        <div class="card-desc">传统 PPT 工具无法支持 ECharts 级别的数据可视化，无法实现 GSAP 级别的流畅动画，更无法运行任意前端交互代码。</div>
-        <span class="card-tag">痛点 #2</span>
-      </div>
-      <div class="card">
-        <span class="card-icon">🔓</span>
-        <div class="card-title">开放生态缺失</div>
-        <div class="card-desc">没有专为 AI Agent 设计的幻灯片标准和开放生态，开发者无法基于此构建更高层的 AI 产品，社区贡献无从落地。</div>
-        <span class="card-tag">痛点 #3</span>
+      .card-icon {
+        font-size: 30px;
+        margin-bottom: 14px;
+        display: block;
+        position: relative;
+        z-index: 1;
+        transition: transform 0.3s;
+      }
+      .card:hover .card-icon {
+        transform: scale(1.15);
+      }
+      .card-title {
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--color-text, #f1f5f9);
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+      }
+      .card-desc {
+        font-size: 15px;
+        color: var(--color-text-muted, #94a3b8);
+        line-height: 1.65;
+        position: relative;
+        z-index: 1;
+      }
+      .card-tag {
+        display: inline-block;
+        margin-top: 14px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--color-primary, #7c3aed);
+        background: rgba(124, 58, 237, 0.12);
+        padding: 3px 10px;
+        border-radius: 999px;
+        position: relative;
+        z-index: 1;
+        transition: background 0.2s;
+      }
+      .card:hover .card-tag {
+        background: rgba(124, 58, 237, 0.25);
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide" data-slide-id="003" data-slide-type="content">
+      <p class="eyebrow">01 · 背景</p>
+      <h1 class="title">为什么需要 tang-slidex？</h1>
+      <div class="cards">
+        <div class="card">
+          <span class="card-icon">🤖</span>
+          <div class="card-title">AI 能力被浪费</div>
+          <div class="card-desc">
+            AI Agent 写前端页面的能力已极为成熟，可轻松生成高质量
+            HTML/CSS/JS。但主流 PPT 工具对 AI 的支持仍停留在"辅助插件"层面。
+          </div>
+          <span class="card-tag">痛点 #1</span>
+        </div>
+        <div class="card">
+          <span class="card-icon">🎨</span>
+          <div class="card-title">表现力的天花板</div>
+          <div class="card-desc">
+            传统 PPT 工具无法支持 ECharts 级别的数据可视化，无法实现 GSAP
+            级别的流畅动画，更无法运行任意前端交互代码。
+          </div>
+          <span class="card-tag">痛点 #2</span>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔓</span>
+          <div class="card-title">开放生态缺失</div>
+          <div class="card-desc">
+            没有专为 AI Agent
+            设计的幻灯片标准和开放生态，开发者无法基于此构建更高层的 AI
+            产品，社区贡献无从落地。
+          </div>
+          <span class="card-tag">痛点 #3</span>
+        </div>
       </div>
     </div>
-  </div>
-  <script>
-    if (window.gsap) {
-      gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
-      gsap.from('.card',  { y: 40, opacity: 0, duration: 0.5, stagger: 0.1, delay: 0.2, ease: 'power2.out' })
-    }
-  </script>
-</body>
+    <script>
+      if (window.gsap) {
+        gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
+        gsap.from('.card', {
+          y: 40,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          delay: 0.2,
+          ease: 'power2.out',
+        })
+      }
+    </script>
+  </body>
 </html>

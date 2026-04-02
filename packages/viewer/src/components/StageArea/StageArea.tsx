@@ -120,9 +120,11 @@ export function StageArea() {
     const onDiscard = () => {
       const mgr = managerRef.current
       if (!mgr) return
-      // disable 会还原 DOM 快照；然后切 mode → useEffect 感知到 present 就不会再 enable
+      // disable → 还原 DOM 快照 → 立即 enable 重新进入编辑态（留在编辑模式，只是丢弃改动）
       mgr.disable()
-      setMode('present')
+      mgr.enable()
+      useEditStore.getState().setDirty(false)
+      showToast('↩️ 已放弃改动', 'info')
     }
     const onReloadSlide = (e: Event) => {
       // undo 后重新加载当前 slide（文件已被还原）
@@ -161,7 +163,12 @@ export function StageArea() {
       const mgr = managerRef.current
       if (mgr?.active) {
         // 编辑模式内：Escape → 退出编辑（通过 setMode，让 useEffect 统一处理）
-        if (e.key === 'Escape') { setMode('present'); return }
+        if (e.key === 'Escape') {
+          // Escape = 放弃改动并留在编辑模式（不切到演示）
+          const mgr2 = managerRef.current
+          if (mgr2) { mgr2.disable(); mgr2.enable(); useEditStore.getState().setDirty(false) }
+          return
+        }
         if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); document.dispatchEvent(new CustomEvent('tang:save')); return }
         if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); document.dispatchEvent(new CustomEvent('tang:undo')); return }
         return

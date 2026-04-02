@@ -1,154 +1,334 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <style>
-    .slide {
-      width: 1280px; height: 720px; overflow: hidden;
-      background-color: var(--color-background, #0f172a);
-      padding: 52px 64px;
-      display: grid; grid-template-columns: 1fr 420px; gap: 48px; align-items: center;
-    }
-    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 12px; }
-    .title   { font-size: 40px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; margin-bottom: 28px; letter-spacing: -0.02em; }
-    .layers  { display: flex; flex-direction: column; gap: 10px; }
-    .layer {
-      display: flex; align-items: center; gap: 0;
-      position: relative;
-    }
-    .layer-line {
-      position: absolute; left: 48px; top: 50%;
-      width: 2px; height: 100%;
-      background: linear-gradient(to bottom, var(--color-border, #334155), transparent);
-    }
-    .layer:last-child .layer-line { display: none; }
-    .layer-badge {
-      width: 96px; flex-shrink: 0;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #fff;
-      padding: 6px 12px; border-radius: 6px;
-      text-align: center;
-    }
-    .layer-body {
-      flex: 1; margin-left: 16px;
-      background: var(--color-surface, #1e293b);
-      border: 1px solid var(--color-border, #334155);
-      border-radius: 8px; padding: 12px 16px;
-      transition: border-color 0.2s;
-    }
-    .layer:hover .layer-body { border-color: var(--color-primary, #7c3aed); }
-    .layer-title { font-size: 15px; font-weight: 600; color: var(--color-text, #f1f5f9); margin-bottom: 3px; }
-    .layer-desc  { font-size: 13px; color: var(--color-text-muted, #94a3b8); }
-    .layer-tags  { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
-    .layer-tag   {
-      font-size: 11px; color: #94a3b8;
-      background: rgba(255,255,255,0.05);
-      padding: 2px 8px; border-radius: 4px;
-    }
-    /* 右侧图表 */
-    #arch-chart { width: 100%; height: 480px; }
-  </style>
-</head>
-<body>
-  <div class="slide" data-slide-id="006" data-slide-type="content">
-    <div style="transform: translate(-8px, -25px)">
-      <p class="eyebrow">03 · 架构</p>
-      <h1 class="title">系统架构分层</h1>
-      <div class="layers">
-        <div class="layer">
-          <div class="layer-badge" style="background:#7c3aed;">用户 / AI</div>
-          <div class="layer-body">
-            <div class="layer-title">输入层</div>
-            <div class="layer-desc">content.md — 自然语言描述 PPT 内容</div>
-          </div>
-        </div>
-        <div class="layer">
-          <div class="layer-badge" style="background:#5b21b6;">Skills 层</div>
-          <div class="layer-body">
-            <div class="layer-title">@tang-slidex/skills</div>
-            <div class="layer-desc">Agent SOP：引导 → 规划 → 生成 → 审查</div>
-            <div class="layer-tags"><span class="layer-tag">ppt-brainstorm</span><span class="layer-tag">ppt-outline</span><span class="layer-tag">slide-generator</span></div>
-          </div>
-        </div>
-        <div class="layer">
-          <div class="layer-badge" style="background:#2563eb;">Core 层</div>
-          <div class="layer-body">
-            <div class="layer-title">@tang-slidex/core</div>
-            <div class="layer-desc">SlideRunner · PPT 规范 · 主题引擎 · 渲染器</div>
-            <div class="layer-tags"><span class="layer-tag">SlideRunner</span><span class="layer-tag">Theme</span><span class="layer-tag">Standards</span></div>
-          </div>
-        </div>
-        <div class="layer">
-          <div class="layer-badge" style="background:#059669;">Builder 层</div>
-          <div class="layer-body">
-            <div class="layer-title">@tang-slidex/builder</div>
-            <div class="layer-desc">HTML 内联打包 + Puppeteer PDF 导出 + CLI</div>
-            <div class="layer-tags"><span class="layer-tag">build</span><span class="layer-tag">export --pdf</span><span class="layer-tag">CLI</span></div>
-          </div>
-        </div>
-        <div class="layer">
-          <div class="layer-badge" style="background:#d97706;">Editor 层</div>
-          <div class="layer-body">
-            <div class="layer-title">@tang-slidex/editor</div>
-            <div class="layer-desc">Vite 插件：slideInspectorPlugin · slideSavePlugin · slideUndoPlugin</div>
-            <div class="layer-tags"><span class="layer-tag">行级写回</span><span class="layer-tag">data-tang-line</span><span class="layer-tag">HMR</span></div>
-          </div>
-        </div>
-        <div class="layer">
-          <div class="layer-badge" style="background:#0e9f6e;">Viewer 层</div>
-          <div class="layer-body" style="border-color:rgba(14,159,110,0.4);">
-            <div class="layer-title" style="display:flex;align-items:center;gap:8px;">
-              @tang-slidex/viewer
-              <span style="font-size:10px;font-weight:700;background:rgba(14,159,110,0.2);color:#34d399;padding:2px 8px;border-radius:999px;">v0.2 NEW</span>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .slide {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background-color: var(--color-background, #0f172a);
+        padding: 52px 64px;
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 48px;
+        align-items: center;
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-primary, #7c3aed);
+        margin-bottom: 12px;
+      }
+      .title {
+        font-size: 40px;
+        font-weight: 800;
+        color: var(--color-text, #f1f5f9);
+        line-height: 1.2;
+        margin-bottom: 28px;
+        letter-spacing: -0.02em;
+      }
+      .layers {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .layer {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        position: relative;
+      }
+      .layer-line {
+        position: absolute;
+        left: 48px;
+        top: 50%;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          var(--color-border, #334155),
+          transparent
+        );
+      }
+      .layer:last-child .layer-line {
+        display: none;
+      }
+      .layer-badge {
+        width: 96px;
+        flex-shrink: 0;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-align: center;
+      }
+      .layer-body {
+        flex: 1;
+        margin-left: 16px;
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: 8px;
+        padding: 12px 16px;
+        transition: border-color 0.2s;
+      }
+      .layer:hover .layer-body {
+        border-color: var(--color-primary, #7c3aed);
+      }
+      .layer-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--color-text, #f1f5f9);
+        margin-bottom: 3px;
+      }
+      .layer-desc {
+        font-size: 13px;
+        color: var(--color-text-muted, #94a3b8);
+      }
+      .layer-tags {
+        display: flex;
+        gap: 6px;
+        margin-top: 6px;
+        flex-wrap: wrap;
+      }
+      .layer-tag {
+        font-size: 11px;
+        color: #94a3b8;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+      /* 右侧图表 */
+      #arch-chart {
+        width: 100%;
+        height: 480px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide" data-slide-id="006" data-slide-type="content">
+      <div style="transform: translate(-8px, -25px)">
+        <p class="eyebrow">03 · 架构</p>
+        <h1 class="title">系统架构分层</h1>
+        <div class="layers">
+          <div class="layer">
+            <div class="layer-badge" style="background: #7c3aed">用户 / AI</div>
+            <div class="layer-body">
+              <div class="layer-title">输入层</div>
+              <div class="layer-desc">content.md — 自然语言描述 PPT 内容</div>
             </div>
-            <div class="layer-desc">React 三栏编辑器：导航缩略图 · 舞台 · 属性面板 · WYSIWYG 编辑模式</div>
-            <div class="layer-tags"><span class="layer-tag">React 19</span><span class="layer-tag">Zustand</span><span class="layer-tag">EditManager</span><span class="layer-tag">Vite</span></div>
+          </div>
+          <div class="layer">
+            <div class="layer-badge" style="background: #5b21b6">Skills 层</div>
+            <div class="layer-body">
+              <div class="layer-title">@tang-slidex/skills</div>
+              <div class="layer-desc">Agent SOP：引导 → 规划 → 生成 → 审查</div>
+              <div class="layer-tags">
+                <span class="layer-tag">ppt-brainstorm</span>
+                <span class="layer-tag">ppt-outline</span>
+                <span class="layer-tag">slide-generator</span>
+              </div>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="layer-badge" style="background: #2563eb">Core 层</div>
+            <div class="layer-body">
+              <div class="layer-title">@tang-slidex/core</div>
+              <div class="layer-desc">
+                SlideRunner · PPT 规范 · 主题引擎 · 渲染器
+              </div>
+              <div class="layer-tags">
+                <span class="layer-tag">SlideRunner</span>
+                <span class="layer-tag">Theme</span>
+                <span class="layer-tag">Standards</span>
+              </div>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="layer-badge" style="background: #059669">
+              Builder 层
+            </div>
+            <div class="layer-body">
+              <div class="layer-title">@tang-slidex/builder</div>
+              <div class="layer-desc">
+                HTML 内联打包 + Puppeteer PDF 导出 + CLI
+              </div>
+              <div class="layer-tags">
+                <span class="layer-tag">build</span>
+                <span class="layer-tag">export --pdf</span>
+                <span class="layer-tag">CLI</span>
+              </div>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="layer-badge" style="background: #d97706">Editor 层</div>
+            <div class="layer-body">
+              <div class="layer-title">@tang-slidex/editor</div>
+              <div class="layer-desc">
+                Vite 插件：slideInspectorPlugin · slideSavePlugin ·
+                slideUndoPlugin
+              </div>
+              <div class="layer-tags">
+                <span class="layer-tag">行级写回</span>
+                <span class="layer-tag">data-tang-line</span>
+                <span class="layer-tag">HMR</span>
+              </div>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="layer-badge" style="background: #0e9f6e">Viewer 层</div>
+            <div
+              class="layer-body"
+              style="border-color: rgba(14, 159, 110, 0.4)"
+            >
+              <div
+                class="layer-title"
+                style="display: flex; align-items: center; gap: 8px"
+              >
+                @tang-slidex/viewer
+                <span
+                  style="
+                    font-size: 10px;
+                    font-weight: 700;
+                    background: rgba(14, 159, 110, 0.2);
+                    color: #34d399;
+                    padding: 2px 8px;
+                    border-radius: 999px;
+                  "
+                >
+                  v0.2 NEW
+                </span>
+              </div>
+              <div class="layer-desc">
+                React 三栏编辑器：导航缩略图 · 舞台 · 属性面板 · WYSIWYG
+                编辑模式
+              </div>
+              <div class="layer-tags">
+                <span class="layer-tag">React 19</span>
+                <span class="layer-tag">Zustand</span>
+                <span class="layer-tag">EditManager</span>
+                <span class="layer-tag">Vite</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div id="arch-chart"></div>
     </div>
-    <div id="arch-chart"></div>
-  </div>
-  <script>
-    if (typeof echarts !== 'undefined') {
-      const chart = echarts.init(document.getElementById('arch-chart'))
-      chart.setOption({
-        backgroundColor: 'transparent',
-        tooltip: { trigger: 'item', backgroundColor: '#1e293b', borderColor: '#334155', textStyle: { color: '#f1f5f9', fontSize: 13 } },
-        series: [{
-          type: 'sunburst',
-          data: [
-            { name: 'Skills', value: 3, itemStyle: { color: '#7c3aed' }, children: [
-              { name: 'brainstorm', value: 1, itemStyle: { color: '#8b5cf6' } },
-              { name: 'outline', value: 1, itemStyle: { color: '#a78bfa' } },
-              { name: 'generator', value: 1, itemStyle: { color: '#c4b5fd' } },
-            ]},
-            { name: 'Core', value: 3, itemStyle: { color: '#2563eb' }, children: [
-              { name: 'Runner', value: 1, itemStyle: { color: '#3b82f6' } },
-              { name: 'Theme', value: 1, itemStyle: { color: '#60a5fa' } },
-              { name: 'Standards', value: 1, itemStyle: { color: '#93c5fd' } },
-            ]},
-            { name: 'Builder', value: 2, itemStyle: { color: '#059669' }, children: [
-              { name: 'Build', value: 1, itemStyle: { color: '#10b981' } },
-              { name: 'PDF', value: 1, itemStyle: { color: '#34d399' } },
-            ]},
-            { name: 'Editor', value: 2, itemStyle: { color: '#d97706' }, children: [
-              { name: 'IDE', value: 1, itemStyle: { color: '#f59e0b' } },
-              { name: 'AI Chat', value: 1, itemStyle: { color: '#fbbf24' } },
-            ]},
+    <script>
+      if (typeof echarts !== 'undefined') {
+        const chart = echarts.init(document.getElementById('arch-chart'))
+        chart.setOption({
+          backgroundColor: 'transparent',
+          tooltip: {
+            trigger: 'item',
+            backgroundColor: '#1e293b',
+            borderColor: '#334155',
+            textStyle: { color: '#f1f5f9', fontSize: 13 },
+          },
+          series: [
+            {
+              type: 'sunburst',
+              data: [
+                {
+                  name: 'Skills',
+                  value: 3,
+                  itemStyle: { color: '#7c3aed' },
+                  children: [
+                    {
+                      name: 'brainstorm',
+                      value: 1,
+                      itemStyle: { color: '#8b5cf6' },
+                    },
+                    {
+                      name: 'outline',
+                      value: 1,
+                      itemStyle: { color: '#a78bfa' },
+                    },
+                    {
+                      name: 'generator',
+                      value: 1,
+                      itemStyle: { color: '#c4b5fd' },
+                    },
+                  ],
+                },
+                {
+                  name: 'Core',
+                  value: 3,
+                  itemStyle: { color: '#2563eb' },
+                  children: [
+                    {
+                      name: 'Runner',
+                      value: 1,
+                      itemStyle: { color: '#3b82f6' },
+                    },
+                    {
+                      name: 'Theme',
+                      value: 1,
+                      itemStyle: { color: '#60a5fa' },
+                    },
+                    {
+                      name: 'Standards',
+                      value: 1,
+                      itemStyle: { color: '#93c5fd' },
+                    },
+                  ],
+                },
+                {
+                  name: 'Builder',
+                  value: 2,
+                  itemStyle: { color: '#059669' },
+                  children: [
+                    {
+                      name: 'Build',
+                      value: 1,
+                      itemStyle: { color: '#10b981' },
+                    },
+                    { name: 'PDF', value: 1, itemStyle: { color: '#34d399' } },
+                  ],
+                },
+                {
+                  name: 'Editor',
+                  value: 2,
+                  itemStyle: { color: '#d97706' },
+                  children: [
+                    { name: 'IDE', value: 1, itemStyle: { color: '#f59e0b' } },
+                    {
+                      name: 'AI Chat',
+                      value: 1,
+                      itemStyle: { color: '#fbbf24' },
+                    },
+                  ],
+                },
+              ],
+              radius: ['20%', '88%'],
+              label: { rotate: 'radial', fontSize: 12, color: '#f1f5f9' },
+              emphasis: { focus: 'ancestor' },
+            },
           ],
-          radius: ['20%', '88%'],
-          label: { rotate: 'radial', fontSize: 12, color: '#f1f5f9' },
-          emphasis: { focus: 'ancestor' },
-        }]
-      })
-    }
-    if (window.gsap) {
-      gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
-      gsap.from('.layer', { x: -24, opacity: 0, duration: 0.35, stagger: 0.07, delay: 0.2 })
-      gsap.from('#arch-chart', { opacity: 0, scale: 0.9, duration: 0.6, delay: 0.3 })
-    }
-  </script>
-</body>
+        })
+      }
+      if (window.gsap) {
+        gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
+        gsap.from('.layer', {
+          x: -24,
+          opacity: 0,
+          duration: 0.35,
+          stagger: 0.07,
+          delay: 0.2,
+        })
+        gsap.from('#arch-chart', {
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.6,
+          delay: 0.3,
+        })
+      }
+    </script>
+  </body>
 </html>

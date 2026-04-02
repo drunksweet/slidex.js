@@ -1,180 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <style>
-    .slide {
-      width: 1280px; height: 720px; overflow: hidden;
-      background-color: var(--color-background, #0f172a);
-      padding: 52px 80px;
-    }
-    .eyebrow {
-      font-size: 12px; font-weight: 700; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 14px;
-    }
-    .title {
-      font-size: 44px; font-weight: 800; color: var(--color-text, #f1f5f9);
-      line-height: 1.2; margin-bottom: 40px; letter-spacing: -0.02em;
-    }
-    .tech-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
-    }
-    .group-label {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--color-text-muted, #94a3b8);
-      margin-bottom: 12px; padding-bottom: 8px;
-      border-bottom: 1px solid var(--color-border, #334155);
-    }
-    .tech-list { display: flex; flex-direction: column; gap: 10px; }
-    .tech-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px;
-      background: var(--color-surface, #1e293b);
-      border: 1px solid var(--color-border, #334155);
-      border-radius: 8px;
-      cursor: default;
-      position: relative; overflow: hidden;
-      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
-    }
-    .tech-item::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(124,58,237,0.12), transparent);
-      opacity: 0; transition: opacity 0.3s;
-    }
-    .tech-item:hover {
-      border-color: var(--color-primary, #7c3aed);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(124,58,237,0.2);
-    }
-    .tech-item:hover::before { opacity: 1; }
-    .tech-icon {
-      font-size: 18px; width: 24px; text-align: center;
-      flex-shrink: 0; position: relative;
-      transition: transform 0.3s;
-    }
-    .tech-item:hover .tech-icon { transform: scale(1.2) rotate(-5deg); }
-    .tech-name { font-size: 15px; font-weight: 500; color: var(--color-text, #f1f5f9); position: relative; }
-    .tech-tag {
-      margin-left: auto; font-size: 11px; font-weight: 600;
-      color: var(--color-primary, #7c3aed);
-      background: rgba(124,58,237,0.1); padding: 2px 8px; border-radius: 999px;
-      position: relative;
-      transition: background 0.2s, color 0.2s;
-    }
-    .tech-item:hover .tech-tag {
-      background: rgba(124,58,237,0.25);
-      color: #c4b5fd;
-    }
-  </style>
-</head>
-<body>
-  <div class="slide" data-slide-id="005" data-slide-type="content">
-    <p class="eyebrow">04 · 技术栈</p>
-    <h1 class="title">技术栈全景</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .slide {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background-color: var(--color-background, #0f172a);
+        padding: 52px 80px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-primary, #7c3aed);
+        margin-bottom: 14px;
+      }
+      .title {
+        font-size: 44px;
+        font-weight: 800;
+        color: var(--color-text, #f1f5f9);
+        line-height: 1.2;
+        margin-bottom: 40px;
+        letter-spacing: -0.02em;
+      }
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      .group-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-text-muted, #94a3b8);
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--color-border, #334155);
+      }
+      .tech-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .tech-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: var(--color-surface, #1e293b);
+        border: 1px solid var(--color-border, #334155);
+        border-radius: 8px;
+        cursor: default;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.25s,
+          transform 0.2s,
+          box-shadow 0.25s;
+      }
+      .tech-item::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.12),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .tech-item:hover {
+        border-color: var(--color-primary, #7c3aed);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+      }
+      .tech-item:hover::before {
+        opacity: 1;
+      }
+      .tech-icon {
+        font-size: 18px;
+        width: 24px;
+        text-align: center;
+        flex-shrink: 0;
+        position: relative;
+        transition: transform 0.3s;
+      }
+      .tech-item:hover .tech-icon {
+        transform: scale(1.2) rotate(-5deg);
+      }
+      .tech-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--color-text, #f1f5f9);
+        position: relative;
+      }
+      .tech-tag {
+        margin-left: auto;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--color-primary, #7c3aed);
+        background: rgba(124, 58, 237, 0.1);
+        padding: 2px 8px;
+        border-radius: 999px;
+        position: relative;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .tech-item:hover .tech-tag {
+        background: rgba(124, 58, 237, 0.25);
+        color: #c4b5fd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide" data-slide-id="005" data-slide-type="content">
+      <p class="eyebrow">04 · 技术栈</p>
+      <h1 class="title">技术栈全景</h1>
 
-    <div class="tech-grid">
-      <div class="tech-group">
-        <div class="group-label">工程基础</div>
-        <div class="tech-list">
-          <div class="tech-item">
-            <span class="tech-icon">📦</span>
-            <span class="tech-name">pnpm</span>
-            <span class="tech-tag">包管理</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">⚡</span>
-            <span class="tech-name">Turborepo</span>
-            <span class="tech-tag">Monorepo</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">🔷</span>
-            <span class="tech-name">TypeScript</span>
-            <span class="tech-tag">语言</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">🔥</span>
-            <span class="tech-name">Vite</span>
-            <span class="tech-tag">构建/HMR</span>
+      <div class="tech-grid">
+        <div class="tech-group">
+          <div class="group-label">工程基础</div>
+          <div class="tech-list">
+            <div class="tech-item">
+              <span class="tech-icon">📦</span>
+              <span class="tech-name">pnpm</span>
+              <span class="tech-tag">包管理</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">⚡</span>
+              <span class="tech-name">Turborepo</span>
+              <span class="tech-tag">Monorepo</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">🔷</span>
+              <span class="tech-name">TypeScript</span>
+              <span class="tech-tag">语言</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">🔥</span>
+              <span class="tech-name">Vite</span>
+              <span class="tech-tag">构建/HMR</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="tech-group">
-        <div class="group-label">可视化 & 动画</div>
-        <div class="tech-list">
-          <div class="tech-item">
-            <span class="tech-icon">📊</span>
-            <span class="tech-name">ECharts</span>
-            <span class="tech-tag">图表</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">🎨</span>
-            <span class="tech-name">AntV / VisActor</span>
-            <span class="tech-tag">可视化</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">✨</span>
-            <span class="tech-name">GSAP</span>
-            <span class="tech-tag">动画</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">🌐</span>
-            <span class="tech-name">Canvas / WebGL</span>
-            <span class="tech-tag">粒子/渲染</span>
+        <div class="tech-group">
+          <div class="group-label">可视化 & 动画</div>
+          <div class="tech-list">
+            <div class="tech-item">
+              <span class="tech-icon">📊</span>
+              <span class="tech-name">ECharts</span>
+              <span class="tech-tag">图表</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">🎨</span>
+              <span class="tech-name">AntV / VisActor</span>
+              <span class="tech-tag">可视化</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">✨</span>
+              <span class="tech-name">GSAP</span>
+              <span class="tech-tag">动画</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">🌐</span>
+              <span class="tech-name">Canvas / WebGL</span>
+              <span class="tech-tag">粒子/渲染</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="tech-group">
-        <div class="group-label">导出 & 分发</div>
-        <div class="tech-list">
-          <div class="tech-item">
-            <span class="tech-icon">🖨️</span>
-            <span class="tech-name">Puppeteer</span>
-            <span class="tech-tag">PDF 导出</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">📄</span>
-            <span class="tech-name">pdf-lib</span>
-            <span class="tech-tag">PDF 合并</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">📦</span>
-            <span class="tech-name">单 HTML 分发</span>
-            <span class="tech-tag">零依赖</span>
+        <div class="tech-group">
+          <div class="group-label">导出 & 分发</div>
+          <div class="tech-list">
+            <div class="tech-item">
+              <span class="tech-icon">🖨️</span>
+              <span class="tech-name">Puppeteer</span>
+              <span class="tech-tag">PDF 导出</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">📄</span>
+              <span class="tech-name">pdf-lib</span>
+              <span class="tech-tag">PDF 合并</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">📦</span>
+              <span class="tech-name">单 HTML 分发</span>
+              <span class="tech-tag">零依赖</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="tech-group">
-        <div class="group-label">编辑器</div>
-        <div class="tech-list">
-          <div class="tech-item">
-            <span class="tech-icon">⚛️</span>
-            <span class="tech-name">React 19</span>
-            <span class="tech-tag">UI</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">🖥️</span>
-            <span class="tech-name">Electron</span>
-            <span class="tech-tag">桌面端</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-icon">🤖</span>
-            <span class="tech-name">AI SDK</span>
-            <span class="tech-tag">对话</span>
+        <div class="tech-group">
+          <div class="group-label">编辑器</div>
+          <div class="tech-list">
+            <div class="tech-item">
+              <span class="tech-icon">⚛️</span>
+              <span class="tech-name">React 19</span>
+              <span class="tech-tag">UI</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">🖥️</span>
+              <span class="tech-name">Electron</span>
+              <span class="tech-tag">桌面端</span>
+            </div>
+            <div class="tech-item">
+              <span class="tech-icon">🤖</span>
+              <span class="tech-name">AI SDK</span>
+              <span class="tech-tag">对话</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    if (window.gsap) {
-      gsap.from('.title',      { y: -20, opacity: 0, duration: 0.45 })
-      gsap.from('.tech-group', { y: 30, opacity: 0, duration: 0.4, stagger: 0.08, delay: 0.2 })
-    }
-  </script>
-</body>
+    <script>
+      if (window.gsap) {
+        gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
+        gsap.from('.tech-group', {
+          y: 30,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          delay: 0.2,
+        })
+      }
+    </script>
+  </body>
 </html>

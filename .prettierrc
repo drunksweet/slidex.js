@@ -1,0 +1,20 @@
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+
+  "overrides": [
+    {
+      "files": ["examples/**/*.html", "slides/**/*.html"],
+      "options": {
+        "printWidth": 80,
+        "htmlWhitespaceSensitivity": "ignore",
+        "bracketSameLine": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# 依赖 & 构建产物
+node_modules/
+dist/
+.turbo/
+
+# 锁文件（不格式化，避免冲突）
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# 生成文件
+*.min.js
+*.min.css

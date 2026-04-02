@@ -11,7 +11,9 @@
     "dev:legacy": "pnpm --filter tang-slidex-example-tech-intro dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format:slides": "prettier --write 'examples/**/*.html'",
+    "format:check": "prettier --check 'examples/**/*.html'"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

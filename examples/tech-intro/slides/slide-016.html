@@ -1,59 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <style>
-    .slide {
-      width: 1280px; height: 720px; overflow: hidden;
-      background-color: var(--color-background, #0f172a);
-      padding: 40px 56px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto 1fr;
-      gap: 20px 36px;
-    }
-    .header { grid-column: 1 / 3; }
-    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary, #7c3aed); margin-bottom: 8px; }
-    .title   { font-size: 36px; font-weight: 800; color: var(--color-text, #f1f5f9); line-height: 1.2; }
-    .col-label {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--color-text-muted, #94a3b8);
-      margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
-    }
-    .col-label span {
-      background: rgba(124,58,237,0.12); color: var(--color-primary, #7c3aed);
-      padding: 2px 8px; border-radius: 999px; font-size: 10px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .slide {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background-color: var(--color-background, #0f172a);
+        padding: 40px 56px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr;
+        gap: 20px 36px;
+      }
+      .header {
+        grid-column: 1 / 3;
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-primary, #7c3aed);
+        margin-bottom: 8px;
+      }
+      .title {
+        font-size: 36px;
+        font-weight: 800;
+        color: var(--color-text, #f1f5f9);
+        line-height: 1.2;
+      }
+      .col-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-text-muted, #94a3b8);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .col-label span {
+        background: rgba(124, 58, 237, 0.12);
+        color: var(--color-primary, #7c3aed);
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 10px;
+      }
 
-    /* viewer 代码块覆写 */
-    .viewer-col pre {
-      margin: 0;
-      border-radius: 10px;
-      font-size: 12px !important;
-      height: 510px;
-      overflow-y: auto;
-    }
-    .viewer-col pre code {
-      font-size: 12px !important;
-      line-height: 1.75 !important;
-    }
-  </style>
-</head>
-<body>
-  <div class="slide" data-slide-id="016" data-slide-type="content">
-
-    <div class="header">
-      <p class="eyebrow">附加 · CodeBox 双模式</p>
-      <h1 class="title">Viewer 静态展示 &nbsp;vs&nbsp; IDE 交互编辑</h1>
-    </div>
-
-    <!-- 左：Viewer 模式（highlight.js 静态高亮，编辑模式下可直接修改代码） -->
-    <div class="viewer-col">
-      <div class="col-label">
-        Viewer 模式
-        <span>highlight.js · 编辑模式可修改</span>
+      /* viewer 代码块覆写 */
+      .viewer-col pre {
+        margin: 0;
+        border-radius: 10px;
+        font-size: 12px !important;
+        height: 510px;
+        overflow-y: auto;
+      }
+      .viewer-col pre code {
+        font-size: 12px !important;
+        line-height: 1.75 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide" data-slide-id="016" data-slide-type="content">
+      <div class="header">
+        <p class="eyebrow">附加 · CodeBox 双模式</p>
+        <h1 class="title">Viewer 静态展示 &nbsp;vs&nbsp; IDE 交互编辑</h1>
       </div>
-      <pre><code class="language-javascript">// tang-slidex · Viewer CodeBox
+
+      <!-- 左：Viewer 模式（highlight.js 静态高亮，编辑模式下可直接修改代码） -->
+      <div class="viewer-col">
+        <div class="col-label">
+          Viewer 模式
+          <span>highlight.js · 编辑模式可修改</span>
+        </div>
+        <pre><code class="language-javascript">// tang-slidex · Viewer CodeBox
 // 编辑模式下点击此处可直接修改代码
 import { createSlide } from '@tang-slidex/core'
 
@@ -85,58 +109,67 @@ gsap.from('.card', {
   duration: 0.5,
   ease: 'power2.out',
 })</code></pre>
-    </div>
-
-    <!-- 右：IDE 模式（CodeMirror 6，行号 + 自动补全 + 运行） -->
-    <div>
-      <div class="col-label">
-        IDE 模式
-        <span>CodeMirror 6 · 行号 · 自动补全 · ▶ Run</span>
       </div>
-      <div
-        data-codebox="ide"
-        data-language="javascript"
-        data-run="true"
-        data-height="510"
-        data-filename="playground.js · IDE 模式"
-      >
-        <script type="text/plain">
-// 支持行号、自动补全、括号匹配、撤销重做
-// 点击 ▶ Run 直接在沙箱里执行
 
-const data = [
-  { name: 'Phase 1', stars: 120 },
-  { name: 'Phase 2', stars: 580 },
-  { name: 'Phase 3', stars: 1840 },
-  { name: 'Phase 4', stars: 4200 },
-]
+      <!-- 右：IDE 模式（CodeMirror 6，行号 + 自动补全 + 运行） -->
+      <div>
+        <div class="col-label">
+          IDE 模式
+          <span>CodeMirror 6 · 行号 · 自动补全 · ▶ Run</span>
+        </div>
+        <div
+          data-codebox="ide"
+          data-language="javascript"
+          data-run="true"
+          data-height="510"
+          data-filename="playground.js · IDE 模式"
+        >
+          <script type="text/plain">
+            // 支持行号、自动补全、括号匹配、撤销重做
+            // 点击 ▶ Run 直接在沙箱里执行
 
-// 计算增长率
-const rates = data.map((d, i) => {
-  if (i === 0) return { ...d, growth: '-' }
-  const prev = data[i - 1].stars
-  const rate = ((d.stars - prev) / prev * 100).toFixed(1)
-  return { ...d, growth: `+${rate}%` }
-})
+            const data = [
+              { name: 'Phase 1', stars: 120 },
+              { name: 'Phase 2', stars: 580 },
+              { name: 'Phase 3', stars: 1840 },
+              { name: 'Phase 4', stars: 4200 },
+            ]
 
-console.log('tang-slidex 增长数据:')
-rates.forEach(r => {
-  console.log(`  ${r.name}: ${r.stars} stars  ${r.growth}`)
-})
+            // 计算增长率
+            const rates = data.map((d, i) => {
+              if (i === 0) return { ...d, growth: '-' }
+              const prev = data[i - 1].stars
+              const rate = ((d.stars - prev) / prev * 100).toFixed(1)
+              return { ...d, growth: `+${rate}%` }
+            })
 
-const total = data.reduce((s, d) => s + d.stars, 0)
-console.log(`总计: ${total} stars`)
-        </script>
+            console.log('tang-slidex 增长数据:')
+            rates.forEach(r => {
+              console.log(`  ${r.name}: ${r.stars} stars  ${r.growth}`)
+            })
+
+            const total = data.reduce((s, d) => s + d.stars, 0)
+            console.log(`总计: ${total} stars`)
+          </script>
+        </div>
       </div>
     </div>
-
-  </div>
-  <script>
-    if (window.gsap) {
-      gsap.from('.header', { y: -20, opacity: 0, duration: 0.4 })
-      gsap.from('.viewer-col', { x: -24, opacity: 0, duration: 0.45, delay: 0.2 })
-      gsap.from('[data-codebox]', { x: 24, opacity: 0, duration: 0.45, delay: 0.2 })
-    }
-  </script>
-</body>
+    <script>
+      if (window.gsap) {
+        gsap.from('.header', { y: -20, opacity: 0, duration: 0.4 })
+        gsap.from('.viewer-col', {
+          x: -24,
+          opacity: 0,
+          duration: 0.45,
+          delay: 0.2,
+        })
+        gsap.from('[data-codebox]', {
+          x: 24,
+          opacity: 0,
+          duration: 0.45,
+          delay: 0.2,
+        })
+      }
+    </script>
+  </body>
 </html>
