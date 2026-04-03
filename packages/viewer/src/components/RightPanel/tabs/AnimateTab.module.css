@@ -223,3 +223,339 @@
   border-color: rgba(239,68,68,0.4);
   color: #f87171;
 }
+
+/* ── 步骤总览 ── */
+.stepOverview {
+  padding: 0 0 8px;
+}
+.stepOverviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.stepOverviewTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.stepOverviewEmpty {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  padding: 8px 0 4px;
+  text-align: center;
+}
+.stepRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.12s;
+  margin-bottom: 4px;
+  background: rgba(255,255,255,0.03);
+}
+.stepRow:hover {
+  background: rgba(139,92,246,0.08);
+  border-color: rgba(139,92,246,0.18);
+}
+.stepNum {
+  font-size: 10px;
+  font-weight: 700;
+  color: #a78bfa;
+  min-width: 36px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.stepInfo {
+  flex: 1;
+  min-width: 0;
+}
+.stepElNames {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stepAnimName {
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+  margin-top: 1px;
+}
+.stepActions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.stepActionBtn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.3);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.stepActionBtn:hover {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.6);
+}
+.stepActionBtnDanger:hover {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.3);
+  color: #f87171;
+}
+.insertStepRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+.insertStepBtn {
+  background: rgba(255,255,255,0.04);
+  border: 1px dashed rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.28);
+  font-size: 10px;
+  padding: 4px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s;
+}
+.insertStepBtn:hover {
+  background: rgba(139,92,246,0.1);
+  border-color: rgba(139,92,246,0.3);
+  color: #a78bfa;
+}
+
+/* ── 整页自动播放预览 ── */
+.autoPlayBtn {
+  width: 100%;
+  background: rgba(139,92,246,0.12);
+  border: 1px solid rgba(139,92,246,0.25);
+  color: #a78bfa;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.autoPlayBtn:hover {
+  background: rgba(139,92,246,0.22);
+  border-color: rgba(139,92,246,0.45);
+  color: #c4b5fd;
+}
+.autoPlayBtn:active { transform: scale(0.98); }
+.autoPlayBtnStop {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.25);
+  color: rgba(239,68,68,0.75);
+}
+.autoPlayBtnStop:hover {
+  background: rgba(239,68,68,0.18);
+  border-color: rgba(239,68,68,0.4);
+  color: #f87171;
+}
+
+/* ── 多绑定列表 ── */
+
+/* 绑定卡片 */
+.bindingCard {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  transition: border-color 0.15s;
+}
+.bindingCard:hover {
+  border-color: rgba(139,92,246,0.25);
+}
+.bindingCard:focus-within {
+  border-color: rgba(139,92,246,0.35);
+}
+
+/* 绑定卡片头部：步骤 + 方向标记 + 删除 */
+.bindingHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px 6px;
+  background: rgba(255,255,255,0.025);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.bindingStepLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.35);
+  flex-shrink: 0;
+}
+.bindingStepInput {
+  width: 42px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+}
+.bindingStepInput:focus {
+  border-color: rgba(139,92,246,0.5);
+  background: rgba(139,92,246,0.08);
+}
+.bindingMaxStep {
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  flex: 1;
+}
+/* 方向徽标 */
+.bindingDirBadge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.4px;
+  flex-shrink: 0;
+}
+.bindingDirIn {
+  background: rgba(74,222,128,0.1);
+  color: rgba(74,222,128,0.75);
+  border: 1px solid rgba(74,222,128,0.2);
+}
+.bindingDirOut {
+  background: rgba(251,146,60,0.1);
+  color: rgba(251,146,60,0.75);
+  border: 1px solid rgba(251,146,60,0.2);
+}
+/* 删除绑定按钮 */
+.bindingDeleteBtn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.18);
+  font-size: 13px;
+  line-height: 1;
+  padding: 1px 3px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.bindingDeleteBtn:hover {
+  color: #f87171;
+  background: rgba(239,68,68,0.1);
+}
+
+/* 绑定体：动画选项 + 时间 */
+.bindingBody {
+  padding: 8px 10px 10px;
+}
+
+/* 行内紧凑选项行 */
+.bindingRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+.bindingRow:last-child { margin-bottom: 0; }
+.bindingRowLabel {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+/* 紧凑 select */
+.bindingSelect {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e2e8f0;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  min-width: 0;
+}
+.bindingSelect:focus { border-color: rgba(139,92,246,0.5); }
+
+/* 紧凑数字输入 */
+.bindingNumInput {
+  width: 52px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e2e8f0;
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 5px;
+  font-family: inherit;
+  text-align: right;
+  outline: none;
+  flex-shrink: 0;
+}
+.bindingNumInput:focus { border-color: rgba(139,92,246,0.5); }
+.bindingUnit {
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  min-width: 16px;
+}
+
+/* 添加绑定按钮 */
+.addBindingBtn {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.3);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  margin-top: 2px;
+}
+.addBindingBtn:hover {
+  background: rgba(139,92,246,0.1);
+  border-color: rgba(139,92,246,0.3);
+  color: #a78bfa;
+}
+
+/* 绑定预览按钮（小版本） */
+.bindingPreviewBtn {
+  background: rgba(139,92,246,0.08);
+  border: 1px solid rgba(139,92,246,0.2);
+  color: rgba(139,92,246,0.7);
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.bindingPreviewBtn:hover {
+  background: rgba(139,92,246,0.18);
+  color: #a78bfa;
+}

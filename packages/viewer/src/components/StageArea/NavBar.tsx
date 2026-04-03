@@ -20,7 +20,9 @@ export function NavBar({ runner }: Props) {
   const { currentStep, totalSteps } = useAnimStore()
 
   // 演示模式 + 当前页有步骤动画时才显示步骤点
-  const showStepDots = mode === 'present' && totalSteps > 0
+  const showStepDots  = mode === 'present' && totalSteps > 0
+  // 编辑模式 + 当前页有步骤动画时显示步骤数标签
+  const showStepCount = mode === 'edit' && totalSteps > 0
 
   return (
     <div className={styles.navBar}>
@@ -46,6 +48,12 @@ export function NavBar({ runner }: Props) {
             />
           ))}
         </div>
+      )}
+
+      {showStepCount && (
+        <span className={styles.stepCount} title={`当前页有 ${totalSteps} 个步骤动画`}>
+          {totalSteps} 步
+        </span>
       )}
 
       <button

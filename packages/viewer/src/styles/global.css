@@ -46,3 +46,16 @@ html, body, #root {
 .tang-code-textarea {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
 }
+
+/* ── AnimateTab：步骤总览高亮 ── */
+.tang-step-highlight {
+  outline: 2px solid rgba(139,92,246,0.9) !important;
+  outline-offset: 3px;
+  border-radius: 3px;
+  animation: tang-step-highlight-pulse 0.9s ease-out;
+}
+@keyframes tang-step-highlight-pulse {
+  0%   { outline-color: rgba(139,92,246,0.9); box-shadow: 0 0 0 0 rgba(139,92,246,0.4); }
+  50%  { outline-color: rgba(192,132,252,1);  box-shadow: 0 0 0 6px rgba(139,92,246,0); }
+  100% { outline-color: rgba(139,92,246,0.9); box-shadow: 0 0 0 0 rgba(139,92,246,0); }
+}

@@ -1,6 +1,7 @@
 import { useRef, useCallback } from 'react'
 import { useSlideStore } from '../store/slideStore'
 import { rehydrateAll } from '../utils/liquidGlassManager'
+import { getPreset } from '../utils/animPresets'
 import type { AnimationController } from './useAnimationController'
 
 /** window.tang 运行时 API 类型 */
@@ -34,18 +35,7 @@ function resetTangRuntime() {
       if (slide?.dataset?.loadAnimation) {
         const gsap = (window as unknown as Record<string, unknown>).gsap as any
         if (gsap) {
-          const PRESETS: Record<string, Record<string, unknown>> = {
-            'fade':       { opacity: 0 },
-            'fade-up':    { opacity: 0, y: 30 },
-            'fade-down':  { opacity: 0, y: -30 },
-            'fade-left':  { opacity: 0, x: 30 },
-            'fade-right': { opacity: 0, x: -30 },
-            'zoom-in':    { opacity: 0, scale: 0.9 },
-            'zoom-out':   { opacity: 0, scale: 1.1 },
-            'slide-up':   { y: 60 },
-            'slide-right':{ x: -60 },
-          }
-          const preset = PRESETS[slide.dataset.loadAnimation] ?? PRESETS['fade-up']
+          const preset = getPreset(slide.dataset.loadAnimation)
           const duration = parseInt(slide.dataset.loadDuration ?? '600') / 1000
           const ease     = slide.dataset.loadEase ?? 'power2.out'
           gsap.from(slide, { ...preset, duration, ease })
@@ -183,9 +173,15 @@ export function useSlideRunner(
         animCtrl.dispose()
         animCtrl.init(slideEl)
 
-        // 执行入场动画（onLoad 回调，此时步骤元素已被 init 隐藏）
+        // 执行入场动画（onLoad 回调）
+        // 注意：init() 此时 **不** 隐藏步骤元素，让 onLoad 里的 gsap.from 能正常播放
         const tang = (window as unknown as Record<string, unknown>).tang as TangRuntime | undefined
         tang?._runLoad()
+
+        // onLoad 启动后，再把演示模式下的入场步骤元素设为 hidden。
+        // 此时 gsap.from 动画已经启动（启动时元素可见），对动画本身无影响；
+        // 而那些没有被 onLoad 控制的步骤元素，也会被正确隐藏。
+        animCtrl.initHideForPresentation()
 
         // highlight.js
         const hljs = (window as unknown as Record<string, unknown>).hljs as any
