@@ -66,7 +66,7 @@
   </head>
   <body>
     <div class="slide" data-slide-id="016" data-slide-type="content">
-      <div class="header">
+      <div class="header" data-step-1="1" data-animation-1="fade-up" data-direction-1="out" data-direction="out">
         <p class="eyebrow">附加 · CodeBox 双模式</p>
         <h1 class="title">Viewer 静态展示 &nbsp;vs&nbsp; IDE 交互编辑</h1>
       </div>
@@ -117,13 +117,7 @@ gsap.from('.card', {
           IDE 模式
           <span>CodeMirror 6 · 行号 · 自动补全 · ▶ Run</span>
         </div>
-        <div
-          data-codebox="ide"
-          data-language="javascript"
-          data-run="true"
-          data-height="510"
-          data-filename="playground.js · IDE 模式"
-        >
+        <div data-codebox="ide" data-language="javascript" data-run="true" data-height="510" data-filename="playground.js · IDE 模式">
           <script type="text/plain">
             // 支持行号、自动补全、括号匹配、撤销重做
             // 点击 ▶ Run 直接在沙箱里执行

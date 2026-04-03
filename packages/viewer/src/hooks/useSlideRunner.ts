@@ -1,5 +1,6 @@
 import { useRef, useCallback } from 'react'
 import { useSlideStore } from '../store/slideStore'
+import { useUiStore } from '../store/uiStore'
 import { rehydrateAll } from '../utils/liquidGlassManager'
 import { getPreset } from '../utils/animPresets'
 import type { AnimationController } from './useAnimationController'
@@ -173,15 +174,27 @@ export function useSlideRunner(
         animCtrl.dispose()
         animCtrl.init(slideEl)
 
-        // 执行入场动画（onLoad 回调）
-        // 注意：init() 此时 **不** 隐藏步骤元素，让 onLoad 里的 gsap.from 能正常播放
+        // 执行入场动画（onLoad 回调）—— 仅演示模式执行，编辑模式跳过
         const tang = (window as unknown as Record<string, unknown>).tang as TangRuntime | undefined
-        tang?._runLoad()
+        const isEdit = useUiStore.getState().mode === 'edit'
 
-        // onLoad 启动后，再把演示模式下的入场步骤元素设为 hidden。
-        // 此时 gsap.from 动画已经启动（启动时元素可见），对动画本身无影响；
-        // 而那些没有被 onLoad 控制的步骤元素，也会被正确隐藏。
-        animCtrl.initHideForPresentation()
+        if (!isEdit) {
+          // 方案 B：preMarkStepEls → _runLoad → initHideForPresentation
+          //
+          // 1. preMarkStepEls()：把步骤元素预设为 opacity:0（透明但占位）
+          //    作用：onLoad 里若有 gsap.from(stepEl, {opacity:0}) 等于 0→0 无效果，
+          //          彻底消除"用户手动给已有 onLoad 的元素加 data-step"的双重控制冲突。
+          //
+          // 2. _runLoad()：执行 onLoad 回调，gsap 针对步骤元素的动画自动失效
+          //
+          // 3. initHideForPresentation()：kill 残余 tween，正式 visibility:hidden
+          animCtrl.preMarkStepEls()
+          tang?._runLoad()
+          animCtrl.initHideForPresentation()
+        } else {
+          // 编辑模式：所有步骤元素保持可见，不执行入场动画
+          // （animCtrl.init 里已经 showEl 了所有步骤元素）
+        }
 
         // highlight.js
         const hljs = (window as unknown as Record<string, unknown>).hljs as any

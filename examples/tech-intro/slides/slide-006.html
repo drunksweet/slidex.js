@@ -47,11 +47,7 @@
         top: 50%;
         width: 2px;
         height: 100%;
-        background: linear-gradient(
-          to bottom,
-          var(--color-border, #334155),
-          transparent
-        );
+        background: linear-gradient(to bottom, var(--color-border, #334155), transparent);
       }
       .layer:last-child .layer-line {
         display: none;
@@ -123,7 +119,7 @@
               <div class="layer-desc">content.md — 自然语言描述 PPT 内容</div>
             </div>
           </div>
-          <div class="layer" data-step="1" data-animation="fade-right" data-duration="380">
+          <div class="layer" data-step-1="1" data-animation-1="fade-right" data-duration-1="380">
             <div class="layer-badge" style="background: #5b21b6">Skills 层</div>
             <div class="layer-body">
               <div class="layer-title">@tang-slidex/skills</div>
@@ -135,13 +131,11 @@
               </div>
             </div>
           </div>
-          <div class="layer" data-step="2" data-animation="fade-right" data-duration="380" data-delay="50">
+          <div class="layer" data-step-1="2" data-animation-1="fade-right" data-duration-1="380" data-delay-1="50">
             <div class="layer-badge" style="background: #2563eb">Core 层</div>
             <div class="layer-body">
               <div class="layer-title">@tang-slidex/core</div>
-              <div class="layer-desc">
-                SlideRunner · PPT 规范 · 主题引擎 · 渲染器
-              </div>
+              <div class="layer-desc">SlideRunner · PPT 规范 · 主题引擎 · 渲染器</div>
               <div class="layer-tags">
                 <span class="layer-tag">SlideRunner</span>
                 <span class="layer-tag">Theme</span>
@@ -149,15 +143,11 @@
               </div>
             </div>
           </div>
-          <div class="layer" data-step="3" data-animation="fade-right" data-duration="380" data-delay="100">
-            <div class="layer-badge" style="background: #059669">
-              Builder 层
-            </div>
+          <div class="layer" data-step-1="3" data-animation-1="fade-right" data-duration-1="380" data-delay-1="100">
+            <div class="layer-badge" style="background: #059669">Builder 层</div>
             <div class="layer-body">
               <div class="layer-title">@tang-slidex/builder</div>
-              <div class="layer-desc">
-                HTML 内联打包 + Puppeteer PDF 导出 + CLI
-              </div>
+              <div class="layer-desc">HTML 内联打包 + Puppeteer PDF 导出 + CLI</div>
               <div class="layer-tags">
                 <span class="layer-tag">build</span>
                 <span class="layer-tag">export --pdf</span>
@@ -165,14 +155,11 @@
               </div>
             </div>
           </div>
-          <div class="layer" data-step="4" data-animation="fade-right" data-duration="380" data-delay="150">
+          <div class="layer" data-step-1="4" data-animation-1="fade-right" data-duration-1="380" data-delay-1="150">
             <div class="layer-badge" style="background: #d97706">Editor 层</div>
             <div class="layer-body">
               <div class="layer-title">@tang-slidex/editor</div>
-              <div class="layer-desc">
-                Vite 插件：slideInspectorPlugin · slideSavePlugin ·
-                slideUndoPlugin
-              </div>
+              <div class="layer-desc">Vite 插件：slideInspectorPlugin · slideSavePlugin · slideUndoPlugin</div>
               <div class="layer-tags">
                 <span class="layer-tag">行级写回</span>
                 <span class="layer-tag">data-tang-line</span>
@@ -180,34 +167,14 @@
               </div>
             </div>
           </div>
-          <div class="layer" data-step="5" data-animation="fade-right" data-duration="380" data-delay="200">
-            <div class="layer-badge" style="background: #0e9f6e; background-color: rgba(192,57,150,1.00)">Viewer 层</div>
-            <div
-              class="layer-body"
-              style="border-color: rgba(14, 159, 110, 0.4)"
-            >
-              <div
-                class="layer-title"
-                style="display: flex; align-items: center; gap: 8px"
-              >
+          <div class="layer" data-step-1="5" data-animation-1="fade-right" data-duration-1="380" data-delay-1="200">
+            <div class="layer-badge" style="background: #0e9f6e; background-color: rgba(192, 57, 150, 1)">Viewer 层</div>
+            <div class="layer-body" style="border-color: rgba(14, 159, 110, 0.4)">
+              <div class="layer-title" style="display: flex; align-items: center; gap: 8px">
                 @tang-slidex/viewer
-                <span
-                  style="
-                    font-size: 10px;
-                    font-weight: 700;
-                    background: rgba(14, 159, 110, 0.2);
-                    color: #34d399;
-                    padding: 2px 8px;
-                    border-radius: 999px;
-                  "
-                >
-                  v0.3 NEW
-                </span>
+                <span style="font-size: 10px; font-weight: 700; background: rgba(14, 159, 110, 0.2); color: #34d399; padding: 2px 8px; border-radius: 999px">v0.3 NEW</span>
               </div>
-              <div class="layer-desc">
-                React 三栏编辑器：导航缩略图 · 舞台 · 属性面板 · WYSIWYG
-                编辑模式
-              </div>
+              <div class="layer-desc">React 三栏编辑器：导航缩略图 · 舞台 · 属性面板 · WYSIWYG 编辑模式</div>
               <div class="layer-tags">
                 <span class="layer-tag">React 19</span>
                 <span class="layer-tag">Zustand</span>
@@ -314,20 +281,11 @@
         })
       }
       tang.onLoad(() => {
-        gsap.from('.title', { y: -20, opacity: 0, duration: 0.4 })
-        gsap.from('.layer', {
-          x: -24,
-          opacity: 0,
-          duration: 0.35,
-          stagger: 0.07,
-          delay: 0.2,
-        })
-        gsap.from('#arch-chart', {
-          opacity: 0,
-          scale: 0.9,
-          duration: 0.6,
-          delay: 0.3,
-        })
+        // 页面级入场：只控制标题和图表（layer 由 data-step-1~5 控制）
+        gsap.from('.eyebrow', { opacity: 0, duration: 0.3 })
+        gsap.from('.title', { y: -20, opacity: 0, duration: 0.4, delay: 0.05 })
+        gsap.from('#arch-chart', { opacity: 0, scale: 0.92, duration: 0.6, delay: 0.15, ease: 'power2.out' })
+        // .layer 由 data-step-1~5 控制，这里不重复
       })
     </script>
   </body>

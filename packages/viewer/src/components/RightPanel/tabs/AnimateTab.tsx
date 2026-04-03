@@ -10,7 +10,7 @@
  * 否则使用 tang.onLoad 脚本的自定义动画。
  */
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useEditStore } from '../../../store/editStore'
 import { getPreset, parseAnimAttrs, parseAnimBindings, type AnimBinding } from '../../../utils/animPresets'
 import panelStyles from '../RightPanel.module.css'
@@ -213,6 +213,14 @@ function resolveAnimEl(
 export function AnimateTab() {
   const { selectedEl, leafEl: rawLeafEl } = useEditStore()
 
+  // ── 监听 tang:apply-style 强制重渲染（applyAttr 只改 DOM，不触发 React 更新） ──
+  const [, setVersion] = useState(0)
+  useEffect(() => {
+    const onAttrChange = () => setVersion(v => v + 1)
+    document.addEventListener('tang:apply-style', onAttrChange)
+    return () => document.removeEventListener('tang:apply-style', onAttrChange)
+  }, [])
+
   const { el: resolvedEl, multiStep } = resolveAnimEl(selectedEl, rawLeafEl)
   const el    = resolvedEl
   const hasEl = !!selectedEl
@@ -250,15 +258,24 @@ export function AnimateTab() {
   // ── 添加绑定 ─────────────────────────────────────────────────────────────
   const handleAddBinding = useCallback(() => {
     if (!el) return
-    // 找下一个空缺的 index（dataset key 格式：'step-N'）
+    // 找下一个空缺的 index（从 1 开始连续扫）
     let nextIdx = 1
     for (let i = 1; i <= 10; i++) {
-      const key = i === 1 ? (el.dataset['step-1'] ?? el.dataset.step) : el.dataset[`step-${i}`]
-      if (key === undefined) { nextIdx = i; break }
+      const stepKey = `step-${i}`
+      const hasSlot = i === 1
+        ? (el.dataset[stepKey] !== undefined || el.dataset.step !== undefined)
+        : el.dataset[stepKey] !== undefined
+      if (!hasSlot) { nextIdx = i; break }
+      if (i === 10) { nextIdx = 11; break } // 超出上限
     }
+    if (nextIdx > 10) return
     const newStep = maxStep + 1
     applyAttr(el, `data-step-${nextIdx}`, String(newStep))
     applyAttr(el, `data-animation-${nextIdx}`, 'fade-up')
+    // 第二个及之后的绑定默认方向 out（已有入场，新增的通常是出场）
+    if (nextIdx > 1) {
+      applyAttr(el, `data-direction-${nextIdx}`, 'out')
+    }
   }, [el, maxStep])
 
   // ── 删除某个绑定 ──────────────────────────────────────────────────────────
@@ -269,6 +286,7 @@ export function AnimateTab() {
     removeAttr(el, `data-duration-${idx}`)
     removeAttr(el, `data-delay-${idx}`)
     removeAttr(el, `data-ease-${idx}`)
+    removeAttr(el, `data-direction-${idx}`)  // 同时清除方向属性
     // idx=1 时同时清理旧格式无后缀属性
     if (idx === 1) {
       removeAttr(el, 'data-step')
@@ -276,6 +294,7 @@ export function AnimateTab() {
       removeAttr(el, 'data-duration')
       removeAttr(el, 'data-delay')
       removeAttr(el, 'data-ease')
+      removeAttr(el, 'data-direction')
     }
     // 若删完了，还清理共享属性
     const remaining = parseAnimBindings(el)
@@ -655,9 +674,17 @@ function BindingCard({ el, binding, maxStep, onDelete, onPreview }: BindingCardP
   const isIn  = binding.direction === 'in'
   const allOpts = isIn ? ANIMATION_OPTIONS : EXIT_ANIMATION_OPTIONS
 
+  // 切换入场/出场方向
+  const handleToggleDirection = () => {
+    const newDir = isIn ? 'out' : 'in'
+    applyAttr(el, `data-direction-${idx}`, newDir)
+    // idx=1 时同时写旧格式兼容属性
+    if (idx === 1) applyAttr(el, 'data-direction', newDir)
+  }
+
   return (
     <div className={styles.bindingCard}>
-      {/* 头部：步骤号 + 方向徽标 + 预览 + 删除 */}
+      {/* 头部：步骤号 + 方向徽标（可点击切换）+ 预览 + 删除 */}
       <div className={styles.bindingHeader}>
         <span className={styles.bindingStepLabel}>步骤</span>
         <input
@@ -668,9 +695,14 @@ function BindingCard({ el, binding, maxStep, onDelete, onPreview }: BindingCardP
           onChange={e => applyAttr(el, `data-step-${idx}`, e.target.value)}
         />
         <span className={styles.bindingMaxStep}>/ {maxStep}</span>
-        <span className={`${styles.bindingDirBadge} ${isIn ? styles.bindingDirIn : styles.bindingDirOut}`}>
+        <button
+          className={`${styles.bindingDirBadge} ${isIn ? styles.bindingDirIn : styles.bindingDirOut}`}
+          onClick={handleToggleDirection}
+          title={isIn ? '点击切换为出场' : '点击切换为入场'}
+          style={{ cursor: 'pointer', border: 'none', padding: '2px 8px' }}
+        >
           {isIn ? '入场' : '出场'}
-        </span>
+        </button>
         <button className={styles.bindingPreviewBtn} onClick={onPreview}>▶</button>
         <button className={styles.bindingDeleteBtn} onClick={onDelete} title="删除此绑定">×</button>
       </div>

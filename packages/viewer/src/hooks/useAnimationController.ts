@@ -23,7 +23,7 @@
 import { useRef } from 'react'
 import { useUiStore } from '../store/uiStore'
 import { useAnimStore } from '../store/animStore'
-import { parseAnimBindings, getPreset, AnimBinding } from '../utils/animPresets'
+import { parseAnimBindings, getPreset, getExitPreset, AnimBinding } from '../utils/animPresets'
 
 // ── 内部类型 ─────────────────────────────────────────────────────────────────
 
@@ -41,6 +41,11 @@ export interface AnimationController {
   /** 演示模式专用：在 tang._runLoad() 执行之后调用，隐藏尚未到达步骤的入场元素。
    *  这样 onLoad 里的 gsap.from 可以先正常播放，不被提前的 visibility:hidden 干扰。*/
   initHideForPresentation(): void
+  /** 演示模式专用：在 tang._runLoad() **之前** 调用。
+   *  把所有 direction='in' 步骤元素预设为 opacity:0（透明但保持布局）。
+   *  这样 onLoad 里任何针对步骤元素的 gsap.from(el, {opacity:0}) 等于从 0→0 无效果，
+   *  彻底消除 onLoad 动画与步骤动画的双重控制冲突，无论用户如何手动配置。*/
+  preMarkStepEls(): void
   /** 推进一步：返回 'stepped'（继续等待）或 'done'（外部翻页） */
   advance(): 'stepped' | 'done'
   /** 回退一步：返回 'retreated'（继续）或 'at-start'（外部翻到上一页） */
@@ -114,7 +119,9 @@ function createController(): AnimationController {
       return
     }
 
-    const preset = getPreset(binding.animation)
+    const preset = binding.direction === 'out'
+      ? getExitPreset(binding.animation)
+      : getPreset(binding.animation)
 
     if (binding.direction === 'in') {
       // ── 入场：gsap.from() ─────────────────────────────────────────────────
@@ -218,13 +225,54 @@ function createController(): AnimationController {
     },
 
     /**
-     * 演示模式专用：在 tang._runLoad() **之后** 调用，隐藏尚未到达步骤的入场元素。
-     * 这样 onLoad 里的 gsap.from 动画能正常对元素做入场，不会被提前 hidden 干扰。
+     * 演示模式专用：在 tang._runLoad() **之后** 调用。
+     * 根据每个元素的**最小步骤绑定方向**决定初始状态：
+     *   - 最小步骤是 'in'  → 初始隐藏（hideEl，同时 kill onLoad 可能的冲突 tween）
+     *   - 最小步骤是 'out' → 不处理（元素已可见，onLoad 动画正在正常播放，不打扰）
      */
     initHideForPresentation() {
-      for (const entries of stepMap.values()) {
+      const processed = new Set<HTMLElement>()
+      const sortedSteps = [...stepMap.keys()].sort((a, b) => a - b)
+
+      for (const step of sortedSteps) {
+        const entries = stepMap.get(step) ?? []
+        for (const { el, binding } of entries) {
+          if (processed.has(el)) continue
+          processed.add(el)
+          // 最小步骤是 'in' → 初始隐藏（kill tween + visibility:hidden）
+          // 最小步骤是 'out' → 什么都不做，保留可见状态及 onLoad 动画
+          if (binding.direction === 'in') {
+            hideEl(el)
+          }
+        }
+      }
+    },
+
+    /**
+     * 演示模式专用：在 _runLoad() **之前** 调用。
+     * 根据元素的**最小步骤绑定方向**，预设元素初始状态：
+     *   - 最小步骤是 'in'  → opacity:0（透明+占位，阻断 onLoad 的冲突动画）
+     *   - 最小步骤是 'out' → 不处理（元素初始可见）
+     */
+    preMarkStepEls() {
+      const gsap = getGsap()
+      const processed = new Set<HTMLElement>()
+      const sortedSteps = [...stepMap.keys()].sort((a, b) => a - b)
+
+      for (const step of sortedSteps) {
+        const entries = stepMap.get(step) ?? []
         for (const { binding, el } of entries) {
-          if (binding.direction === 'in') hideEl(el)
+          if (processed.has(el)) continue
+          processed.add(el)
+          // 只对最小步骤是 'in' 的元素预设 opacity:0
+          if (binding.direction === 'in') {
+            if (gsap) {
+              gsap.set(el, { opacity: 0, visibility: 'visible' })
+            } else {
+              el.style.opacity = '0'
+              el.style.visibility = 'visible'
+            }
+          }
         }
       }
     },
@@ -262,8 +310,15 @@ function createController(): AnimationController {
     },
 
     revealAll() {
+      const gsap = getGsap()
       for (const entries of stepMap.values()) {
-        for (const { el } of entries) showEl(el)
+        for (const { el } of entries) {
+          if (gsap) {
+            gsap.killTweensOf(el)
+            gsap.set(el, { clearProps: 'opacity,transform,x,y,scale,visibility' })
+          }
+          showEl(el)
+        }
       }
       currentStep = totalSteps
       syncStore()

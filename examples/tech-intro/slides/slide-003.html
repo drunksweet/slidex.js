@@ -53,11 +53,7 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: radial-gradient(
-          circle at 50% 0%,
-          rgba(124, 58, 237, 0.08) 0%,
-          transparent 70%
-        );
+        background: radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
         opacity: 0;
         transition: opacity 0.3s;
       }
@@ -120,7 +116,7 @@
     </style>
   </head>
   <body>
-    <div class="slide" data-slide-id="003" data-slide-type="content">
+    <div class="slide" data-slide-id="003" data-slide-type="content" data-load-animation="zoom-out">
       <p class="eyebrow">01 · 背景</p>
       <h1 class="title">为什么需要 tang-slidex.js？</h1>
 
@@ -133,29 +129,19 @@
         <div class="card" data-step-1="1" data-animation-1="fade-up" data-duration-1="450">
           <span class="card-icon">🤖</span>
           <div class="card-title">AI 能力被浪费</div>
-          <div class="card-desc">
-            AI Agent 写前端页面的能力已极为成熟，可轻松生成高质量
-            HTML/CSS/JS。但主流 PPT 工具对 AI 的支持仍停留在"辅助插件"层面。
-          </div>
+          <div class="card-desc">AI Agent 写前端页面的能力已极为成熟，可轻松生成高质量 HTML/CSS/JS。但主流 PPT 工具对 AI 的支持仍停留在"辅助插件"层面。</div>
           <span class="card-tag">痛点 #1</span>
         </div>
         <div class="card" data-step-1="2" data-animation-1="fade-up" data-duration-1="450" data-delay-1="80">
           <span class="card-icon">🎨</span>
           <div class="card-title">表现力的天花板</div>
-          <div class="card-desc">
-            传统 PPT 工具无法支持 ECharts 级别的数据可视化，无法实现 GSAP
-            级别的流畅动画，更无法运行任意前端交互代码。
-          </div>
+          <div class="card-desc">传统 PPT 工具无法支持 ECharts 级别的数据可视化，无法实现 GSAP 级别的流畅动画，更无法运行任意前端交互代码。</div>
           <span class="card-tag">痛点 #2</span>
         </div>
         <div class="card" data-step-1="3" data-animation-1="fade-up" data-duration-1="450" data-delay-1="160">
           <span class="card-icon">🔓</span>
           <div class="card-title">开放生态缺失</div>
-          <div class="card-desc">
-            没有专为 AI Agent
-            设计的幻灯片标准和开放生态，开发者无法基于此构建更高层的 AI
-            产品，社区贡献无从落地。
-          </div>
+          <div class="card-desc">没有专为 AI Agent 设计的幻灯片标准和开放生态，开发者无法基于此构建更高层的 AI 产品，社区贡献无从落地。</div>
           <span class="card-tag">痛点 #3</span>
         </div>
       </div>
@@ -164,7 +150,7 @@
       tang.onLoad(() => {
         // 标题、eyebrow 做入场动画
         // .card 由框架步骤动画逐个 reveal（data-step=1/2/3），这里不重复
-        gsap.from('.title',   { y: -20, opacity: 0, duration: 0.45 })
+        gsap.from('.title', { y: -20, opacity: 0, duration: 0.45 })
         gsap.from('.eyebrow', { opacity: 0, duration: 0.35 })
       })
     </script>

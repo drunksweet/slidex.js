@@ -11,9 +11,10 @@
     {
       "files": ["examples/**/*.html", "slides/**/*.html"],
       "options": {
-        "printWidth": 80,
+        "printWidth": 100000,
         "htmlWhitespaceSensitivity": "ignore",
-        "bracketSameLine": false
+        "bracketSameLine": true,
+        "singleAttributePerLine": false
       }
     }
   ]

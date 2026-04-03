@@ -254,7 +254,7 @@ export function StageArea() {
 
     if (mode === 'edit') {
       if (!mgr.active) mgr.enable()
-      // 编辑模式：立即显示所有步骤元素（让用户可以选中并配置）
+      // 编辑模式：立即显示所有步骤元素（kill gsap 残留 + clearProps）
       animCtrl.revealAll()
     } else {
       // 退出编辑：先 disable mgr（还原 DOM 快照）
@@ -265,6 +265,9 @@ export function StageArea() {
         const slideEl = host?.querySelector<HTMLElement>('.slide')
         animCtrl.dispose()
         animCtrl.init(slideEl ?? null)
+        // 模式切换回演示：手动隐藏入场步骤元素
+        // （此时不重跑 onLoad，只需把步骤元素回归初始隐藏态）
+        animCtrl.initHideForPresentation()
       }, 0)
     }
 

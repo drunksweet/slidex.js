@@ -23,9 +23,7 @@
       .deco-grid {
         position: absolute;
         inset: 0;
-        background-image:
-          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
         background-size: 64px 64px;
         pointer-events: none;
       }
@@ -55,8 +53,15 @@
         animation: pulse 2s ease-in-out infinite;
       }
       @keyframes pulse {
-        0%, 100% { box-shadow: 0 0 4px #fbbf24; }
-        50%       { box-shadow: 0 0 14px #fbbf24, 0 0 28px rgba(245,158,11,0.4); }
+        0%,
+        100% {
+          box-shadow: 0 0 4px #fbbf24;
+        }
+        50% {
+          box-shadow:
+            0 0 14px #fbbf24,
+            0 0 28px rgba(245, 158, 11, 0.4);
+        }
       }
 
       .main-text {
@@ -76,7 +81,9 @@
         animation: shimmer 3s linear infinite;
       }
       @keyframes shimmer {
-        to { background-position: 200% center; }
+        to {
+          background-position: 200% center;
+        }
       }
 
       .sub-text {
@@ -137,9 +144,13 @@
         text-decoration: none;
         position: relative;
         overflow: hidden;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
       }
-      .link-btn:hover { transform: translateY(-2px); }
+      .link-btn:hover {
+        transform: translateY(-2px);
+      }
       .link-btn .ripple {
         position: absolute;
         border-radius: 50%;
@@ -149,20 +160,27 @@
         pointer-events: none;
       }
       @keyframes ripple-out {
-        to { transform: scale(4); opacity: 0; }
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
       }
       .link-btn-primary {
         background: #fff;
         color: #7c3aed;
         box-shadow: 0 4px 24px rgba(255, 255, 255, 0.2);
       }
-      .link-btn-primary:hover { box-shadow: 0 8px 32px rgba(255, 255, 255, 0.35); }
+      .link-btn-primary:hover {
+        box-shadow: 0 8px 32px rgba(255, 255, 255, 0.35);
+      }
       .link-btn-secondary {
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.25);
         color: #fff;
       }
-      .link-btn-secondary:hover { background: rgba(255, 255, 255, 0.14); }
+      .link-btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
 
       .bottom-info {
         position: absolute;
@@ -186,43 +204,43 @@
       </div>
 
       <div class="main-text">
-        v0.3<br /><span class="glow-text">已就绪.</span>
+        v0.3
+        <br />
+        <span class="glow-text">已就绪.</span>
       </div>
 
       <p class="sub-text">
-        AI 生成 · 浏览器编辑 · 步骤动画 · 行级写回<br />
+        AI 生成 · 浏览器编辑 · 步骤动画 · 行级写回
+        <br />
         tang-slidex 正在开发中，欢迎 Star 和贡献。
       </p>
 
-      <!-- 步骤 1 出现：v0.3 亮点 -->
-      <div class="chips" data-step="1" data-animation="fade-up" data-duration="500">
+      <!-- 步骤 1 出现：三层动画 chips（元素级） -->
+      <div class="chips" data-step-1="1" data-animation-1="fade-up" data-duration-1="500">
         <div class="chip">
-          <span class="chip-dot" style="background:#a78bfa"></span>
-          GSAP 步骤动画
+          <span class="chip-dot" style="background: #7c3aed"></span>
+          页面级 tang.onLoad
         </div>
         <div class="chip">
-          <span class="chip-dot" style="background:#34d399"></span>
-          tang.onLoad 入场协议
+          <span class="chip-dot" style="background: #f59e0b"></span>
+          元素级 data-step-1
         </div>
         <div class="chip">
-          <span class="chip-dot" style="background:#60a5fa"></span>
+          <span class="chip-dot" style="background: #3b82f6"></span>
+          自由级 tang.onStep
+        </div>
+        <div class="chip">
+          <span class="chip-dot" style="background: #34d399"></span>
+          GSAP 全量驱动
+        </div>
+        <div class="chip">
+          <span class="chip-dot" style="background: #f472b6"></span>
           AnimateTab 可视化配置
         </div>
-        <div class="chip">
-          <span class="chip-dot" style="background:#f59e0b"></span>
-          10 种预设效果
-        </div>
-        <div class="chip">
-          <span class="chip-dot" style="background:#f472b6"></span>
-          页面 & 元素双层动画
-        </div>
       </div>
-
       <!-- 步骤 2 出现：行动按钮 -->
-      <div class="links" data-step="2" data-animation="fade-up" data-duration="400">
-        <a href="https://github.com/drunksweet/slidex.js" class="link-btn link-btn-primary">
-          ⭐ GitHub
-        </a>
+      <div class="links" data-step-1="2" data-animation-1="fade-up" data-duration-1="400">
+        <a href="https://github.com/drunksweet/slidex.js" class="link-btn link-btn-primary">⭐ GitHub</a>
         <a href="#" class="link-btn link-btn-secondary">📖 文档</a>
         <a href="#0" class="link-btn link-btn-secondary">⬅ 重播</a>
       </div>
@@ -256,7 +274,8 @@
         }
         for (let i = 0; i < pts.length; i++) {
           for (let j = i + 1; j < pts.length; j++) {
-            const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y
+            const dx = pts[i].x - pts[j].x,
+              dy = pts[i].y - pts[j].y
             const d = Math.sqrt(dx * dx + dy * dy)
             if (d < 130) {
               ctx.beginPath()
@@ -269,7 +288,8 @@
           }
         }
         for (const p of pts) {
-          p.x += p.vx; p.y += p.vy
+          p.x += p.vx
+          p.y += p.vy
           if (p.x < 0 || p.x > 1280) p.vx *= -1
           if (p.y < 0 || p.y > 720) p.vy *= -1
         }
@@ -277,8 +297,8 @@
       })()
 
       // ─── 按钮涟漪 ────────────────────────────────────────────────────────────
-      document.querySelectorAll('.link-btn').forEach(btn => {
-        btn.addEventListener('click', e => {
+      document.querySelectorAll('.link-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
           const rect = btn.getBoundingClientRect()
           const size = Math.max(rect.width, rect.height)
           const ripple = document.createElement('span')
@@ -301,6 +321,12 @@
         })
         gsap.from('.sub-text', { y: 20, opacity: 0, duration: 0.5, delay: 0.4 })
         gsap.from('.bottom-info', { opacity: 0, duration: 0.6, delay: 0.7 })
+      })
+
+      // ─── 自由级：步骤 2 时对 GitHub 按钮做脉冲高亮 ─────────────────────────
+      tang.onStep(2, () => {
+        if (!window.gsap) return
+        gsap.fromTo('.link-btn-primary', { boxShadow: '0 4px 24px rgba(255,255,255,0.2)' }, { boxShadow: '0 0 0 6px rgba(255,255,255,0.3)', duration: 0.35, yoyo: true, repeat: 3, ease: 'power2.inOut' })
       })
     </script>
   </body>

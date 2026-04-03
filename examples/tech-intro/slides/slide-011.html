@@ -181,10 +181,7 @@
             <div class="prop-icon">🔍</div>
             <div>
               <div class="prop-title">slideInspectorPlugin — 注入行号</div>
-              <div class="prop-desc">
-                Vite 插件在内存中为每个元素注入
-                data-tang-line，不修改源文件，HMR 友好
-              </div>
+              <div class="prop-desc">Vite 插件在内存中为每个元素注入 data-tang-line，不修改源文件，HMR 友好</div>
               <span class="prop-code">data-tang-line="42"</span>
             </div>
           </div>
@@ -192,9 +189,7 @@
             <div class="prop-icon">✂️</div>
             <div>
               <div class="prop-title">applyPatchesByLine — 行级替换</div>
-              <div class="prop-desc">
-                按行号精准定位，正则替换单个属性值，其余行字节级不变，杜绝整文件序列化带来的格式破坏
-              </div>
+              <div class="prop-desc">按行号精准定位，正则替换单个属性值，其余行字节级不变，杜绝整文件序列化带来的格式破坏</div>
               <span class="prop-code">setInlineStyleProp() · lines[i]</span>
             </div>
           </div>
@@ -202,10 +197,7 @@
             <div class="prop-icon">📚</div>
             <div>
               <div class="prop-title">editHistory 历史栈 — 文件级 Undo</div>
-              <div class="prop-desc">
-                保存前把当前文件内容入栈（最多 30 版），POST /api/undo
-                弹栈还原并触发浏览器重载
-              </div>
+              <div class="prop-desc">保存前把当前文件内容入栈（最多 30 版），POST /api/undo 弹栈还原并触发浏览器重载</div>
               <span class="prop-code">Map&lt;filePath, string[]&gt;</span>
             </div>
           </div>
@@ -213,10 +205,7 @@
             <div class="prop-icon">🧹</div>
             <div>
               <div class="prop-title">cleanInjectAttrs — 防污染</div>
-              <div class="prop-desc">
-                写回前自动移除所有 data-tang-line / data-tang-file
-                注入属性，源文件保持干净
-              </div>
+              <div class="prop-desc">写回前自动移除所有 data-tang-line / data-tang-file 注入属性，源文件保持干净</div>
               <span class="prop-code">cleanInjectAttrs(html)</span>
             </div>
           </div>
@@ -229,20 +218,10 @@
           <div class="t-dot" style="background: #ff5f57"></div>
           <div class="t-dot" style="background: #febc2e"></div>
           <div class="t-dot" style="background: #28c840"></div>
-          <div class="code-filename">
-            slideSavePlugin.ts · applyPatchesByLine
-          </div>
+          <div class="code-filename">slideSavePlugin.ts · applyPatchesByLine</div>
         </div>
         <div class="code-body">
-          <pre
-            style="
-              margin: 0;
-              background: transparent;
-              padding: 0;
-              font-size: inherit;
-              line-height: inherit;
-            "
-          ><code><span class="kw">export function</span> <span class="fn">applyPatchesByLine</span>(
+          <pre style="margin: 0; background: transparent; padding: 0; font-size: inherit; line-height: inherit"><code><span class="kw">export function</span> <span class="fn">applyPatchesByLine</span>(
   html: <span class="str">string</span>,
   patches: <span class="fn">WysiwygPatch</span>[]
 ): <span class="str">string</span> {

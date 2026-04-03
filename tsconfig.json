@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./packages/viewer/node_modules/@types"
+    ],
+    "paths": {
+      "vite": ["./packages/viewer/node_modules/vite"],
+      "@vitejs/plugin-react": ["./packages/viewer/node_modules/@vitejs/plugin-react"],
+      "vite-plugin-pwa": ["./packages/viewer/node_modules/vite-plugin-pwa"]
+    }
+  },
+  "include": [
+    "vite.config.ts",
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.tsx"
+  ]
+}
